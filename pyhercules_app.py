@@ -423,7 +423,9 @@ def create_summary_content(cluster_id, cluster_map, config_data, state_data, eva
             add_config_row("Tabular Header:", h_str)
             add_config_row("Tabular Index:", i_str)
         add_config_row("Rep. Mode:", get_config_str('representation_mode', data_dict=config_data))
-        add_config_row("Hierarchy:", f"{get_config_str('level_cluster_counts', data_dict=config_data)} (Levels={len(config_data.get('level_cluster_counts',[]))})")
+        level_counts = config_data.get('level_cluster_counts',[]) if config_data else []
+        level_counts = level_counts if level_counts is not None else []
+        add_config_row("Hierarchy:", f"{get_config_str('level_cluster_counts', data_dict=config_data)} (Levels={len(level_counts)})")
         add_config_row("Topic Seed:", get_config_str('topic_seed', default="(Not Set)", data_dict=config_data))
         add_config_row("Text Embedder:", get_config_str('selected_text_embedder', default='N/A', data_dict=config_data))
         add_config_row("LLM:", get_config_str('selected_llm', default='N/A', data_dict=config_data))
