@@ -105,6 +105,166 @@ def get_file_list(directory_path):
                 filepaths.append(os.path.join(root, filename))
     return filepaths
 
+def detect_column_types(df: pd.DataFrame) -> Dict[str, str]:
+    """
+    Automatically detects column types as 'numeric', 'categorical', or 'text'.
+    
+    Returns:
+        Dict mapping column names to detected types ('numeric', 'categorical', 'text')
+    """
+    types = {}
+    
+    for col in df.columns:
+        # 1. Try to detect if column is actually numeric (even if stored as object)
+        if pd.api.types.is_numeric_dtype(df[col]):
+            types[col] = 'numeric'
+            continue
+        
+        # Try converting to numeric to see if it's numeric data stored as strings
+        try:
+            # Attempt conversion - if most values convert successfully, treat as numeric
+            numeric_converted = pd.to_numeric(df[col], errors='coerce')
+            non_null_ratio = numeric_converted.notna().sum() / len(df[col])
+            
+            # If >80% of non-null values can be converted to numeric, treat as numeric
+            if non_null_ratio > 0.8:
+                types[col] = 'numeric'
+                continue
+        except:
+            pass
+        
+        # 2. For object/string columns, determine if categorical or text
+        if df[col].dtype == 'object' or df[col].dtype.name == 'category':
+            n_unique = df[col].nunique()
+            n_total = len(df[col].dropna())
+            
+            if n_total == 0:
+                types[col] = 'text'  # Safe default for empty columns
+                continue
+                
+            cardinality_ratio = n_unique / n_total
+            avg_length = df[col].astype(str).str.len().mean()
+            
+            # Categorical criteria: low cardinality OR low unique count, AND short strings
+            is_low_cardinality = cardinality_ratio < 0.05 or n_unique < 50
+            is_short = avg_length < 30
+            
+            if is_low_cardinality and is_short:
+                types[col] = 'categorical'
+            else:
+                types[col] = 'text'
+        else:
+            # Fallback for other dtypes (datetime, etc.)
+            types[col] = 'text'
+    
+    return types
+
+def preprocess_mixed_data(df: pd.DataFrame, 
+                          column_types: Dict[str, str],
+                          variable_metadata: Optional[Dict[str, Dict[str, Any]]] = None
+                          ) -> Tuple[np.ndarray, List[str], Dict[str, Dict[str, Any]]]:
+    """
+    Preprocesses mixed data types (numeric, categorical, text) into a unified numerical representation.
+    
+    Args:
+        df: Input DataFrame
+        column_types: Dict mapping column names to types ('numeric', 'categorical', 'text')
+        variable_metadata: Optional existing metadata to preserve
+        
+    Returns:
+        Tuple of (processed_data_array, column_names_list, metadata_dict)
+    """
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.decomposition import TruncatedSVD
+    from sklearn.preprocessing import StandardScaler
+    
+    processed_parts = []
+    final_column_names = []
+    metadata_out = variable_metadata.copy() if variable_metadata else {}
+    
+    for col, col_type in column_types.items():
+        if col not in df.columns:
+            continue
+            
+        if col_type == 'numeric':
+            # Keep numeric columns as-is, but handle missing/invalid values
+            # Convert to numeric, coercing errors to NaN, then fill NaN with column mean
+            col_data = pd.to_numeric(df[col], errors='coerce')
+            col_mean = col_data.mean()
+            col_data = col_data.fillna(col_mean if not pd.isna(col_mean) else 0)
+            processed_parts.append(col_data.values.reshape(-1, 1))
+            final_column_names.append(col)
+            if col not in metadata_out:
+                metadata_out[col] = {'name': col, 'type': 'numeric', 'source_column': col}
+                
+        elif col_type == 'categorical':
+            # One-hot encode categorical columns
+            # Fill NaN with a placeholder category
+            col_data = df[col].fillna('_MISSING_')
+            encoded = pd.get_dummies(col_data, prefix=col, drop_first=True, dtype=float)
+            if encoded.shape[1] > 0:  # Only add if there are columns after encoding
+                processed_parts.append(encoded.values)
+                for new_col in encoded.columns:
+                    final_column_names.append(new_col)
+                    category_value = new_col.replace(f"{col}_", "")
+                    metadata_out[new_col] = {
+                        'name': new_col,
+                        'type': 'categorical_encoded',
+                        'source_column': col,
+                        'category': category_value
+                    }
+        
+        elif col_type == 'text':
+            # TF-IDF + SVD for text columns
+            texts = df[col].fillna('').astype(str)
+            
+            # Skip if all texts are empty
+            if texts.str.strip().eq('').all():
+                continue
+            
+            try:
+                # TF-IDF vectorization
+                vectorizer = TfidfVectorizer(
+                    max_features=100,
+                    stop_words='english',
+                    min_df=1,
+                    max_df=0.95
+                )
+                tfidf_matrix = vectorizer.fit_transform(texts)
+                
+                # SVD for dimensionality reduction
+                n_components = min(10, tfidf_matrix.shape[1] - 1, tfidf_matrix.shape[0] - 1)
+                if n_components > 0:
+                    svd = TruncatedSVD(n_components=n_components, random_state=42)
+                    text_features = svd.fit_transform(tfidf_matrix)
+                    
+                    processed_parts.append(text_features)
+                    for i in range(text_features.shape[1]):
+                        new_col_name = f"{col}_text_dim{i}"
+                        final_column_names.append(new_col_name)
+                        metadata_out[new_col_name] = {
+                            'name': new_col_name,
+                            'type': 'text_embedding',
+                            'source_column': col,
+                            'method': 'tfidf_svd',
+                            'dimension': i
+                        }
+            except Exception as e:
+                warnings.warn(f"Error processing text column '{col}': {e}. Skipping.")
+                continue
+    
+    if not processed_parts:
+        raise ValueError("No valid columns to process after preprocessing.")
+    
+    # Combine all processed parts horizontally
+    combined_data = np.hstack(processed_parts)
+    
+    # Scale everything together
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(combined_data)
+    
+    return scaled_data, final_column_names, metadata_out
+
 def infer_data_and_prepare(session_dir: str) -> Tuple[Any, Optional[str], Optional[str]]:
     """Infers data type and prepares input from a directory of files."""
     print(f"Note: Using directory data inference for {session_dir}.")
@@ -823,13 +983,12 @@ def create_upload_layout():
                 dbc.Alert(id='tabular-load-status', color="info", is_open=False, duration=6000, dismissable=True, className="d-flex align-items-center"),
                 dbc.Row([dbc.Col(dbc.Checklist(options=[{"label": "Data has header row", "value": "header"}], value=["header"], id="tabular-header-checkbox", switch=True), md=4, className="mb-2 d-flex align-items-center"), dbc.Col(dbc.InputGroup([dbc.InputGroupText("Index Column", className="small"), dbc.Input(id="tabular-index-input", placeholder="None, 0, or name", type="text", value="", debounce=True, size="sm")]), md=8, className="mb-2")], className="mb-3 align-items-center"),
                 html.Div(id='numeric-column-checklist-wrapper', children=[
-                    html.H6("Select Numeric Columns for Clustering:", className="mt-3"),
-                    dbc.Checklist(
-                        id='numeric-column-selector',
-                        options=[], value=[], # Initially empty
-                        inline=True, switch=True, className="mb-2"
-                    ),
-                    dbc.FormText("Only selected numeric columns will be used in the analysis.")
+                    html.H6("Column Type Detection & Selection:", className="mt-3"),
+                    dbc.FormText("Columns are automatically classified. Override if needed.", className="mb-2 text-muted"),
+                    html.Div(id='column-type-selector-container', children=[
+                        # Will be populated dynamically with column type controls
+                    ]),
+                    dbc.FormText("Text columns use TF-IDF+SVD. Categorical columns are one-hot encoded. All are scaled together.", className="small text-info")
                 ], className="mt-3 mb-3 border-top pt-3", style={'display': 'none'}), # Initially hidden
                 html.H6("Data Preview (first 50 rows):"),
                 dash_table.DataTable(id='tabular-preview-table', page_size=PREVIEW_TABLE_PAGE_SIZE, style_table={'overflowX': 'auto', 'minWidth': '100%'}, style_cell={'textAlign': 'left', 'padding': '8px', 'maxWidth': 180, 'overflow': 'hidden', 'textOverflow': 'ellipsis', 'whiteSpace': 'nowrap', 'fontSize': '0.9em', 'border': '1px solid #eee'}, style_header={'backgroundColor': 'var(--bs-light)', 'fontWeight': 'bold', 'borderBottom': '2px solid #dee2e6'}, style_data={'border': '1px solid #eee'}, style_data_conditional=[{'if': {'row_index': 'odd'}, 'backgroundColor': 'rgba(0,0,0,.02)'}], tooltip_delay=0, tooltip_duration=None)])], className="mt-4 mb-4 shadow-sm", style={'display': 'none'}),
@@ -939,6 +1098,7 @@ def create_results_layout(clusters_data: List[Dict], config_data: Dict, state_da
 app.layout = html.Div([
     dcc.Store(id='session-id-store'), dcc.Store(id='temp-data-dir-store'), dcc.Store(id='uploaded-file-info-store'),
     dcc.Store(id='validated-load-params-store'), dcc.Store(id='ground-truth-data-store'),
+    dcc.Store(id='column-types-store'),  # New store for column types
     dcc.Store(id='hercules-results-store', storage_type='memory'),
     dcc.Store(id='run-params-store'), dcc.Store(id='run-trigger-store'),
     dcc.Download(id='download-full-results-json'), dcc.Download(id='download-membership-csv'),
@@ -977,13 +1137,14 @@ def display_results_page(results_data):
     Output('page-content', 'children', allow_duplicate=True), Output('session-id-store', 'data', allow_duplicate=True),
     Output('temp-data-dir-store', 'data', allow_duplicate=True), Output('uploaded-file-info-store', 'data', allow_duplicate=True),
     Output('validated-load-params-store', 'data', allow_duplicate=True), Output('ground-truth-data-store', 'data', allow_duplicate=True),
+    Output('column-types-store', 'data', allow_duplicate=True),
     Output('hercules-results-store', 'data', allow_duplicate=True),
     Input('back-to-upload-button', 'n_clicks'), Input({'type': 'error-back-to-upload-button', 'index': ALL}, 'n_clicks'),
     State('session-id-store', 'data'), prevent_initial_call=True)
 def go_back_to_upload(back_clicks, error_clicks, session_id_to_clean):
     ctx = callback_context
     if not ctx.triggered:
-        return (no_update,) * 7
+        return (no_update,) * 8
     button_clicked = (ctx.triggered_id == 'back-to-upload-button' and back_clicks and back_clicks > 0) or \
                      (isinstance(ctx.triggered_id, dict) and ctx.triggered_id.get('type') == 'error-back-to-upload-button' and any(n and n > 0 for n in error_clicks))
     if button_clicked:
@@ -996,7 +1157,7 @@ def go_back_to_upload(back_clicks, error_clicks, session_id_to_clean):
                     print(f"Cleaned up: {session_dir}")
                 except Exception as e:
                     print(f"Warning: Could not clean {session_dir}: {e}", file=sys.stderr)
-        return create_upload_layout(), None, None, None, None, None, None
+        return create_upload_layout(), None, None, None, None, None, None, None
     return (no_update,) * 7
 
 @callback(
@@ -1155,8 +1316,8 @@ def handle_ground_truth_upload(contents, filename):
     Output('tabular-load-status', 'color', allow_duplicate=True),
     Output('tabular-load-status', 'is_open', allow_duplicate=True),
     Output('validated-load-params-store', 'data', allow_duplicate=True),
-    Output('numeric-column-selector', 'options'),
-    Output('numeric-column-selector', 'value'),
+    Output('column-type-selector-container', 'children'),
+    Output('column-types-store', 'data'),
     Output('numeric-column-checklist-wrapper', 'style'),
     Input('tabular-header-checkbox', 'value'),
     Input('tabular-index-input', 'value'),
@@ -1174,7 +1335,7 @@ def update_tabular_preview(header_check, index_input, uploaded_file_info):
     df_preview, err = load_tabular_data(filepath, header=header_row, index_col=index_col, nrows=PREVIEW_NROWS)
 
     valid_params, preview_data, preview_cols, preview_tips = None, None, [], []
-    selector_options, selector_value, selector_style = [], [], {'display': 'none'}
+    column_type_ui, column_types_dict, selector_style = [], {}, {'display': 'none'}
     icon_map = {"danger": "bi-x-octagon-fill", "warning": "bi-exclamation-triangle-fill", "success": "bi-check-circle-fill"}
     status_msg, status_color, status_open = "", "info", False
 
@@ -1199,17 +1360,75 @@ def update_tabular_preview(header_check, index_input, uploaded_file_info):
                 status_msg += f" (Warning creating preview: {e})"
                 status_color = "warning"
 
-        numeric_cols = df_preview.select_dtypes(include=np.number).columns.tolist()
-        if numeric_cols:
-            selector_options = [{'label': str(col), 'value': str(col)} for col in numeric_cols]
-            selector_value = [str(col) for col in numeric_cols] # All selected by default
+        # Detect column types automatically
+        if not df_preview.empty:
+            column_types_dict = detect_column_types(df_preview)
+            
+            # Create UI for each column with detected type
+            column_type_ui = []
+            for col, detected_type in column_types_dict.items():
+                # Create badge with confidence indicator
+                if detected_type == 'numeric':
+                    badge_color = 'primary'
+                    badge_icon = 'bi-123'
+                elif detected_type == 'categorical':
+                    badge_color = 'success'
+                    badge_icon = 'bi-tags'
+                else:  # text
+                    badge_color = 'info'
+                    badge_icon = 'bi-chat-left-text'
+                
+                column_type_ui.append(
+                    dbc.Row([
+                        dbc.Col([
+                            html.Strong(str(col), className="me-2"),
+                            dbc.Badge([
+                                html.I(className=f"bi {badge_icon} me-1"),
+                                detected_type.title()
+                            ], color=badge_color, className="me-2")
+                        ], width=6, className="d-flex align-items-center mb-2"),
+                        dbc.Col([
+                            dcc.Dropdown(
+                                id={'type': 'column-type-override', 'column': str(col)},
+                                options=[
+                                    {'label': '📊 Numeric', 'value': 'numeric'},
+                                    {'label': '🏷️ Categorical', 'value': 'categorical'},
+                                    {'label': '📝 Text', 'value': 'text'},
+                                    {'label': '🚫 Ignore', 'value': 'ignore'}
+                                ],
+                                value=detected_type,
+                                clearable=False,
+                                className="column-type-dropdown"
+                            )
+                        ], width=6, className="mb-2")
+                    ], className="mb-1")
+                )
+            
             selector_style = {'display': 'block'}
-        elif df_preview is not None:
-             # Keep it hidden but ensure the component ID is in the layout
-             selector_style = {'display': 'none'}
 
     status_div = [html.I(className=f"bi {icon_map.get(status_color, 'bi-info-circle-fill')} me-2"), status_msg]
-    return preview_data, preview_cols, preview_tips, status_div, status_color, status_open, valid_params, selector_options, selector_value, selector_style
+    return preview_data, preview_cols, preview_tips, status_div, status_color, status_open, valid_params, column_type_ui, column_types_dict, selector_style
+
+
+@callback(
+    Output('column-types-store', 'data', allow_duplicate=True),
+    Input({'type': 'column-type-override', 'column': ALL}, 'value'),
+    State('column-types-store', 'data'),
+    State({'type': 'column-type-override', 'column': ALL}, 'id'),
+    prevent_initial_call=True
+)
+def update_column_types(override_values, current_types, override_ids):
+    """Update column types when user manually overrides them."""
+    if not current_types or not override_ids:
+        return no_update
+    
+    updated_types = current_types.copy()
+    for i, override_id in enumerate(override_ids):
+        col_name = override_id['column']
+        if i < len(override_values) and override_values[i]:
+            updated_types[col_name] = override_values[i]
+    
+    return updated_types
 
 
 @callback(
@@ -1222,17 +1441,17 @@ def update_tabular_preview(header_check, index_input, uploaded_file_info):
     Input('run-button', 'n_clicks'),
     State('representation-mode-input', 'value'), State('cluster-counts-input', 'value'), State('topic-seed-input', 'value'),
     State('text-embedder-select', 'value'), State('llm-select', 'value'), State('image-embedder-select', 'value'),
-    State('image-captioner-select', 'value'), State('numeric-column-selector', 'value'),
+    State('image-captioner-select', 'value'), State('column-types-store', 'data'),
     prevent_initial_call=True
 )
-def initiate_run(n_clicks, rep_mode, counts_str, topic_seed, txt_emb, llm, img_emb, img_cap, selected_cols):
+def initiate_run(n_clicks, rep_mode, counts_str, topic_seed, txt_emb, llm, img_emb, img_cap, column_types):
     if not n_clicks:
         return no_update, no_update, no_update, no_update, no_update, no_update
 
     params = {
         'rep_mode': rep_mode, 'counts_str': counts_str, 'topic_seed': topic_seed,
         'txt_emb_name': txt_emb, 'llm_name': llm, 'img_emb_name': img_emb,
-        'img_cap_name': img_cap, 'selected_columns': selected_cols
+        'img_cap_name': img_cap, 'column_types': column_types  # Changed from selected_columns
     }
     initial_status = dbc.Alert([html.I(className="bi bi-hourglass-split me-2"), "Run initiated... Hercules is starting."], color="info")
     
@@ -1285,7 +1504,7 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
     llm_name = run_params.get('llm_name')
     img_emb_name = run_params.get('img_emb_name')
     img_cap_name = run_params.get('img_cap_name')
-    selected_columns = run_params.get('selected_columns')
+    column_types = run_params.get('column_types')  # Changed from selected_columns
 
     try:
         with open(log_filepath, 'w', encoding='utf-8') as log_stream:
@@ -1311,26 +1530,72 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
                 df_full, err = load_tabular_data(filepath, header=header, index_col=index_col)
                 if err: raise ValueError(f"Tabular Load Error: {err}")
                 if df_full is None or df_full.empty: raise ValueError("Tabular file loaded empty.")
-                df_numeric = df_full.select_dtypes(include=np.number)
-                if df_numeric.empty: raise ValueError(f"File '{filename}' has no numeric columns.")
                 
-                if selected_columns is not None:
-                    if not selected_columns: raise ValueError("No numeric columns were selected for clustering.")
-                    final_cols = [c for c in selected_columns if c in df_numeric.columns]
-                    if not final_cols: raise ValueError("None of the selected columns found in data.")
-                    print(f"Using {len(final_cols)} of {len(df_numeric.columns)} numeric columns.", file=log_stream)
-                    input_data = df_numeric[final_cols]
+                # Use column types for mixed data preprocessing
+                if column_types:
+                    # Filter out 'ignore' columns
+                    active_column_types = {col: ctype for col, ctype in column_types.items() 
+                                          if ctype != 'ignore' and col in df_full.columns}
+                    
+                    if not active_column_types:
+                        raise ValueError("No columns selected for clustering (all are ignored).")
+                    
+                    # Check if we have mixed data types
+                    type_set = set(active_column_types.values())
+                    has_mixed = len(type_set) > 1 or 'categorical' in type_set or 'text' in type_set
+                    
+                    if has_mixed:
+                        print(f"Detected mixed data types: {dict(Counter(active_column_types.values()))}", file=log_stream)
+                        print("Preprocessing with TF-IDF+SVD for text and one-hot encoding for categorical...", file=log_stream)
+                        
+                        # Use only the columns in active_column_types
+                        df_to_process = df_full[[col for col in active_column_types.keys()]]
+                        
+                        # Preprocess mixed data
+                        processed_array, var_names, var_metadata = preprocess_mixed_data(
+                            df_to_process, 
+                            active_column_types
+                        )
+                        
+                        input_data = processed_array
+                        data_type = 'numeric'
+                        
+                        # Store metadata for Hercules - keyed by column index (what Hercules expects from NumPy arrays)
+                        # Each metadata dict must have a 'name' field for Hercules to use proper column names
+                        numeric_metadata = {
+                            i: var_metadata.get(var_names[i], {})
+                            for i in range(len(var_names))
+                        }
+                        
+                        print(f"Preprocessed to {processed_array.shape[0]} rows × {processed_array.shape[1]} features", file=log_stream)
+                        print(f"Feature breakdown: {len([v for v in var_metadata.values() if v.get('type') == 'numeric'])} numeric, "
+                              f"{len([v for v in var_metadata.values() if v.get('type') == 'categorical_encoded'])} categorical (encoded), "
+                              f"{len([v for v in var_metadata.values() if v.get('type') == 'text_embedding'])} text (embedded)", 
+                              file=log_stream)
+                    else:
+                        # All numeric - use old logic
+                        print("All selected columns are numeric. Using direct numeric input.", file=log_stream)
+                        final_cols = list(active_column_types.keys())
+                        input_data = df_full[final_cols].select_dtypes(include=np.number)
+                        data_type = 'numeric'
+                        numeric_metadata = None
                 else:
-                    print("Warning: No column selection provided. Using all numeric columns.", file=log_stream)
+                    # Fallback: use all numeric columns
+                    df_numeric = df_full.select_dtypes(include=np.number)
+                    if df_numeric.empty: 
+                        raise ValueError(f"File '{filename}' has no numeric columns and no column types specified.")
+                    print("Warning: No column types provided. Using all numeric columns.", file=log_stream)
                     input_data = df_numeric
+                    data_type = 'numeric'
+                    numeric_metadata = None
                 
-                data_type = 'numeric'
                 load_params = valid_load_params
             elif temp_data_dir: # Directory of files
                 data_desc = f"Files in Session: {os.path.basename(temp_data_dir)}"
                 print(f"Inferring data from directory: {temp_data_dir}", file=log_stream)
                 input_data, data_type, err = infer_data_and_prepare(temp_data_dir)
                 if err: raise ValueError(f"Data Inference Error: {err}")
+                numeric_metadata = None  # No metadata for directory-based data
             else:
                 raise ValueError("No data source specified.")
             
@@ -1346,7 +1611,11 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
             
             with contextlib.redirect_stdout(log_stream):
                 print(f"\n--- Starting Hercules Clustering ({data_type.upper()}) ---")
-                top_clusters = hercules.cluster(input_data, topic_seed=seed)
+                # Pass numeric_metadata if available (for mixed data types)
+                if data_type == 'numeric' and 'numeric_metadata' in locals() and numeric_metadata:
+                    top_clusters = hercules.cluster(input_data, topic_seed=seed, numeric_metadata=numeric_metadata)
+                else:
+                    top_clusters = hercules.cluster(input_data, topic_seed=seed)
                 print("\n--- Clustering Finished ---\n")
                 if not hercules._all_clusters_map:
                     raise ValueError("Clustering finished, but no clusters were generated.")
