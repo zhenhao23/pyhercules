@@ -1,0 +1,7 @@
+Feature,Global Mean,Cluster Mean,Mean Deviation,Mean % Deviation,Global Median,Cluster Median,Median Deviation,Abs Mean Deviation
+Total Charges,2283.30,665.22,-1618.08,-70.87,1397.47,523.67,-873.80,1618.08
+Monthly Charges,64.76,21.08,-43.68,-67.45,70.35,20.15,-50.20,43.68
+CLTV,4400.30,4374.38,-25.91,-0.59,4527.00,4471.50,-55.50,25.91
+Churn Score,58.70,52.74,-5.96,-10.15,61.00,53.00,-8.00,5.96
+Tenure Months,32.37,30.55,-1.82,-5.63,29.00,25.00,-4.00,1.82
+Churn Value,0.27,0.07,-0.19,-72.10,0.00,0.00,0.00,0.19

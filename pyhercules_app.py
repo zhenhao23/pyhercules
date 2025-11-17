@@ -201,7 +201,7 @@ def preprocess_mixed_data(df: pd.DataFrame,
             # One-hot encode categorical columns
             # Fill NaN with a placeholder category
             col_data = df[col].fillna('_MISSING_')
-            encoded = pd.get_dummies(col_data, prefix=col, drop_first=True, dtype=float)
+            encoded = pd.get_dummies(col_data, prefix=col, drop_first=False, dtype=float)
             if encoded.shape[1] > 0:  # Only add if there are columns after encoding
                 processed_parts.append(encoded.values)
                 for new_col in encoded.columns:
