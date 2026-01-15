@@ -176,7 +176,6 @@ def preprocess_mixed_data(df: pd.DataFrame,
     """
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.decomposition import TruncatedSVD
-    from sklearn.preprocessing import StandardScaler
     
     processed_parts = []
     final_column_names = []
@@ -259,11 +258,8 @@ def preprocess_mixed_data(df: pd.DataFrame,
     # Combine all processed parts horizontally
     combined_data = np.hstack(processed_parts)
     
-    # Scale everything together
-    scaler = StandardScaler()
-    scaled_data = scaler.fit_transform(combined_data)
-    
-    return scaled_data, final_column_names, metadata_out
+    # Don't scale here - Hercules will handle scaling internally for numeric data
+    return combined_data, final_column_names, metadata_out
 
 def infer_data_and_prepare(session_dir: str) -> Tuple[Any, Optional[str], Optional[str]]:
     """Infers data type and prepares input from a directory of files."""

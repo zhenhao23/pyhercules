@@ -268,7 +268,7 @@ def google_text_embedding_001(texts: list[str]) -> np.ndarray:
         print(f"Error calling Google Embedding API ('{_google_embedding_model_name}'): {e}")
         return dummy_text_embedding(texts)
 
-_gemini_model_name = "gemini-2.0-flash" # User-specified model name
+_gemini_model_name = "gemini-2.5-flash-lite" # User-specified model name
 
 def google_gemini_llm(prompt: str) -> str:
     """Generates text using Google's Gemini model."""
