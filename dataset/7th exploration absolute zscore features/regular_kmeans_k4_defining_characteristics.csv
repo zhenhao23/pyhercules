@@ -1,0 +1,99 @@
+Cluster_ID,Feature,Centroid_Value,Z_Score,Abs_Z_Score
+0,Total Charges,0.5288,1.6015,1.6015
+0,CLTV,0.1331,1.4081,1.4081
+0,Tenure Months,0.3087,1.2865,1.2865
+0,Partner_No,-0.1266,-1.2786,1.2786
+0,Partner_Yes,0.1266,1.2786,1.2786
+0,Payment Method_Bank transfer (automatic),0.1021,1.2384,1.2384
+0,Churn Reason_Limited range of services,-0.0793,-1.0838,1.0838
+0,Online Backup_Yes,0.3564,1.0646,1.0646
+0,Online Security_Yes,0.3673,1.0474,1.0474
+0,Payment Method_Credit card (automatic),0.099,1.0411,1.0411
+0,Tech Support_Yes,0.3602,1.0207,1.0207
+1,Churn Reason_Extra data charges,0.2972,1.731,1.731
+1,Churn Reason_Competitor made better offer,0.4049,1.7231,1.7231
+1,Churn Reason_Poor expertise of phone support,0.1602,1.7212,1.7212
+1,Churn Reason_Attitude of support person,0.4568,1.707,1.707
+1,Churn Reason_Price too high,0.3232,1.7043,1.7043
+1,Churn Reason_Moved,0.249,1.7033,1.7033
+1,Churn Reason_Network reliability,0.3462,1.7012,1.7012
+1,Churn Score,1.1039,1.7,1.7
+1,Contract_One year,-0.2923,-1.6882,1.6882
+1,Churn Reason_Service dissatisfaction,0.3108,1.6875,1.6875
+1,Churn Reason_Long distance charges,0.2332,1.6866,1.6866
+1,Churn Label_No,-1.6638,-1.6865,1.6865
+1,Churn Value,1.6638,1.6865,1.6865
+1,Churn Label_Yes,1.6638,1.6865,1.6865
+1,Churn Reason__MISSING_,-1.6638,-1.6865,1.6865
+1,Churn Reason_Competitor offered higher download speeds,0.4668,1.6815,1.6815
+1,Churn Reason_Don't know,0.4246,1.6786,1.6786
+1,Churn Reason_Competitor offered more data,0.4151,1.6756,1.6756
+1,Churn Reason_Lack of affordable download/upload speed,0.1931,1.6729,1.6729
+1,Churn Reason_Lack of self-service on Website,0.3081,1.6713,1.6713
+1,Churn Reason_Product dissatisfaction,0.3279,1.6625,1.6625
+1,Payment Method_Credit card (automatic),-0.2152,-1.6477,1.6477
+1,Churn Reason_Attitude of service provider,0.3805,1.6312,1.6312
+1,Churn Reason_Competitor had better devices,0.3741,1.6217,1.6217
+1,Contract_Month-to-month,0.6745,1.6047,1.6047
+1,Gender_Female,0.0221,1.5734,1.5734
+1,Gender_Male,-0.0221,-1.5734,1.5734
+1,Churn Reason_Poor expertise of online support,0.1427,1.5613,1.5613
+1,Payment Method_Bank transfer (automatic),-0.1957,-1.5498,1.5498
+1,Dependents_Yes,-0.4328,-1.5423,1.5423
+1,Dependents_No,0.4328,1.5423,1.5423
+1,Churn Reason_Deceased,0.079,1.5378,1.5378
+1,Tenure Months,-0.551,-1.5184,1.5184
+1,Contract_Two year,-0.5069,-1.5063,1.5063
+1,Partner_Yes,-0.2377,-1.5005,1.5005
+1,Partner_No,0.2377,1.5005,1.5005
+1,Payment Method_Electronic check,0.5723,1.4526,1.4526
+1,Churn Reason_Limited range of services,0.1771,1.4508,1.4508
+1,CLTV,-0.2218,-1.3943,1.3943
+1,Senior Citizen_No,-0.288,-1.3378,1.3378
+1,Senior Citizen_Yes,0.288,1.3378,1.3378
+1,Internet Service_Fiber optic,0.7641,1.3377,1.3377
+1,Paperless Billing_Yes,0.3879,1.1783,1.1783
+1,Paperless Billing_No,-0.3879,-1.1783,1.1783
+1,Online Security_No,0.6734,1.1239,1.1239
+1,Tech Support_No,0.6603,1.12,1.12
+2,Online Security_No internet service,1.9014,1.7321,1.7321
+2,Internet Service_No,1.9014,1.7321,1.7321
+2,Streaming Movies_No internet service,1.9014,1.7321,1.7321
+2,Streaming TV_No internet service,1.9014,1.7321,1.7321
+2,Tech Support_No internet service,1.9014,1.7321,1.7321
+2,Device Protection_No internet service,1.9014,1.7321,1.7321
+2,Online Backup_No internet service,1.9014,1.7321,1.7321
+2,Streaming Movies_No,-0.8087,-1.7177,1.7177
+2,Streaming Movies_Yes,-0.7961,-1.7147,1.7147
+2,Streaming TV_No,-0.8148,-1.713,1.713
+2,Streaming TV_Yes,-0.7901,-1.7077,1.7077
+2,Device Protection_No,-0.8854,-1.6713,1.6713
+2,Payment Method_Mailed check,0.611,1.6665,1.6665
+2,Online Backup_No,-0.8836,-1.6579,1.6579
+2,Device Protection_Yes,-0.724,-1.6209,1.6209
+2,Tech Support_No,-0.9863,-1.6177,1.6177
+2,Online Security_No,-0.9933,-1.6151,1.6151
+2,Online Backup_Yes,-0.7256,-1.5888,1.5888
+2,Paperless Billing_No,0.6104,1.563,1.563
+2,Paperless Billing_Yes,-0.6104,-1.563,1.563
+2,Senior Citizen_Yes,-0.3475,-1.4738,1.4738
+2,Senior Citizen_No,0.3475,1.4738,1.4738
+2,Tech Support_Yes,-0.6394,-1.4148,1.4148
+2,Online Security_Yes,-0.6339,-1.3949,1.3949
+2,Payment Method_Electronic check,-0.5417,-1.3734,1.3734
+2,Monthly Charges,-1.4518,-1.3586,1.3586
+2,Contract_Two year,0.415,1.3001,1.3001
+2,Multiple Lines_No,0.5895,1.2714,1.2714
+2,Dependents_No,-0.3273,-1.2465,1.2465
+2,Dependents_Yes,0.3273,1.2465,1.2465
+2,Total Charges,-0.7116,-1.1442,1.1442
+2,Contract_Month-to-month,-0.4157,-1.1173,1.1173
+2,Internet Service_DSL,-0.7237,-1.0782,1.0782
+3,Phone Service_No,3.054,1.7321,1.7321
+3,Phone Service_Yes,-3.054,-1.7321,1.7321
+3,Multiple Lines_No phone service,3.054,1.7321,1.7321
+3,Internet Service_DSL,1.3817,1.5712,1.5712
+3,Multiple Lines_No,-0.9633,-1.5318,1.5318
+3,Multiple Lines_Yes,-0.8542,-1.4281,1.4281
+3,Gender_Female,-0.0198,-1.0952,1.0952
+3,Gender_Male,0.0198,1.0952,1.0952
