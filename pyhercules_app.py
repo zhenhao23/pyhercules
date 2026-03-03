@@ -85,9 +85,12 @@ def get_download_filename(base: str, ext: str, session_id_str: Optional[str] = N
         return f"{base}_{session_id_str}_{ts}.{ext}"
     return f"{base}_{ts}.{ext}"
 
-def parse_cluster_counts(counts_str: str) -> Optional[List[int]]:
+def parse_cluster_counts(counts_str: str) -> Optional[List[int] | str]:
     if not counts_str:
         return None
+    # Check for star mode
+    if counts_str.strip().lower() == 'star':
+        return 'star'
     try:
         counts = [int(c.strip()) for c in counts_str.split(',') if c.strip()]
         if not counts or any(c <= 0 for c in counts):
@@ -581,7 +584,13 @@ def create_summary_content(cluster_id, cluster_map, config_data, state_data, eva
         add_config_row("Rep. Mode:", get_config_str('representation_mode', data_dict=config_data))
         level_counts = config_data.get('level_cluster_counts',[]) if config_data else []
         level_counts = level_counts if level_counts is not None else []
-        add_config_row("Hierarchy:", f"{get_config_str('level_cluster_counts', data_dict=config_data)} (Levels={len(level_counts)})")
+        # Handle star mode
+        if level_counts == 'star':
+            add_config_row("Hierarchy:", "Star Mode (K* Means + Auto K, Levels=2)")
+        elif isinstance(level_counts, list):
+            add_config_row("Hierarchy:", f"{get_config_str('level_cluster_counts', data_dict=config_data)} (Levels={len(level_counts)})")
+        else:
+            add_config_row("Hierarchy:", f"{get_config_str('level_cluster_counts', data_dict=config_data)}")
         add_config_row("Topic Seed:", get_config_str('topic_seed', default="(Not Set)", data_dict=config_data))
         add_config_row("Text Embedder:", get_config_str('selected_text_embedder', default='N/A', data_dict=config_data))
         add_config_row("LLM:", get_config_str('selected_llm', default='N/A', data_dict=config_data))
@@ -952,11 +961,12 @@ def create_upload_layout():
                                  html.I(className="bi bi-info-circle ms-1", id="tooltip-counts", style={'cursor': 'pointer'}),
                                  dbc.Tooltip(
                                      "Comma-separated list of desired clusters per level (e.g., 10,5,2). "
+                                     "Enter 'star' for K* Means two-level hierarchy mode. "
                                      "Leave empty for automatic K determination (experimental).",
                                      target="tooltip-counts", placement="top"
                                  ),
-                                 dbc.Input(id='cluster-counts-input', placeholder='e.g., 5, 3, 2 or blank for auto-k', value='5, 2'),
-                                 dbc.FormText("Comma-separated.", className="small")
+                                 dbc.Input(id='cluster-counts-input', placeholder="e.g., 5,3,2 or 'star' or blank for auto-k", value='5, 2'),
+                                 dbc.FormText("Comma-separated, 'star' for K* mode, or blank.", className="small")
                              ]),
                          ], className="mb-3"),
                          dbc.Row([
@@ -1510,10 +1520,11 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
 
             level_counts = parse_cluster_counts(counts_str)
             if level_counts is None and counts_str and counts_str.strip():
-                raise ValueError("Invalid Cluster Counts. Use comma-separated positive integers (e.g., 10, 5).")
+                raise ValueError("Invalid Cluster Counts. Use comma-separated positive integers (e.g., 10, 5), 'star' for K* mode, or leave empty for auto-k.")
 
             seed = topic_seed.strip() if topic_seed else None
-            print(f"Run params: Mode={rep_mode}, Counts={level_counts or 'Auto'}, Seed={seed}", file=log_stream)
+            counts_display = 'Star Mode' if level_counts == 'star' else (level_counts or 'Auto')
+            print(f"Run params: Mode={rep_mode}, Counts={counts_display}, Seed={seed}", file=log_stream)
             
             if ground_truth_data and isinstance(ground_truth_data, dict):
                 parsed_gt = ground_truth_data

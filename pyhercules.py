@@ -260,6 +260,370 @@ def _parse_llm_response(llm_output_str: str, expected_ids: list[Union[int, str]]
         return None
 
 # =============================================================================
+# K* Means Algorithm for Star Mode
+# =============================================================================
+
+class KStarMeans:
+    """
+    K*-means clustering algorithm with automatic cluster number selection
+    using Minimum Description Length (MDL) principle.
+    """
+    
+    def __init__(self, patience=5, random_state=42):
+        self.patience = patience
+        self.random_state = random_state
+        self.centroids = None
+        self.labels = None
+        self.cost_history = []
+        
+    def _init_subcentroids(self, X):
+        """Initialize two sub-centroids for a cluster using k-means++."""
+        if len(X) < 2:
+            return [X[0].copy(), X[0].copy()]
+        from sklearn.cluster import kmeans_plusplus
+        centers, _ = kmeans_plusplus(X, n_clusters=min(2, len(X)), random_state=self.random_state)
+        return [centers[0], centers[1] if len(centers) > 1 else centers[0]]
+    
+    def _mdl_cost(self, X, centroids, clusters):
+        """Calculate MDL cost: Model Cost + Index Cost + Residual Cost."""
+        n, d = X.shape
+        k = len(centroids)
+        
+        if k == 0:
+            return np.inf
+        
+        X_flat = X.flatten()
+        unique_vals = np.unique(X_flat)
+        if len(unique_vals) > 1:
+            min_dist = np.min(np.diff(np.sort(unique_vals)))
+            floatprecision = max(-np.log(min_dist), 1e-10)
+        else:
+            floatprecision = 1.0
+        
+        floatcost = (np.max(X) - np.min(X)) / floatprecision
+        modelcost = k * d * floatcost
+        idxcost = n * np.log(k) if k > 1 else 0
+        
+        squared_distances = 0
+        for i, cluster_indices in enumerate(clusters):
+            if len(cluster_indices) > 0:
+                cluster_points = X[cluster_indices]
+                squared_distances += np.sum((cluster_points - centroids[i])**2)
+        
+        residualcost = (n * d * np.log(2 * np.pi) + squared_distances) / 2
+        return modelcost + idxcost + residualcost
+    
+    def _assign_to_centroids(self, X, centroids):
+        """Assign each point to nearest centroid."""
+        if len(centroids) == 0:
+            return []
+        distances = np.array([np.linalg.norm(X - c, axis=1) for c in centroids])
+        labels = np.argmin(distances, axis=0)
+        clusters = [np.where(labels == i)[0] for i in range(len(centroids))]
+        return clusters
+    
+    def _kmeans_step(self, X, centroids, clusters, subcentroids, subclusters):
+        """Perform one k-means iteration."""
+        clusters = self._assign_to_centroids(X, centroids)
+        new_centroids = []
+        new_subcentroids = []
+        new_subclusters = []
+        
+        for i, cluster_indices in enumerate(clusters):
+            if len(cluster_indices) > 0:
+                cluster_points = X[cluster_indices]
+                new_centroid = np.mean(cluster_points, axis=0)
+                new_centroids.append(new_centroid)
+                
+                if i < len(subcentroids):
+                    sub_c1, sub_c2 = subcentroids[i]
+                else:
+                    sub_c1, sub_c2 = self._init_subcentroids(cluster_points)
+                
+                sub_clusters = self._assign_to_centroids(cluster_points, [sub_c1, sub_c2])
+                if len(sub_clusters[0]) > 0:
+                    sub_c1 = np.mean(cluster_points[sub_clusters[0]], axis=0)
+                if len(sub_clusters[1]) > 0:
+                    sub_c2 = np.mean(cluster_points[sub_clusters[1]], axis=0)
+                
+                new_subcentroids.append([sub_c1, sub_c2])
+                new_subclusters.append(sub_clusters)
+            else:
+                new_centroids.append(centroids[i])
+                if i < len(subcentroids):
+                    new_subcentroids.append(subcentroids[i])
+                    new_subclusters.append(subclusters[i] if i < len(subclusters) else [[], []])
+        
+        return new_centroids, clusters, new_subcentroids, new_subclusters
+    
+    def _maybe_split(self, X, centroids, clusters, subcentroids, subclusters):
+        """Try to split each cluster and keep the best split if it reduces cost."""
+        n = len(X)
+        current_k = len(centroids)
+        best_costchange = 0
+        split_at = -1
+        
+        for i in range(len(centroids)):
+            if i >= len(subclusters) or len(clusters[i]) < 2:
+                continue
+            
+            cluster_points = X[clusters[i]]
+            subc1, subc2 = subclusters[i]
+            submu1, submu2 = subcentroids[i]
+            
+            cost_after_split = 0
+            if len(subc1) > 0:
+                cost_after_split += np.sum((cluster_points[subc1] - submu1)**2)
+            if len(subc2) > 0:
+                cost_after_split += np.sum((cluster_points[subc2] - submu2)**2)
+            
+            cost_before_split = np.sum((cluster_points - centroids[i])**2)
+            costchange = cost_after_split - cost_before_split + (n * np.log((current_k + 1) / current_k))
+            
+            if costchange < best_costchange:
+                best_costchange = costchange
+                split_at = i
+        
+        if best_costchange < 0 and split_at >= 0:
+            submu1, submu2 = subcentroids[split_at]
+            new_centroids = centroids[:split_at] + [submu1, submu2] + centroids[split_at+1:]
+            new_clusters = self._assign_to_centroids(X, new_centroids)
+            
+            new_subcentroids = []
+            new_subclusters = []
+            for cluster_indices in new_clusters:
+                if len(cluster_indices) > 0:
+                    cluster_points = X[cluster_indices]
+                    subs = self._init_subcentroids(cluster_points)
+                    sub_clusters = self._assign_to_centroids(cluster_points, subs)
+                    new_subcentroids.append(subs)
+                    new_subclusters.append(sub_clusters)
+                else:
+                    new_subcentroids.append([new_centroids[len(new_subcentroids)], new_centroids[len(new_subcentroids)]])
+                    new_subclusters.append([[], []])
+            
+            return new_centroids, new_clusters, new_subcentroids, new_subclusters, True
+        
+        return centroids, clusters, subcentroids, subclusters, False
+    
+    def _maybe_merge(self, X, centroids, clusters, subcentroids, subclusters):
+        """Find closest pair of centroids and merge if it reduces cost."""
+        k = len(centroids)
+        if k < 2:
+            return centroids, clusters, subcentroids, subclusters
+        
+        n = len(X)
+        min_dist = np.inf
+        i1, i2 = 0, 1
+        for i in range(k):
+            for j in range(i+1, k):
+                dist = np.linalg.norm(centroids[i] - centroids[j])
+                if dist < min_dist:
+                    min_dist = dist
+                    i1, i2 = i, j
+        
+        Z_indices = np.concatenate([clusters[i1], clusters[i2]])
+        if len(Z_indices) == 0:
+            return centroids, clusters, subcentroids, subclusters
+        
+        Z = X[Z_indices]
+        m_merged = np.mean(Z, axis=0)
+        
+        mainQ = np.sum((Z - m_merged)**2)
+        subcQ = 0
+        if len(clusters[i1]) > 0:
+            subcQ += np.sum((X[clusters[i1]] - centroids[i1])**2)
+        if len(clusters[i2]) > 0:
+            subcQ += np.sum((X[clusters[i2]] - centroids[i2])**2)
+        
+        costchange = mainQ - subcQ - (n * np.log(k / (k - 1)))
+        
+        if costchange < 0:
+            new_centroids = [c for idx, c in enumerate(centroids) if idx not in [i1, i2]]
+            new_centroids.insert(i1, m_merged)
+            new_clusters = self._assign_to_centroids(X, new_centroids)
+            
+            new_subcentroids = []
+            new_subclusters = []
+            for cluster_indices in new_clusters:
+                if len(cluster_indices) > 0:
+                    cluster_points = X[cluster_indices]
+                    subs = self._init_subcentroids(cluster_points)
+                    sub_clusters = self._assign_to_centroids(cluster_points, subs)
+                    new_subcentroids.append(subs)
+                    new_subclusters.append(sub_clusters)
+                else:
+                    new_subcentroids.append([new_centroids[len(new_subcentroids)], new_centroids[len(new_subcentroids)]])
+                    new_subclusters.append([[], []])
+            
+            return new_centroids, new_clusters, new_subcentroids, new_subclusters
+        
+        return centroids, clusters, subcentroids, subclusters
+    
+    def fit(self, X):
+        """Fit K*-means clustering to data."""
+        np.random.seed(self.random_state)
+        n, d = X.shape
+        
+        mu = np.mean(X, axis=0)
+        centroids = [mu]
+        clusters = [np.arange(n)]
+        subcentroids = [self._init_subcentroids(X)]
+        subclusters = [self._assign_to_centroids(X, subcentroids[0])]
+        
+        best_cost = np.inf
+        unimproved_count = 0
+        iteration = 0
+        
+        print(f"Starting K*-means with patience={self.patience}")
+        
+        while True:
+            iteration += 1
+            centroids, clusters, subcentroids, subclusters = self._kmeans_step(X, centroids, clusters, subcentroids, subclusters)
+            centroids, clusters, subcentroids, subclusters, did_split = self._maybe_split(X, centroids, clusters, subcentroids, subclusters)
+            
+            if did_split:
+                print(f"  Iteration {iteration}: Split performed, K={len(centroids)}")
+            
+            if not did_split:
+                centroids, clusters, subcentroids, subclusters = self._kmeans_step(X, centroids, clusters, subcentroids, subclusters)
+                old_k = len(centroids)
+                centroids, clusters, subcentroids, subclusters = self._maybe_merge(X, centroids, clusters, subcentroids, subclusters)
+                
+                if len(centroids) < old_k:
+                    print(f"  Iteration {iteration}: Merge performed, K={len(centroids)}")
+            
+            cost = self._mdl_cost(X, centroids, clusters)
+            self.cost_history.append(cost)
+            
+            if iteration % 5 == 0:
+                print(f"  Iteration {iteration}: K={len(centroids)}, Cost={cost:.2f}")
+            
+            if cost < best_cost:
+                best_cost = cost
+                unimproved_count = 0
+                self.centroids = [c.copy() for c in centroids]
+                self.labels = np.argmin(np.array([np.linalg.norm(X - c, axis=1) for c in centroids]), axis=0)
+            else:
+                unimproved_count += 1
+            
+            if unimproved_count >= self.patience:
+                print(f"\nConverged after {iteration} iterations")
+                print(f"Final K={len(self.centroids)}, Best Cost={best_cost:.2f}")
+                break
+        
+        return self
+    
+    def predict(self, X):
+        """Predict cluster labels for new data."""
+        if self.centroids is None:
+            raise ValueError("Model not fitted yet. Call fit() first.")
+        distances = np.array([np.linalg.norm(X - c, axis=1) for c in self.centroids])
+        return np.argmin(distances, axis=0)
+
+
+def find_optimal_level2_k_star(level1_centroids, level1_cluster_sizes, min_threshold_pct=10.0, random_state=42):
+    """
+    Automatically find the optimal K for Level 2 clustering in star mode.
+    
+    Parameters:
+    -----------
+    level1_centroids : ndarray
+        Level 1 cluster centroids
+    level1_cluster_sizes : ndarray
+        Level 1 cluster population sizes
+    min_threshold_pct : float
+        Minimum percentage of population per cluster (default 10%)
+    random_state : int
+        Random seed for reproducibility
+        
+    Returns:
+    --------
+    dict : Contains optimal_k, level2_kmeans model, and level2_centroid_labels
+    """
+    if not (5.0 <= min_threshold_pct <= 20.0):
+        min_threshold_pct = 10.0
+    
+    optimal_k_level1 = len(level1_centroids)
+    total_samples = np.sum(level1_cluster_sizes)
+    
+    print(f"\n{'='*80}")
+    print(f"STAR MODE - LEVEL 2: Automatic K Selection")
+    print(f"{'='*80}")
+    print(f"Level 1 K: {optimal_k_level1} micro-segments")
+    print(f"Total samples: {total_samples:,}")
+    print(f"Minimum threshold: {min_threshold_pct}% ({int(total_samples * min_threshold_pct / 100):,} samples)")
+    print(f"{'='*80}")
+    
+    level1_centroids_array = np.array(level1_centroids)
+    initial_k = min(7, optimal_k_level1)
+    print(f"\nStarting K heuristic: min(7, {optimal_k_level1}) = {initial_k}")
+    
+    best_k = None
+    best_result = None
+    
+    for k_candidate in range(initial_k, 1, -1):
+        print(f"\nTrying K={k_candidate}...")
+        
+        kmeans_l2 = KMeans(n_clusters=k_candidate, random_state=random_state, n_init=10, max_iter=300)
+        level2_centroid_labels = kmeans_l2.fit_predict(level1_centroids_array, sample_weight=level1_cluster_sizes)
+        
+        cluster_percentages = []
+        min_percentage = 100.0
+        
+        for l2_id in range(k_candidate):
+            l1_in_l2 = np.where(level2_centroid_labels == l2_id)[0]
+            count = np.sum(level1_cluster_sizes[l1_in_l2])
+            percentage = (count / total_samples) * 100
+            cluster_percentages.append(percentage)
+            min_percentage = min(min_percentage, percentage)
+        
+        meets_threshold = min_percentage >= min_threshold_pct
+        
+        print(f"  Minimum cluster: {min_percentage:.2f}%")
+        print(f"  {'✅ MEETS THRESHOLD' if meets_threshold else '❌ BELOW THRESHOLD'}")
+        
+        if meets_threshold:
+            best_k = k_candidate
+            best_result = {
+                'optimal_k': k_candidate,
+                'level2_kmeans': kmeans_l2,
+                'level2_centroid_labels': level2_centroid_labels,
+                'cluster_percentages': cluster_percentages,
+                'meets_threshold': True
+            }
+            print(f"\n🎯 SUCCESS! Found optimal K={k_candidate}")
+            break
+    
+    if best_k is None:
+        print(f"\n⚠️ No K met the threshold. Using K=2 as best-effort fallback")
+        k_candidate = 2
+        kmeans_l2 = KMeans(n_clusters=k_candidate, random_state=random_state, n_init=10, max_iter=300)
+        level2_centroid_labels = kmeans_l2.fit_predict(level1_centroids_array, sample_weight=level1_cluster_sizes)
+        
+        cluster_percentages = []
+        for l2_id in range(k_candidate):
+            l1_in_l2 = np.where(level2_centroid_labels == l2_id)[0]
+            count = np.sum(level1_cluster_sizes[l1_in_l2])
+            percentage = (count / total_samples) * 100
+            cluster_percentages.append(percentage)
+        
+        best_result = {
+            'optimal_k': 2,
+            'level2_kmeans': kmeans_l2,
+            'level2_centroid_labels': level2_centroid_labels,
+            'cluster_percentages': cluster_percentages,
+            'meets_threshold': False
+        }
+    
+    print(f"\n{'='*80}")
+    print(f"LEVEL 2 COMPLETE: Selected K={best_result['optimal_k']}")
+    print(f"{'='*80}\n")
+    
+    return best_result
+
+
+# =============================================================================
 # Cluster Data Structure
 # =============================================================================
 
@@ -987,8 +1351,12 @@ class Hercules:
     DEFAULT_RESAMPLING_ITERATIONS = 10
     EMPTY_TEXT_PLACEHOLDER = "[EMPTY_CONTENT]"
 
+    # Star mode defaults
+    DEFAULT_STAR_MODE_MIN_THRESHOLD_PCT = 10.0
+    DEFAULT_STAR_MODE_PATIENCE = 5
+
     def __init__(self,
-                 level_cluster_counts: Optional[list[int]],
+                 level_cluster_counts: Optional[list[int] | str],
                  text_embedding_client: Optional[Callable[[list[str]], np.ndarray]] = None,
                  llm_client: Optional[Callable[[str], str]] = None,
                  image_embedding_client: Optional[Callable[[list[Any]], np.ndarray]] = None,
@@ -1029,13 +1397,15 @@ class Hercules:
                  use_llm_for_l0_descriptions: bool = DEFAULT_USE_LLM_FOR_L0_DESCRIPTIONS,
                  use_resampling: bool = DEFAULT_USE_RESAMPLING,
                  resampling_points_per_cluster: int = DEFAULT_RESAMPLING_POINTS_PER_CLUSTER,
-                 resampling_iterations: int = DEFAULT_RESAMPLING_ITERATIONS
+                 resampling_iterations: int = DEFAULT_RESAMPLING_ITERATIONS,
+                 star_mode_min_threshold_pct: float = DEFAULT_STAR_MODE_MIN_THRESHOLD_PCT,
+                 star_mode_patience: int = DEFAULT_STAR_MODE_PATIENCE
                  ):
         """
         Initializes the Hercules clusterer.
 
         Args:
-            level_cluster_counts: List of desired clusters per level, or None for auto-k.
+            level_cluster_counts: List of desired clusters per level, None for auto-k, or 'star' for K* Means mode.
             text_embedding_client: Function for embedding text.
             llm_client: Function for LLM calls (description generation).
             image_embedding_client: Function for embedding images (optional).
@@ -1135,9 +1505,11 @@ class Hercules:
         self._function_metadata['image_captioning'] = self._get_function_metadata(self.image_captioning_client)
 
         if level_cluster_counts is not None:
-            if not isinstance(level_cluster_counts, list) or not all(isinstance(k, int) and k > 0 for k in level_cluster_counts):
-                raise ValueError("`level_cluster_counts`, if provided, must be a list of positive integers.")
+            if level_cluster_counts != 'star':
+                if not isinstance(level_cluster_counts, list) or not all(isinstance(k, int) and k > 0 for k in level_cluster_counts):
+                    raise ValueError("`level_cluster_counts`, if provided, must be a list of positive integers or 'star'.")
         self.level_cluster_counts = level_cluster_counts
+        self.star_mode = (level_cluster_counts == 'star')
         if representation_mode not in ["direct", "description"]:
              raise ValueError("`representation_mode` must be 'direct' or 'description'")
         self.representation_mode = representation_mode
@@ -1202,6 +1574,9 @@ class Hercules:
         self.use_resampling = use_resampling
         self.resampling_points_per_cluster = max(1, resampling_points_per_cluster)
         self.resampling_iterations = max(1, resampling_iterations)
+        
+        self.star_mode_patience = max(1, star_mode_patience)
+        self.star_mode_min_threshold_pct = max(0.0, star_mode_min_threshold_pct)
 
         self.variable_names: list[str] | None = None
         self.numeric_metadata_by_name: dict[str, dict[str, Any]] | None = None
@@ -1853,7 +2228,7 @@ class Hercules:
         n_items_requested = len(item_ids_requested)
         self._log(f"Building LLM prompt {prompt_id} for {n_items_requested} {item_type_plural} (Level {level})...", level=2)
 
-        prompt = f"""Generate a concise 'title' (max 5-7 words) and 'description' (1-2 sentences) for EACH of the {item_type_plural} below (Level {level}).
+        prompt = f"""Generate a concise 'title' (max 5-7 words) and 'description' (3-4 sentences) for EACH of the {item_type_plural} below (Level {level}).
 """
         if self._current_topic_seed:
             escaped_seed = self._current_topic_seed.replace('"', '\\"').replace("'", "\\'")
@@ -2809,8 +3184,13 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         self._log(f"Hercules Version: {self.HERCULES_VERSION}", level=1)
         self._log(f"Verbosity Level: {self.verbose}", level=1)
         self._log(f"Representation Mode: {self.representation_mode}", level=1)
-        if self.level_cluster_counts is None: self._log(f"Automatic K Mode: Enabled (Method: {self.auto_k_method}, Max K: {self.auto_k_max})", level=1)
-        else: self._log(f"Automatic K Mode: Disabled (Using level_cluster_counts: {self.level_cluster_counts})", level=1)
+        if self.star_mode:
+            self._log(f"Star Mode: Enabled (K* Means for L1, Auto K with threshold for L2)", level=1)
+            self._log(f"  Star L2 threshold: {self.star_mode_min_threshold_pct}%", level=1)
+        elif self.level_cluster_counts is None:
+            self._log(f"Automatic K Mode: Enabled (Method: {self.auto_k_method}, Max K: {self.auto_k_max})", level=1)
+        else:
+            self._log(f"Automatic K Mode: Disabled (Using level_cluster_counts: {self.level_cluster_counts})", level=1)
         if self.reduction_methods: self._log(f"Reduction Methods: {self.reduction_methods} ({self.n_reduction_components} components)", level=1)
         if self._current_topic_seed: self._log(f"Topic Seed: '{self._current_topic_seed}'", level=1)
         if numeric_metadata: self._log("Numeric metadata provided.", level=1)
@@ -2860,7 +3240,12 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
             return [] if not self._l0_clusters_ordered else self._l0_clusters_ordered
 
         self._log(f"Starting hierarchical loop with {len(valid_l0_clusters)} valid L0 clusters.", level=1)
-        top_level_clusters = self._perform_hierarchical_clustering_loop(valid_l0_clusters)
+        
+        # Use star mode if enabled
+        if self.star_mode:
+            top_level_clusters = self._perform_star_mode_clustering(valid_l0_clusters)
+        else:
+            top_level_clusters = self._perform_hierarchical_clustering_loop(valid_l0_clusters)
 
         if self.save_run_details: self._save_prompt_log()
         self._log(f"\n--- Hercules Clustering Run Finished ---", level=1)
@@ -2868,6 +3253,140 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         self._log(f"Returning {len(top_level_clusters)} top-level clusters.", level=1)
 
         return top_level_clusters
+
+    def _perform_star_mode_clustering(self, l0_clusters: list[Cluster]) -> list[Cluster]:
+        """
+        Performs K* Means two-level hierarchical clustering (Star Mode).
+        Level 1: K* Means with MDL-based automatic K selection
+        Level 2: Weighted K-Means with business-driven threshold
+        """
+        if self.input_data_type != 'numeric':
+            print("Warning: Star mode is optimized for numeric data. Proceeding with available representation vectors.")
+        
+        # Extract representation vectors from L0 clusters
+        valid_l0_clusters = [c for c in l0_clusters if c.representation_vector is not None]
+        if not valid_l0_clusters:
+            print("Error: No valid L0 clusters with representation vectors for star mode.")
+            return []
+        
+        vectors_l0 = np.array([c.representation_vector for c in valid_l0_clusters])
+        
+        self._log(f"\n--- STAR MODE: Level 1 (K* Means) ---", level=1)
+        self._log(f"Input: {vectors_l0.shape[0]} L0 clusters", level=1)
+        
+        # Level 1: K* Means clustering
+        kstar = KStarMeans(patience=self.star_mode_patience, random_state=self.random_state)
+        kstar.fit(vectors_l0)
+        
+        optimal_k_level1 = len(kstar.centroids)
+        labels_level1 = kstar.labels
+        
+        self._log(f"K* Means determined K={optimal_k_level1} for Level 1", level=1)
+        
+        # Create Level 1 clusters
+        level1_clusters = []
+        level1_cluster_map = {}
+        
+        for i in range(optimal_k_level1):
+            level1_cluster = Cluster(level=1, original_data_type=self.input_data_type)
+            level1_cluster.representation_vector = kstar.centroids[i]
+            level1_cluster.representation_vector_space = valid_l0_clusters[0].representation_vector_space
+            level1_clusters.append(level1_cluster)
+            level1_cluster_map[i] = level1_cluster
+            self._all_clusters_map[level1_cluster.id] = level1_cluster
+        
+        # Assign L0 clusters to Level 1
+        for idx, l0_cluster in enumerate(valid_l0_clusters):
+            l1_label = labels_level1[idx]
+            parent_l1 = level1_cluster_map[l1_label]
+            parent_l1.children.append(l0_cluster)
+            l0_cluster.parent = parent_l1
+        
+        # Aggregate numeric data and get descriptions for Level 1
+        clusters_needing_llm_desc = []
+        for parent in level1_clusters:
+            parent._aggregate_numeric_data_from_children()
+            clusters_needing_llm_desc.append(parent)
+        
+        if clusters_needing_llm_desc:
+            processed_llm_results, _ = self._get_llm_descriptions_batched(clusters_needing_llm_desc)
+            for parent in level1_clusters:
+                key = parent.id
+                if key in processed_llm_results:
+                    parent.title, parent.description = processed_llm_results[key]
+        
+        self._generate_and_assign_description_embeddings(level1_clusters)
+        
+        if self.reduction_methods:
+            self._apply_reductions_to_embeddings(level1_clusters, 'representation_vector')
+            self._apply_reductions_to_embeddings(level1_clusters, 'description_embedding')
+        
+        self._log(f"Level 1 complete: {len(level1_clusters)} clusters created", level=1)
+        
+        # Level 2: Weighted K-Means with automatic K selection
+        self._log(f"\n--- STAR MODE: Level 2 (Weighted K-Means Auto K) ---", level=1)
+        
+        level1_centroids = np.array([c.representation_vector for c in level1_clusters])
+        level1_cluster_sizes = np.array([len(c.get_level0_descendants()) for c in level1_clusters])
+        
+        level2_result = find_optimal_level2_k_star(
+            level1_centroids=level1_centroids,
+            level1_cluster_sizes=level1_cluster_sizes,
+            min_threshold_pct=self.star_mode_min_threshold_pct,
+            random_state=self.random_state
+        )
+        
+        optimal_k_level2 = level2_result['optimal_k']
+        level2_kmeans = level2_result['level2_kmeans']
+        level2_centroid_labels = level2_result['level2_centroid_labels']
+        
+        self._log(f"Level 2 determined K={optimal_k_level2}", level=1)
+        
+        # Create Level 2 clusters
+        level2_clusters = []
+        level2_cluster_map = {}
+        
+        for i in range(optimal_k_level2):
+            level2_cluster = Cluster(level=2, original_data_type=self.input_data_type)
+            level2_cluster.representation_vector = level2_kmeans.cluster_centers_[i]
+            level2_cluster.representation_vector_space = level1_clusters[0].representation_vector_space
+            level2_clusters.append(level2_cluster)
+            level2_cluster_map[i] = level2_cluster
+            self._all_clusters_map[level2_cluster.id] = level2_cluster
+        
+        # Assign Level 1 clusters to Level 2
+        for idx, l1_cluster in enumerate(level1_clusters):
+            l2_label = level2_centroid_labels[idx]
+            parent_l2 = level2_cluster_map[l2_label]
+            parent_l2.children.append(l1_cluster)
+            l1_cluster.parent = parent_l2
+        
+        # Aggregate and describe Level 2
+        clusters_needing_llm_desc = []
+        for parent in level2_clusters:
+            parent._aggregate_numeric_data_from_children()
+            clusters_needing_llm_desc.append(parent)
+        
+        if clusters_needing_llm_desc:
+            processed_llm_results, _ = self._get_llm_descriptions_batched(clusters_needing_llm_desc)
+            for parent in level2_clusters:
+                key = parent.id
+                if key in processed_llm_results:
+                    parent.title, parent.description = processed_llm_results[key]
+        
+        self._generate_and_assign_description_embeddings(level2_clusters)
+        
+        if self.reduction_methods:
+            self._apply_reductions_to_embeddings(level2_clusters, 'representation_vector')
+            self._apply_reductions_to_embeddings(level2_clusters, 'description_embedding')
+        
+        self._max_level = 2
+        self._log(f"Level 2 complete: {len(level2_clusters)} macro-segments created", level=1)
+        self._log(f"\nStar mode clustering complete!", level=1)
+        self._log(f"  Level 1: {optimal_k_level1} micro-segments (K* Means)", level=1)
+        self._log(f"  Level 2: {optimal_k_level2} macro-segments (Weighted Auto K)", level=1)
+        
+        return level2_clusters
 
     @property
     def max_level(self) -> int:
