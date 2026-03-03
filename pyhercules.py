@@ -547,17 +547,20 @@ class Cluster:
         return sampled_children
 
     def compute_numeric_statistics(self, variable_names: list[str],
-                                   numeric_stats_precision: int = 2
+                                   numeric_stats_precision: int = 2,
+                                   global_means: np.ndarray | None = None
                                    ) -> dict | None:
         """
         Computes statistics using aggregated *original, unscaled* numeric data.
+        Features are sorted by absolute deviation from global mean.
 
         Args:
             variable_names: Names of the numeric features.
             numeric_stats_precision: Decimal places for storing stats (not used for computation).
+            global_means: Global mean values for each feature (for deviation calculation).
 
         Returns:
-            Dictionary of statistics per variable, or None.
+            Dictionary of statistics per variable (sorted by deviation), or None.
         """
         if self.original_data_type != 'numeric': return None
         data_to_analyze = self.original_numeric_data if self.level > 0 else self._raw_item_data
@@ -579,7 +582,7 @@ class Cluster:
             var_names_to_use = variable_names
             num_features = len(var_names_to_use)
 
-        stats = {}
+        stats_list = []
         for i in range(num_features):
              var_name = var_names_to_use[i]
              try:
@@ -588,17 +591,58 @@ class Cluster:
                  if var_data_clean.size == 0: continue
 
                  is_single_item = (self.level == 0 or data.shape[0] == 1)
+                 
+                 cluster_mean = float(np.mean(var_data_clean))
+                 
+                 # Calculate deviation from global mean if available
+                 deviation_pct = 0.0
+                 abs_deviation_pct = 0.0
+                 global_mean = None
+                 
+                 if global_means is not None and i < len(global_means):
+                     global_mean = float(global_means[i])
+                     # Calculate percentage deviation
+                     if abs(global_mean) > 1e-10:  # Avoid division by zero
+                         deviation_pct = ((cluster_mean - global_mean) / abs(global_mean)) * 100
+                         abs_deviation_pct = abs(deviation_pct)
+                     else:
+                         # If global mean is ~0, use absolute difference
+                         deviation_pct = cluster_mean * 100
+                         abs_deviation_pct = abs(deviation_pct)
 
-                 stats[var_name] = {
-                     "mean": float(np.mean(var_data_clean)),
-                     "median": float(np.median(var_data_clean)) if not is_single_item else float(np.mean(var_data_clean)),
-                     "min": float(np.min(var_data_clean)) if not is_single_item else float(np.mean(var_data_clean)),
-                     "max": float(np.max(var_data_clean)) if not is_single_item else float(np.mean(var_data_clean)),
-                     "std": float(np.std(var_data_clean)) if not is_single_item else 0.0
-                 }
+                 stats_list.append({
+                     'var_name': var_name,
+                     'mean': cluster_mean,
+                     'median': float(np.median(var_data_clean)) if not is_single_item else cluster_mean,
+                     'min': float(np.min(var_data_clean)) if not is_single_item else cluster_mean,
+                     'max': float(np.max(var_data_clean)) if not is_single_item else cluster_mean,
+                     'std': float(np.std(var_data_clean)) if not is_single_item else 0.0,
+                     'global_mean': global_mean,
+                     'deviation_pct': deviation_pct,
+                     'abs_deviation_pct': abs_deviation_pct
+                 })
              except Exception as e:
                   warnings.warn(f"Error computing stats for var '{var_name}' in cluster {self.id}: {e}")
                   continue
+        
+        if not stats_list:
+            return None
+        
+        # Sort by absolute deviation (descending) - most defining features first
+        stats_list.sort(key=lambda x: x['abs_deviation_pct'], reverse=True)
+        
+        # Convert to dictionary keyed by variable name, preserving sorted order
+        stats = {item['var_name']: {
+            'mean': item['mean'],
+            'median': item['median'],
+            'min': item['min'],
+            'max': item['max'],
+            'std': item['std'],
+            'global_mean': item['global_mean'],
+            'deviation_pct': item['deviation_pct'],
+            'abs_deviation_pct': item['abs_deviation_pct']
+        } for item in stats_list}
+        
         return stats if stats else None
 
     def get_data_for_prompt(self,
@@ -613,7 +657,8 @@ class Cluster:
                            variable_metadata_by_name: Optional[Dict[str, Dict[str, Any]]],
                            numeric_stats_precision: int,
                            max_stats_vars: int,
-                           child_sample_desc_trunc_len: int
+                           child_sample_desc_trunc_len: int,
+                           global_numeric_means: np.ndarray | None = None
                            ) -> dict:
         """
         Prepares data for generating LLM title/description prompt.
@@ -671,7 +716,8 @@ class Cluster:
         if self.original_data_type == 'numeric' and variable_names:
              prompt_data["statistics"] = self.compute_numeric_statistics(
                  variable_names,
-                 numeric_stats_precision=numeric_stats_precision
+                 numeric_stats_precision=numeric_stats_precision,
+                 global_means=global_numeric_means
              )
 
         if self.level == 0 and self.original_data_type == 'image':
@@ -926,7 +972,7 @@ class Hercules:
     DEFAULT_PROMPT_IMMEDIATE_CHILD_SAMPLE_STRATEGY = "random"
     DEFAULT_PROMPT_IMMEDIATE_CHILD_SAMPLE_SIZE = 3
     DEFAULT_PROMPT_CHILD_SAMPLE_DESC_TRUNC_LEN = 75
-    DEFAULT_PROMPT_MAX_STATS_VARS = 5
+    DEFAULT_PROMPT_MAX_STATS_VARS = 10
     DEFAULT_PROMPT_NUMERIC_STATS_PRECISION = 2
     DEFAULT_DIRECT_L0_TEXT_TRUNC_LEN = 150
     DEFAULT_CLUSTER_NUMERIC_STATS_PRECISION = 2
@@ -1161,6 +1207,7 @@ class Hercules:
         self.numeric_metadata_by_name: dict[str, dict[str, Any]] | None = None
         self.input_data_type: str | None = None
         self.original_numeric_data_: np.ndarray | None = None
+        self._global_numeric_means_: np.ndarray | None = None
         self._scaler: StandardScaler | None = None
 
         self._reducers_trained_ = {"text_embedding": False, "image_embedding": False, "numeric": False}
@@ -1361,6 +1408,7 @@ class Hercules:
         self.variable_names = None
         self.numeric_metadata_by_name = None
         self.original_numeric_data_ = None
+        self._global_numeric_means_ = None
         self._scaler = None
         input_type = None
         standardized_data = None
@@ -1565,6 +1613,10 @@ class Hercules:
                  raise ValueError("Numeric data contains non-finite values (inf/-inf). Please handle them before clustering.")
 
             self.original_numeric_data_ = numeric_data_unscaled.copy()
+            
+            # Store global means for deviation calculations
+            self._global_numeric_means_ = np.mean(numeric_data_unscaled, axis=0)
+            self._log(f"Stored global means for {len(self._global_numeric_means_)} numeric features.", level=2)
 
             if original_numeric_keys is not None:
                 num_features = len(original_numeric_keys)
@@ -1870,8 +1922,9 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
 
             stats = data.get("statistics")
             if stats:
-                 stat_desc = "Key Statistics (Original Scale)"
+                 stat_desc = "Most Defining Features (Top Deviations from Global Mean)"
                  cluster_block += f"{stat_desc}:\n"
+                 # Stats are already sorted by deviation, just take the first N
                  vars_to_show = list(stats.keys())[:self.prompt_max_stats_vars]
                  num_fmt = f"{{:.{self.prompt_numeric_stats_precision}f}}"
 
@@ -1880,22 +1933,23 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                       var_meta = variable_metadata.get(var_name) if variable_metadata else None
                       unit_str = f" ({var_meta['unit']})" if var_meta and var_meta.get('unit') else ""
                       desc_str = f" # {var_meta['description']}" if var_meta and var_meta.get('description') else ""
-                      is_single_item_or_l0 = (level == 0 or num_underlying == 1)
-
-                      if not is_single_item_or_l0:
-                          mean = s_data['mean']
-                          min_val = s_data['min']
-                          max_val = s_data['max']
-                          std = s_data['std']
-                          cluster_block += (f"- {var_name}{unit_str}: mean={num_fmt.format(mean)} "
-                                            f"(range: {num_fmt.format(min_val)} to {num_fmt.format(max_val)})"
-                                            f"{f', std={num_fmt.format(std)}' if std > 1e-9 else ''}"
-                                            f"{desc_str}\n")
+                      
+                      cluster_mean = s_data['mean']
+                      deviation_pct = s_data.get('deviation_pct', 0.0)
+                      global_mean = s_data.get('global_mean')
+                      
+                      # Format deviation string
+                      if global_mean is not None:
+                          direction = "↑" if deviation_pct > 0 else "↓"
+                          deviation_str = f" | {direction} Deviation: {abs(deviation_pct):.2f}%"
+                          comparison_str = f" (Cluster: {num_fmt.format(cluster_mean)} vs Global: {num_fmt.format(global_mean)})"
+                          cluster_block += f"- {var_name}{unit_str}:{comparison_str}{deviation_str}{desc_str}\n"
                       else:
-                           cluster_block += f"- {var_name}{unit_str}: {num_fmt.format(s_data['mean'])}{desc_str}\n"
+                          # Fallback if global means not available
+                          cluster_block += f"- {var_name}{unit_str}: mean={num_fmt.format(cluster_mean)}{desc_str}\n"
 
                  if len(stats) > self.prompt_max_stats_vars:
-                      cluster_block += "- ... (more variables exist)\n"
+                      cluster_block += f"- ... ({len(stats) - self.prompt_max_stats_vars} more features with lower deviations)\n"
 
             cluster_block += f"--- End {item_type} ID: {item_id_str} ---\n"
 
@@ -2042,6 +2096,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                         variable_names=self.variable_names,
                         variable_metadata_by_name=self.numeric_metadata_by_name,
                         numeric_stats_precision=self.cluster_numeric_stats_precision,
+                        global_numeric_means=self._global_numeric_means_,
                         max_stats_vars=self.prompt_max_stats_vars,
                         child_sample_desc_trunc_len=self.prompt_child_sample_desc_trunc_len
                     ) for c in batch_chunk

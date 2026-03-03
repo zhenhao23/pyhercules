@@ -644,7 +644,8 @@ def create_summary_content(cluster_id, cluster_map, config_data, state_data, eva
             html.H6("Download Results", className="mt-4 mb-2 fw-bold"),
             dbc.Button([html.I(className="bi bi-table me-1"), "Membership DF (CSV)"], id="btn-download-membership-csv", color="info", outline=True, size="sm", className="me-2 mb-2"),
             dbc.Button([html.I(className="bi bi-graph-up me-1"), "Evaluation (JSON)"], id="btn-download-evaluation-json", color="info", outline=True, size="sm", className="me-2 mb-2"),
-            dbc.Button([html.I(className="bi bi-diagram-3 me-1"), "Hierarchy (TXT)"], id="btn-download-hierarchy-txt", color="info", outline=True, size="sm", className="mb-2"),
+            dbc.Button([html.I(className="bi bi-diagram-3 me-1"), "Hierarchy (TXT)"], id="btn-download-hierarchy-txt", color="info", outline=True, size="sm", className="me-2 mb-2"),
+            dbc.Button([html.I(className="bi bi-chat-left-text me-1"), "Cluster Prompts (CSV)"], id="btn-download-cluster-prompts", color="info", outline=True, size="sm", className="mb-2"),
         ], className="mt-3 border-top pt-3")
 
         log_accordion_item = dbc.AccordionItem(
@@ -1099,7 +1100,7 @@ app.layout = html.Div([
     dcc.Store(id='run-params-store'), dcc.Store(id='run-trigger-store'),
     dcc.Download(id='download-full-results-json'), dcc.Download(id='download-membership-csv'),
     dcc.Download(id='download-evaluation-json'), dcc.Download(id='download-hierarchy-txt'),
-    dcc.Download(id='download-run-log-txt'),
+    dcc.Download(id='download-run-log-txt'), dcc.Download(id='download-cluster-prompts'),
     html.Div(id='page-content', children=create_upload_layout())
 ])
 
@@ -1636,7 +1637,7 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
             cfg = {k: getattr(hercules, k, 'N/A') for k in ['level_cluster_counts', 'representation_mode', 'reduction_methods', 'random_state']}
             cfg.update({"selected_text_embedder": txt_emb_name, "selected_llm": llm_name, "selected_image_embedder": img_emb_name, "selected_image_captioner": img_cap_name})
             state = {"variable_names": getattr(hercules, 'variable_names', None), "input_data_type": getattr(hercules, 'input_data_type', 'unknown'), "embedding_dims": getattr(hercules, 'embedding_dims_', {}), "max_level_achieved": getattr(hercules, 'max_level', 0), "num_l0_items": len(getattr(hercules, '_l0_clusters_ordered', [])), "_l0_original_ids_ordered": [str(c.original_id) for c in getattr(hercules, '_l0_clusters_ordered', [])], "tabular_load_params": load_params, "data_source_description": data_desc}
-            results_pkg = {"clusters": clusters_serial, "config": cfg, "state": state, "eval_results": eval_results}
+            results_pkg = {"clusters": clusters_serial, "config": cfg, "state": state, "eval_results": eval_results, "prompt_log": getattr(hercules, '_prompt_log', [])}
             
             duration = time.time() - start_time
             final_status_alert = dbc.Alert([html.I(className="bi bi-check-circle-fill me-2"), html.Strong(f"Finished in {duration:.2f}s. Results ready.")], color="success", duration=8000)
@@ -2071,6 +2072,56 @@ def download_run_log(n_clicks, results_data, session_id):
     log_text = log_content if isinstance(log_content, str) else "Log content not available as simple text."
     filename = get_download_filename("hercules_run_log", "txt", session_id)
     return dict(content=log_text, filename=filename)
+
+@app.callback(Output('download-cluster-prompts', 'data'),
+              [Input('btn-download-cluster-prompts', 'n_clicks')],
+              [State('hercules-results-store', 'data'), State('session-id-store', 'data')],
+              prevent_initial_call=True)
+def download_cluster_prompts_callback(n_clicks, results_pkg, session_id):
+    if not results_pkg or not n_clicks:
+        return no_update
+    
+    prompt_log = results_pkg.get('prompt_log', [])
+    if not prompt_log:
+        return no_update
+    
+    # Build CSV content with actual prompt_log fields
+    csv_lines = ["prompt_id,run_id,timestamp,level,item_ids_requested,item_ids_included,item_type,topic_seed,estimated_tokens,token_limit,prompt_text,llm_response,llm_error,parsed_output,parsing_error"]
+    
+    for entry in prompt_log:
+        prompt_id = str(entry.get('prompt_id', ''))
+        run_id = str(entry.get('run_id', ''))
+        timestamp = str(entry.get('timestamp', ''))
+        level = str(entry.get('level', ''))
+        
+        # Convert lists to semicolon-separated strings
+        item_ids_requested = '; '.join([str(x) for x in entry.get('item_ids_requested', [])])
+        item_ids_included = '; '.join([str(x) for x in entry.get('item_ids_included', [])])
+        
+        item_type = str(entry.get('item_type', ''))
+        topic_seed = str(entry.get('topic_seed_used', ''))
+        estimated_tokens = str(entry.get('estimated_tokens', ''))
+        token_limit = str(entry.get('token_limit', ''))
+        
+        # Get full prompt and response, preserving newlines
+        prompt_text = str(entry.get('prompt_text', '')).replace('"', '""')
+        llm_response = str(entry.get('llm_response', '') or '').replace('"', '""')
+        llm_error = str(entry.get('llm_error', '') or '').replace('"', '""')
+        
+        # Handle parsed_output which might be a dict/list
+        parsed_output = entry.get('parsed_output', '')
+        if parsed_output:
+            parsed_output = str(parsed_output).replace('"', '""')
+        else:
+            parsed_output = ''
+        
+        parsing_error = str(entry.get('parsing_error', '') or '').replace('"', '""')
+        
+        csv_lines.append(f'"{prompt_id}","{run_id}","{timestamp}","{level}","{item_ids_requested}","{item_ids_included}","{item_type}","{topic_seed}","{estimated_tokens}","{token_limit}","{prompt_text}","{llm_response}","{llm_error}","{parsed_output}","{parsing_error}"')
+    
+    csv_content = '\n'.join(csv_lines)
+    filename = get_download_filename("cluster_prompts", "csv", session_id)
+    return dict(content=csv_content, filename=filename)
 
 # --- Run the App ---
 if __name__ == '__main__':
