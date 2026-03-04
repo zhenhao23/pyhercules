@@ -1362,6 +1362,7 @@ class Hercules:
                  image_embedding_client: Optional[Callable[[list[Any]], np.ndarray]] = None,
                  image_captioning_client: Optional[Callable[[list[Any], Optional[str]], list[str]]] = None,
                  representation_mode: str = DEFAULT_REPRESENTATION_MODE,
+                 industry_context: Optional[str] = None,
                  auto_k_method: str = DEFAULT_AUTO_K_METHOD,
                  auto_k_max: int = DEFAULT_AUTO_K_MAX,
                  auto_k_metric_params: dict = DEFAULT_AUTO_K_METRIC_PARAMS,
@@ -1411,6 +1412,7 @@ class Hercules:
             image_embedding_client: Function for embedding images (optional).
             image_captioning_client: Function for captioning images (optional).
             representation_mode: 'direct' or 'description'.
+            industry_context: Industry context string ('telco', 'bank', 'retail') to guide LLM responses with domain-specific jargon.
             auto_k_method: Metric for auto-k ('silhouette', 'davies_bouldin', 'calinski_harabasz').
             auto_k_max: Max k to test per level for auto-k.
             auto_k_metric_params: Additional params for auto-k metric functions.
@@ -1513,6 +1515,7 @@ class Hercules:
         if representation_mode not in ["direct", "description"]:
              raise ValueError("`representation_mode` must be 'direct' or 'description'")
         self.representation_mode = representation_mode
+        self.industry_context = industry_context  # Store industry context for LLM prompt generation
 
         if self.level_cluster_counts is None:
             valid_auto_k_methods = ['silhouette', 'davies_bouldin', 'calinski_harabasz']
@@ -2230,9 +2233,13 @@ class Hercules:
 
         prompt = f"""Generate a concise 'title' (max 5-7 words) and 'description' (3-4 sentences) for EACH of the {item_type_plural} below (Level {level}).
 """
+        if self._current_industry_context:
+            industry_names = {'telco': 'Telecommunications', 'bank': 'Banking & Finance', 'retail': 'Retail & E-commerce'}
+            industry_display = industry_names.get(self._current_industry_context, self._current_industry_context)
+            prompt += f"INDUSTRY CONTEXT: Use {industry_display} domain terminology and jargon in your responses.\n"
         if self._current_topic_seed:
             escaped_seed = self._current_topic_seed.replace('"', '\\"').replace("'", "\\'")
-            prompt += f"CONTEXT FOCUS: Orient towards '{escaped_seed}', if relevant.\n"
+            prompt += f"TOPIC FOCUS: Orient towards '{escaped_seed}', if relevant.\n"
 
         prompt += f"""
 RESPONSE FORMAT: Respond ONLY with a single, valid JSON object.
@@ -3179,6 +3186,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         self.numeric_metadata_by_name = None
         Cluster.reset_id_counter()
         self._current_topic_seed = topic_seed
+        self._current_industry_context = self.industry_context
 
         self._log(f"--- Starting Hercules Clustering Run: {self._run_id} ---", level=1)
         self._log(f"Hercules Version: {self.HERCULES_VERSION}", level=1)
@@ -3192,6 +3200,10 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         else:
             self._log(f"Automatic K Mode: Disabled (Using level_cluster_counts: {self.level_cluster_counts})", level=1)
         if self.reduction_methods: self._log(f"Reduction Methods: {self.reduction_methods} ({self.n_reduction_components} components)", level=1)
+        if self._current_industry_context:
+            industry_names = {'telco': 'Telecommunications', 'bank': 'Banking & Finance', 'retail': 'Retail & E-commerce'}
+            industry_display = industry_names.get(self._current_industry_context, self._current_industry_context)
+            self._log(f"Industry Context: {industry_display}", level=1)
         if self._current_topic_seed: self._log(f"Topic Seed: '{self._current_topic_seed}'", level=1)
         if numeric_metadata: self._log("Numeric metadata provided.", level=1)
         if self.prompt_include_immediate_children: self._log(f"Prompting includes immediate children (Strategy: {self.prompt_immediate_child_sample_strategy}, Size: {self.prompt_immediate_child_sample_size}).", level=1)

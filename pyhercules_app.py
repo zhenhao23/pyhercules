@@ -971,6 +971,28 @@ def create_upload_layout():
                          ], className="mb-3"),
                          dbc.Row([
                              dbc.Col([
+                                 dbc.Label("Industry Context (Optional)", html_for='industry-select', className="fw-bold"),
+                                 html.I(className="bi bi-info-circle ms-1", id="tooltip-industry", style={'cursor': 'pointer'}),
+                                 dbc.Tooltip(
+                                     "Select the industry to guide LLM responses with domain-specific terminology and jargon.",
+                                     target="tooltip-industry", placement="top"
+                                 ),
+                                 dcc.Dropdown(
+                                     id='industry-select',
+                                     options=[
+                                         {'label': 'None (General)', 'value': ''},
+                                         {'label': 'Telecommunications', 'value': 'telco'},
+                                         {'label': 'Banking & Finance', 'value': 'bank'},
+                                         {'label': 'Retail & E-commerce', 'value': 'retail'}
+                                     ],
+                                     value='',
+                                     placeholder='Select industry',
+                                     clearable=True
+                                 )
+                             ])
+                         ], className="mb-3"),
+                         dbc.Row([
+                             dbc.Col([
                                  dbc.Label("Topic Seed (Optional)", html_for='topic-seed-input', className="fw-bold"),
                                  html.I(className="bi bi-info-circle ms-1", id="tooltip-seed", style={'cursor': 'pointer'}),
                                  dbc.Tooltip(
@@ -1446,17 +1468,17 @@ def update_column_types(override_values, current_types, override_ids):
     Output('log-interval', 'disabled'),
     Output('status-updates', 'children', allow_duplicate=True),
     Input('run-button', 'n_clicks'),
-    State('representation-mode-input', 'value'), State('cluster-counts-input', 'value'), State('topic-seed-input', 'value'),
+    State('representation-mode-input', 'value'), State('cluster-counts-input', 'value'), State('industry-select', 'value'), State('topic-seed-input', 'value'),
     State('text-embedder-select', 'value'), State('llm-select', 'value'), State('image-embedder-select', 'value'),
     State('image-captioner-select', 'value'), State('column-types-store', 'data'),
     prevent_initial_call=True
 )
-def initiate_run(n_clicks, rep_mode, counts_str, topic_seed, txt_emb, llm, img_emb, img_cap, column_types):
+def initiate_run(n_clicks, rep_mode, counts_str, industry_context, topic_seed, txt_emb, llm, img_emb, img_cap, column_types):
     if not n_clicks:
         return no_update, no_update, no_update, no_update, no_update, no_update
 
     params = {
-        'rep_mode': rep_mode, 'counts_str': counts_str, 'topic_seed': topic_seed,
+        'rep_mode': rep_mode, 'counts_str': counts_str, 'industry_context': industry_context, 'topic_seed': topic_seed,
         'txt_emb_name': txt_emb, 'llm_name': llm, 'img_emb_name': img_emb,
         'img_cap_name': img_cap, 'column_types': column_types  # Changed from selected_columns
     }
@@ -1506,6 +1528,7 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
     # Unpack parameters
     rep_mode = run_params.get('rep_mode')
     counts_str = run_params.get('counts_str')
+    industry_context = run_params.get('industry_context', '')
     topic_seed = run_params.get('topic_seed')
     txt_emb_name = run_params.get('txt_emb_name')
     llm_name = run_params.get('llm_name')
@@ -1523,8 +1546,9 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
                 raise ValueError("Invalid Cluster Counts. Use comma-separated positive integers (e.g., 10, 5), 'star' for K* mode, or leave empty for auto-k.")
 
             seed = topic_seed.strip() if topic_seed else None
+            industry_display = {'telco': 'Telecommunications', 'bank': 'Banking & Finance', 'retail': 'Retail & E-commerce'}.get(industry_context, 'None') if industry_context else 'None'
             counts_display = 'Star Mode' if level_counts == 'star' else (level_counts or 'Auto')
-            print(f"Run params: Mode={rep_mode}, Counts={counts_display}, Seed={seed}", file=log_stream)
+            print(f"Run params: Mode={rep_mode}, Counts={counts_display}, Industry={industry_display}, Seed={seed}", file=log_stream)
             
             if ground_truth_data and isinstance(ground_truth_data, dict):
                 parsed_gt = ground_truth_data
@@ -1615,7 +1639,7 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
             sel_img_cap = hf.get_function_by_name(img_cap_name, hf.AVAILABLE_IMAGE_CAPTIONERS) if data_type == 'image' else None
 
             print("Instantiating Hercules...", file=log_stream)
-            hercules = Hercules(level_cluster_counts=level_counts, representation_mode=rep_mode, text_embedding_client=sel_txt_emb, llm_client=sel_llm, image_embedding_client=sel_img_emb, image_captioning_client=sel_img_cap, reduction_methods=['pca'], random_state=42, verbose=True, save_run_details=False)
+            hercules = Hercules(level_cluster_counts=level_counts, representation_mode=rep_mode, industry_context=industry_context, text_embedding_client=sel_txt_emb, llm_client=sel_llm, image_embedding_client=sel_img_emb, image_captioning_client=sel_img_cap, reduction_methods=['pca'], random_state=42, verbose=True, save_run_details=False)
             
             with contextlib.redirect_stdout(log_stream):
                 print(f"\n--- Starting Hercules Clustering ({data_type.upper()}) ---")
