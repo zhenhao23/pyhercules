@@ -556,8 +556,9 @@ def find_optimal_level2_k_star(level1_centroids, level1_cluster_sizes, min_thres
     print(f"{'='*80}")
     
     level1_centroids_array = np.array(level1_centroids)
-    initial_k = min(7, optimal_k_level1)
-    print(f"\nStarting K heuristic: min(7, {optimal_k_level1}) = {initial_k}")
+    max_theoretical_k = int(100 // min_threshold_pct)  # floor of 100/threshold
+    initial_k = min(max_theoretical_k, optimal_k_level1)
+    print(f"\nStarting K heuristic: min({max_theoretical_k}, {optimal_k_level1}) = {initial_k}")
     
     best_k = None
     best_result = None
@@ -1594,7 +1595,7 @@ class Hercules:
         
         self._run_id: str | None = None
         self._prompt_log: list[dict] = []
-        self._current_topic_seed: str | None = None
+        self._current_business_goal: str | None = None
         self._all_clusters_map: dict[int, Cluster] = {}
         self._l0_clusters_ordered: list[Cluster] = []
         self._max_level: int = 0
@@ -2237,9 +2238,9 @@ class Hercules:
             industry_names = {'telco': 'Telecommunications', 'bank': 'Banking & Finance', 'retail': 'Retail & E-commerce'}
             industry_display = industry_names.get(self._current_industry_context, self._current_industry_context)
             prompt += f"INDUSTRY CONTEXT: Use {industry_display} domain terminology and jargon in your responses.\n"
-        if self._current_topic_seed:
-            escaped_seed = self._current_topic_seed.replace('"', '\\"').replace("'", "\\'")
-            prompt += f"TOPIC FOCUS: Orient towards '{escaped_seed}', if relevant.\n"
+        if self._current_business_goal:
+            escaped_goal = self._current_business_goal.replace('"', '\\"').replace("'", "\\'")
+            prompt += f"BUSINESS GOAL FOCUS: Orient towards '{escaped_goal}', if relevant.\n"
 
         prompt += f"""
 RESPONSE FORMAT: Respond ONLY with a single, valid JSON object.
@@ -2345,7 +2346,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                           log_entry = {
                               "prompt_id": prompt_id, "run_id": self._run_id, "timestamp": timestamp,
                               "level": level, "item_ids_requested": [d["id"] for d in cluster_prompt_data_list],
-                              "item_ids_included": [], "item_type": item_type, "topic_seed_used": self._current_topic_seed,
+                              "item_ids_included": [], "item_type": item_type, "business_goal_used": self._current_business_goal,
                               "prompt_text": "Prompt too large for first item.", "estimated_tokens": prompt_tokens_estimate + cluster_block_tokens,
                               "token_limit": self.max_prompt_tokens, "llm_response": None, "llm_error": None,
                               "parsed_output": None, "parsing_error": "Prompt generation failed (too large for first item)"}
@@ -2366,7 +2367,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                  log_entry = {
                      "prompt_id": prompt_id, "run_id": self._run_id, "timestamp": timestamp,
                      "level": level, "item_ids_requested": [d["id"] for d in cluster_prompt_data_list],
-                     "item_ids_included": [], "item_type": item_type, "topic_seed_used": self._current_topic_seed,
+                     "item_ids_included": [], "item_type": item_type, "business_goal_used": self._current_business_goal,
                      "prompt_text": "No items fit within token limits.", "estimated_tokens": prompt_tokens_estimate,
                      "token_limit": self.max_prompt_tokens, "llm_response": None, "llm_error": None,
                      "parsed_output": None, "parsing_error": "Prompt generation failed (no items fit)"}
@@ -2379,7 +2380,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                 "prompt_id": prompt_id, "run_id": self._run_id, "timestamp": timestamp,
                 "level": level, "item_ids_requested": [d["id"] for d in cluster_prompt_data_list],
                 "item_ids_included": item_ids_included, "item_type": item_type,
-                "topic_seed_used": self._current_topic_seed, "prompt_text": prompt,
+                "business_goal_used": self._current_business_goal, "prompt_text": prompt,
                 "estimated_tokens": 0, "token_limit": self.max_prompt_tokens,
                 "llm_response": None, "llm_error": None, "parsed_output": None, "parsing_error": None
              }
@@ -2414,7 +2415,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                        f.write(f"--- PROMPT {i+1} / ID: {entry.get('prompt_id', 'N/A')} / Level: {entry.get('level', 'N/A')} ---\n")
                        f.write(f"Timestamp: {entry.get('timestamp', 'N/A')}\n")
                        f.write(f"Item Type: {entry.get('item_type', 'N/A')}\n")
-                       f.write(f"Topic Seed: {entry.get('topic_seed_used', 'None')}\n")
+                       f.write(f"Business Goal: {entry.get('business_goal_used', 'None')}\n")
                        f.write(f"Item IDs Requested: {[str(x) for x in entry.get('item_ids_requested', [])]}\n")
                        f.write(f"Item IDs Included : {[str(x) for x in entry.get('item_ids_included', [])]}\n")
                        f.write(f"Estimated Tokens: {entry.get('estimated_tokens', 'N/A')}\n")
@@ -2682,7 +2683,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                 self._log(f"  Attempting IMAGE captioning for {len(standardized_data)} items...", level=2)
                 try:
                     image_identifiers = [c._raw_item_data for c in l0_clusters]
-                    image_captions = self.image_captioning_client(image_identifiers, prompt=self._current_topic_seed)
+                    image_captions = self.image_captioning_client(image_identifiers, prompt=self._current_business_goal)
                     if len(image_captions) != len(l0_clusters): raise ValueError("Captioning client returned incorrect number of captions.")
                     captions_generated = 0
                     for i, cluster in enumerate(l0_clusters):
@@ -3166,7 +3167,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         return current_clusters
 
     def cluster(self, data: Any,
-                topic_seed: str | None = None,
+                business_goal: str | None = None,
                 numeric_metadata: Optional[Dict[Union[str, int], Dict[str, Any]]] = None
                 ) -> list[Cluster]:
         """
@@ -3185,7 +3186,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         self.variable_names = None
         self.numeric_metadata_by_name = None
         Cluster.reset_id_counter()
-        self._current_topic_seed = topic_seed
+        self._current_business_goal = business_goal
         self._current_industry_context = self.industry_context
 
         self._log(f"--- Starting Hercules Clustering Run: {self._run_id} ---", level=1)
@@ -3204,7 +3205,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
             industry_names = {'telco': 'Telecommunications', 'bank': 'Banking & Finance', 'retail': 'Retail & E-commerce'}
             industry_display = industry_names.get(self._current_industry_context, self._current_industry_context)
             self._log(f"Industry Context: {industry_display}", level=1)
-        if self._current_topic_seed: self._log(f"Topic Seed: '{self._current_topic_seed}'", level=1)
+        if self._current_business_goal: self._log(f"Business Goal: '{self._current_business_goal}'", level=1)
         if numeric_metadata: self._log("Numeric metadata provided.", level=1)
         if self.prompt_include_immediate_children: self._log(f"Prompting includes immediate children (Strategy: {self.prompt_immediate_child_sample_strategy}, Size: {self.prompt_immediate_child_sample_size}).", level=1)
 
@@ -3465,7 +3466,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
     def evaluate_level(self, level: int,
                        ground_truth_labels: Optional[Union[list, np.ndarray, pd.Series, Dict[Any, Any]]] = None,
                        calculate_llm_internal_metrics: bool = True,
-                       topic_seed: Optional[str] = None
+                       business_goal: Optional[str] = None
                       ) -> Dict[str, Any]:
         """
         Evaluates the clustering quality at a specified level of the hierarchy.
@@ -3476,14 +3477,14 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         - LLM-based internal metrics (Silhouette, DB, CH) based on L-1 description_embeddings
           and L0 description_embeddings (optional).
         - External metrics (ARI, NMI, V-Measure) if ground truth is provided.
-        - Topic alignment score if a topic_seed is provided.
+        - Topic alignment score if a business_goal is provided.
 
         Args:
             level: The hierarchy level to evaluate (> 0).
             ground_truth_labels: Optional ground truth labels for the original L0 items.
                                 Should match the order or keys/index of the input data.
             calculate_llm_internal_metrics: Whether to calculate LLM-based internal metrics. Defaults to True.
-            topic_seed: Optional seed text to evaluate topic alignment of clusters at the given level.
+            business_goal: Optional goal text to evaluate topic alignment of clusters at the given level.
 
         Returns:
             Dictionary containing evaluation metric scores and metadata.
@@ -3517,7 +3518,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
             "llm_davies_bouldin_on_l0": None,
             "llm_calinski_harabasz_on_l0": None,
 
-            "topic_seed_provided": bool(topic_seed),
+            "business_goal_provided": bool(business_goal),
             "topic_alignment_score": None,
             "num_clusters_in_topic_alignment": 0,
         }
@@ -3526,8 +3527,8 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
             self._log(f"  LLM-based internal metrics: Will be calculated.", level=2)
         else:
             self._log(f"  LLM-based internal metrics: Will NOT be calculated (calculate_llm_internal_metrics=False).", level=2)
-        if topic_seed:
-            self._log(f"  Topic seed provided for alignment: '{topic_seed[:50]}...'", level=2)
+        if business_goal:
+            self._log(f"  Business goal provided for alignment: '{business_goal[:50]}...'", level=2)
 
 
         if not self._l0_clusters_ordered or not self._all_clusters_map:
@@ -3862,14 +3863,14 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         ]
         results["num_clusters_with_desc_embedding"] = len(target_level_cluster_objs_with_desc_emb)
 
-        if topic_seed:
-            self._log(f"\n  Calculating Topic Alignment for level {level} with seed: '{topic_seed[:50]}...'", level=2)
-            results["topic_seed_provided"] = True
+        if business_goal:
+            self._log(f"\n  Calculating Topic Alignment for level {level} with business goal: '{business_goal[:50]}...'", level=2)
+            results["business_goal_provided"] = True
             try:
-                topic_seed_embedding = self.text_embedding_client([topic_seed])
-                if topic_seed_embedding is None or topic_seed_embedding.shape[0] == 0 or not np.all(np.isfinite(topic_seed_embedding[0])):
-                    raise ValueError("Failed to generate a valid embedding for the topic seed.")
-                topic_seed_vec = topic_seed_embedding[0]
+                business_goal_embedding = self.text_embedding_client([business_goal])
+                if business_goal_embedding is None or business_goal_embedding.shape[0] == 0 or not np.all(np.isfinite(business_goal_embedding[0])):
+                    raise ValueError("Failed to generate a valid embedding for the business goal.")
+                business_goal_vec = business_goal_embedding[0]
 
                 cluster_desc_embeddings_for_alignment = []
                 for cluster_obj in target_level_cluster_objs_from_map:
@@ -3886,7 +3887,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                     self._log(f"  Warning: {results['topic_alignment_error']}", level=2)
 
                 else:
-                    alignment_similarities = cosine_similarity(topic_seed_vec.reshape(1, -1), np.array(cluster_desc_embeddings_for_alignment))
+                    alignment_similarities = cosine_similarity(business_goal_vec.reshape(1, -1), np.array(cluster_desc_embeddings_for_alignment))
                     results["topic_alignment_score"] = float(np.mean(alignment_similarities[0]))
                     self._log(f"  Calculated topic alignment score: {results['topic_alignment_score']:.4f} using {len(cluster_desc_embeddings_for_alignment)} clusters.", level=2)
 
@@ -4453,7 +4454,7 @@ if __name__ == '__main__':
         start_time = time.time()
         top_level_clusters = hercules_instance.cluster(
             input_data,
-            topic_seed=f"Insights from {EXAMPLE_DATA_TYPE} data", # Optional
+            business_goal=f"Insights from {EXAMPLE_DATA_TYPE} data", # Optional
             numeric_metadata=numeric_metadata_input
         )
         end_time = time.time()

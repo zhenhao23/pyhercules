@@ -165,7 +165,7 @@ INDUSTRY CONTEXT: Use Telecommunications domain terminology and jargon in your r
 
 ---
 
-### Mechanism 2: Topic Seed (Business Goal)
+### Mechanism 2: Business Goal
 
 #### User Input (Text Field)
 
@@ -178,22 +178,22 @@ INDUSTRY CONTEXT: Use Telecommunications domain terminology and jargon in your r
 - "fraud detection patterns"
 - "upsell potential"
 
-**Location:** `pyhercules_app.py` - Topic seed input in clustering configuration
+**Location:** `pyhercules_app.py` - Business goal input in clustering configuration
 
 #### Prompt Integration
 
-When topic seed is provided:
+When business goal is provided:
 
 ```python
-if topic_seed:
-    escaped_seed = topic_seed.replace('"', '\\"').replace("'", "\\'")
-    prompt += f"TOPIC FOCUS: Orient towards '{escaped_seed}', if relevant.\n"
+if self._current_business_goal:
+    escaped_goal = self._current_business_goal.replace('"', '\\"').replace("'", "\\'")
+    prompt += f"BUSINESS GOAL FOCUS: Orient towards '{escaped_goal}', if relevant.\n"
 ```
 
 **Injected Prompt Snippet:**
 
 ```
-TOPIC FOCUS: Orient towards 'customer retention strategies', if relevant.
+BUSINESS GOAL FOCUS: Orient towards 'customer retention strategies', if relevant.
 ```
 
 **Effect:**
@@ -208,35 +208,32 @@ TOPIC FOCUS: Orient towards 'customer retention strategies', if relevant.
 
 ### Complete LLM Prompt Structure
 
-**Location:** `Hercules._build_llm_prompt()` in `pyhercules.py` (lines 2211-2390)
+**Location:** `Hercules._build_llm_prompt()` in `pyhercules.py` (lines 2211-2400)
 
 #### Full Template
 
-```
-Generate a concise 'title' (max 5-7 words) and 'description' (3-4 sentences)
-for EACH of the Clusters below (Level 2).
-
+````
+Generate a concise 'title' (max 5-7 words) and 'description' (3-4 sentences) for EACH of the Clusters below (Level 2).
 [IF INDUSTRY SET]
 INDUSTRY CONTEXT: Use {Industry} domain terminology and jargon in your responses.
-
-[IF TOPIC SEED SET]
-TOPIC FOCUS: Orient towards '{topic_seed}', if relevant.
+[IF BUSINESS GOAL SET]
+BUSINESS GOAL FOCUS: Orient towards '{business_goal}', if relevant.
 
 RESPONSE FORMAT: Respond ONLY with a single, valid JSON object.
-- Top-level keys MUST be the string representation of the 'Cluster ID' provided.
+- Top-level keys MUST be the string representation of the 'Cluster ID' provided (e.g., "cluster_5").
 - Values MUST be JSON objects containing non-empty "title" and "description" string keys.
 
-EXAMPLE (for IDs "cluster_5", "cluster_12"):
+EXAMPLE (for IDs "id_A", "id_B"):
 {
-  "cluster_5": { "title": "High-Value Loyalists", "description": "Desc..." },
-  "cluster_12": { "title": "At-Risk Churners", "description": "Desc..." }
+  "id_A": { "title": "Title A", "description": "Desc A." },
+  "id_B": { "title": "Title B", "description": "Desc B." }
 }
 
-IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fences.
+IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fences (```json ... ```) or any text outside the JSON structure.
 
 --- Clusters Information ---
 
---- Cluster ID: cluster_5 (L2, 342 base items, BaseType: Numeric, InternalID: 5) ---
+--- Cluster ID: cluster_5 (L2 (342 base items), BaseType: Numeric, InternalID: 5) ---
 Representative Content/Samples (from L0 Descendants):
 - (Orig. ID: customer_1023) "MonthlyCharges=89.50, TenureMonths=6, Contract=Month-to-month"
 - (Orig. ID: customer_2451) "MonthlyCharges=95.20, TenureMonths=4, Contract=Month-to-month"
@@ -253,13 +250,15 @@ Most Defining Features (Top Deviations from Global Mean):
 
 --- End Cluster ID: cluster_5 ---
 
---- Cluster ID: cluster_12 (L2, 125 base items, ...) ---
+--- Cluster ID: cluster_12 (L2 (125 base items), BaseType: Numeric, InternalID: 12) ---
 [... similar structure for next cluster ...]
+
+--- End Cluster ID: cluster_12 ---
 
 --- End Clusters Information ---
 
 Generate the JSON output for the 2 Cluster ID(s): cluster_5, cluster_12
-```
+````
 
 #### Prompt Components Breakdown
 
@@ -267,7 +266,7 @@ Generate the JSON output for the 2 Cluster ID(s): cluster_5, cluster_12
 | ------------------------ | ------------------------------ | ---------------------------------------------------------- |
 | **Task instruction**     | Fixed template                 | Define output format (JSON, title+description)             |
 | **Industry context**     | User dropdown                  | Inject domain jargon                                       |
-| **Topic seed**           | User text input                | Guide business focus                                       |
+| **Business goal**        | User text input                | Guide business focus                                       |
 | **Format specification** | Fixed template                 | Ensure parseable JSON response                             |
 | **Cluster ID**           | Cluster object                 | Unique identifier for mapping                              |
 | **L0 samples**           | `get_representative_samples()` | Show raw data examples                                     |
@@ -295,14 +294,14 @@ Raw Cluster Data
       ↓
 [Build Prompt]
   • Add industry context (if set)
-  • Add topic seed (if set)
+  • Add business goal (if set)
   • Include L0 samples
   • Include top features with deviations
       ↓
 [LLM Generation]
   • Generate title & description
   • Apply domain terminology (from industry)
-  • Align with business goal (from topic seed)
+  • Align with business goal (from business_goal)
       ↓
 Actionable Cluster Labels
 ```
@@ -336,16 +335,16 @@ hercules = Hercules(
 )
 ```
 
-### Topic Seed
+### Business Goal
 
-**Parameter:** `topic_seed` (in `cluster()` method)  
+**Parameter:** `business_goal` (in `cluster()` method)  
 **Type:** String  
 **Effect:** Orients descriptions toward business theme
 
 ```python
 top_clusters = hercules.cluster(
     data,
-    topic_seed="customer retention strategies"  # Focus on retention
+    business_goal="customer retention strategies"  # Focus on retention
 )
 ```
 
@@ -359,7 +358,7 @@ top_clusters = hercules.cluster(
 | ------------------------------ | -------------------------- | ---------------------------------------- |
 | `compute_numeric_statistics()` | `pyhercules.py` L917-1010  | Calculate deviations, sort by abs. value |
 | `get_data_for_prompt()`        | `pyhercules.py` L1015-1090 | Prepare cluster data for LLM             |
-| `_build_llm_prompt()`          | `pyhercules.py` L2211-2390 | Construct complete prompt with context   |
+| `_build_llm_prompt()`          | `pyhercules.py` L2211-2400 | Construct complete prompt with context   |
 
 ### Data Flow
 
@@ -382,7 +381,7 @@ prompt_data = cluster.get_data_for_prompt(
 prompt = hercules._build_llm_prompt(
     [prompt_data_cluster1, prompt_data_cluster2, ...]
 )
-# → Injects industry_context and topic_seed
+# → Injects industry_context and business_goal
 # → Formats top features with deviation indicators
 
 # 4. Send to LLM
@@ -405,7 +404,7 @@ hercules = Hercules(
 
 top_clusters = hercules.cluster(
     telco_customer_data,
-    topic_seed='churn prediction'
+    business_goal='churn prediction'
 )
 ```
 
@@ -430,7 +429,7 @@ top_clusters = hercules.cluster(
 
 ```
 INDUSTRY CONTEXT: Use Telecommunications domain terminology and jargon in your responses.
-TOPIC FOCUS: Orient towards 'churn prediction', if relevant.
+BUSINESS GOAL FOCUS: Orient towards 'churn prediction', if relevant.
 
 --- Cluster ID: cluster_3 ---
 Most Defining Features (Top Deviations from Global Mean):
@@ -457,7 +456,7 @@ Most Defining Features (Top Deviations from Global Mean):
 - ✅ Uses telco jargon: "ARPU", "Fiber subscribers", "contract upgrade"
 - ✅ Oriented to churn prediction: "churn indicators", "retention intervention"
 - ✅ Focuses on top 5 features (ignores Dependents_Yes at 2.34% deviation)
-- ✅ Provides actionable suggestion aligned with topic seed
+- ✅ Provides actionable suggestion aligned with business goal
 
 ---
 
@@ -488,7 +487,7 @@ Most Defining Features (Top Deviations from Global Mean):
 **Actionable Summarization Layer** = Statistical Feature Filtering + Contextual LLM Guidance
 
 - **Feature-Driven Pre-Analysis:** Absolute z-score deviation ranking ensures LLM sees only the most defining characteristics
-- **Contextualized Prompting:** Industry context + topic seed inject domain knowledge and business objectives
+- **Contextualized Prompting:** Industry context + business goal inject domain knowledge and business objectives
 
 **Result:** AI-generated cluster descriptions that are statistically grounded, domain-specific, and aligned with business goals.
 

@@ -591,7 +591,7 @@ def create_summary_content(cluster_id, cluster_map, config_data, state_data, eva
             add_config_row("Hierarchy:", f"{get_config_str('level_cluster_counts', data_dict=config_data)} (Levels={len(level_counts)})")
         else:
             add_config_row("Hierarchy:", f"{get_config_str('level_cluster_counts', data_dict=config_data)}")
-        add_config_row("Topic Seed:", get_config_str('topic_seed', default="(Not Set)", data_dict=config_data))
+        add_config_row("Business Goal:", get_config_str('business_goal', default="(Not Set)", data_dict=config_data))
         add_config_row("Text Embedder:", get_config_str('selected_text_embedder', default='N/A', data_dict=config_data))
         add_config_row("LLM:", get_config_str('selected_llm', default='N/A', data_dict=config_data))
         if input_data_type.lower() == 'image':
@@ -993,14 +993,14 @@ def create_upload_layout():
                          ], className="mb-3"),
                          dbc.Row([
                              dbc.Col([
-                                 dbc.Label("Topic Seed (Optional)", html_for='topic-seed-input', className="fw-bold"),
-                                 html.I(className="bi bi-info-circle ms-1", id="tooltip-seed", style={'cursor': 'pointer'}),
+                                 dbc.Label("Business Goal (Optional)", html_for='business-goal-input', className="fw-bold"),
+                                 html.I(className="bi bi-info-circle ms-1", id="tooltip-goal", style={'cursor': 'pointer'}),
                                  dbc.Tooltip(
-                                     "A phrase to guide LLM topic focus (e.g., 'financial performance', 'customer sentiment'). "
+                                     "A phrase to guide LLM-generated descriptions toward your business objective (e.g., 'increase retention', 'identify churn risk'). "
                                      "More effective with 'description' mode.",
-                                     target="tooltip-seed", placement="top"
+                                     target="tooltip-goal", placement="top"
                                  ),
-                                 dbc.Input(id='topic-seed-input', placeholder='Guides LLM topic focus')
+                                 dbc.Input(id='business-goal-input', placeholder='Guides LLM descriptions toward business objective')
                              ])
                          ], className="mb-3"),
                          html.Hr(),
@@ -1468,17 +1468,17 @@ def update_column_types(override_values, current_types, override_ids):
     Output('log-interval', 'disabled'),
     Output('status-updates', 'children', allow_duplicate=True),
     Input('run-button', 'n_clicks'),
-    State('representation-mode-input', 'value'), State('cluster-counts-input', 'value'), State('industry-select', 'value'), State('topic-seed-input', 'value'),
+    State('representation-mode-input', 'value'), State('cluster-counts-input', 'value'), State('industry-select', 'value'), State('business-goal-input', 'value'),
     State('text-embedder-select', 'value'), State('llm-select', 'value'), State('image-embedder-select', 'value'),
     State('image-captioner-select', 'value'), State('column-types-store', 'data'),
     prevent_initial_call=True
 )
-def initiate_run(n_clicks, rep_mode, counts_str, industry_context, topic_seed, txt_emb, llm, img_emb, img_cap, column_types):
+def initiate_run(n_clicks, rep_mode, counts_str, industry_context, business_goal, txt_emb, llm, img_emb, img_cap, column_types):
     if not n_clicks:
         return no_update, no_update, no_update, no_update, no_update, no_update
 
     params = {
-        'rep_mode': rep_mode, 'counts_str': counts_str, 'industry_context': industry_context, 'topic_seed': topic_seed,
+        'rep_mode': rep_mode, 'counts_str': counts_str, 'industry_context': industry_context, 'business_goal': business_goal,
         'txt_emb_name': txt_emb, 'llm_name': llm, 'img_emb_name': img_emb,
         'img_cap_name': img_cap, 'column_types': column_types  # Changed from selected_columns
     }
@@ -1529,7 +1529,7 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
     rep_mode = run_params.get('rep_mode')
     counts_str = run_params.get('counts_str')
     industry_context = run_params.get('industry_context', '')
-    topic_seed = run_params.get('topic_seed')
+    business_goal = run_params.get('business_goal')
     txt_emb_name = run_params.get('txt_emb_name')
     llm_name = run_params.get('llm_name')
     img_emb_name = run_params.get('img_emb_name')
@@ -1545,7 +1545,7 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
             if level_counts is None and counts_str and counts_str.strip():
                 raise ValueError("Invalid Cluster Counts. Use comma-separated positive integers (e.g., 10, 5), 'star' for K* mode, or leave empty for auto-k.")
 
-            seed = topic_seed.strip() if topic_seed else None
+            seed = business_goal.strip() if business_goal else None
             industry_display = {'telco': 'Telecommunications', 'bank': 'Banking & Finance', 'retail': 'Retail & E-commerce'}.get(industry_context, 'None') if industry_context else 'None'
             counts_display = 'Star Mode' if level_counts == 'star' else (level_counts or 'Auto')
             print(f"Run params: Mode={rep_mode}, Counts={counts_display}, Industry={industry_display}, Seed={seed}", file=log_stream)
@@ -1645,9 +1645,9 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
                 print(f"\n--- Starting Hercules Clustering ({data_type.upper()}) ---")
                 # Pass numeric_metadata if available (for mixed data types)
                 if data_type == 'numeric' and 'numeric_metadata' in locals() and numeric_metadata:
-                    top_clusters = hercules.cluster(input_data, topic_seed=seed, numeric_metadata=numeric_metadata)
+                    top_clusters = hercules.cluster(input_data, business_goal=seed, numeric_metadata=numeric_metadata)
                 else:
-                    top_clusters = hercules.cluster(input_data, topic_seed=seed)
+                    top_clusters = hercules.cluster(input_data, business_goal=seed)
                 print("\n--- Clustering Finished ---\n")
                 if not hercules._all_clusters_map:
                     raise ValueError("Clustering finished, but no clusters were generated.")
@@ -2121,7 +2121,7 @@ def download_cluster_prompts_callback(n_clicks, results_pkg, session_id):
         return no_update
     
     # Build CSV content with actual prompt_log fields
-    csv_lines = ["prompt_id,run_id,timestamp,level,item_ids_requested,item_ids_included,item_type,topic_seed,estimated_tokens,token_limit,prompt_text,llm_response,llm_error,parsed_output,parsing_error"]
+    csv_lines = ["prompt_id,run_id,timestamp,level,item_ids_requested,item_ids_included,item_type,business_goal,estimated_tokens,token_limit,prompt_text,llm_response,llm_error,parsed_output,parsing_error"]
     
     for entry in prompt_log:
         prompt_id = str(entry.get('prompt_id', ''))
@@ -2134,7 +2134,7 @@ def download_cluster_prompts_callback(n_clicks, results_pkg, session_id):
         item_ids_included = '; '.join([str(x) for x in entry.get('item_ids_included', [])])
         
         item_type = str(entry.get('item_type', ''))
-        topic_seed = str(entry.get('topic_seed_used', ''))
+        business_goal = str(entry.get('business_goal_used', ''))
         estimated_tokens = str(entry.get('estimated_tokens', ''))
         token_limit = str(entry.get('token_limit', ''))
         
@@ -2152,7 +2152,7 @@ def download_cluster_prompts_callback(n_clicks, results_pkg, session_id):
         
         parsing_error = str(entry.get('parsing_error', '') or '').replace('"', '""')
         
-        csv_lines.append(f'"{prompt_id}","{run_id}","{timestamp}","{level}","{item_ids_requested}","{item_ids_included}","{item_type}","{topic_seed}","{estimated_tokens}","{token_limit}","{prompt_text}","{llm_response}","{llm_error}","{parsed_output}","{parsing_error}"')
+        csv_lines.append(f'"{prompt_id}","{run_id}","{timestamp}","{level}","{item_ids_requested}","{item_ids_included}","{item_type}","{business_goal}","{estimated_tokens}","{token_limit}","{prompt_text}","{llm_response}","{llm_error}","{parsed_output}","{parsing_error}"')
     
     csv_content = '\n'.join(csv_lines)
     filename = get_download_filename("cluster_prompts", "csv", session_id)
