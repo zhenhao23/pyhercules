@@ -644,7 +644,8 @@ def create_summary_content(cluster_id, cluster_map, config_data, state_data, eva
             html.H6("Download Results", className="mt-4 mb-2 fw-bold"),
             dbc.Button([html.I(className="bi bi-table me-1"), "Membership DF (CSV)"], id="btn-download-membership-csv", color="info", outline=True, size="sm", className="me-2 mb-2"),
             dbc.Button([html.I(className="bi bi-graph-up me-1"), "Evaluation (JSON)"], id="btn-download-evaluation-json", color="info", outline=True, size="sm", className="me-2 mb-2"),
-            dbc.Button([html.I(className="bi bi-diagram-3 me-1"), "Hierarchy (TXT)"], id="btn-download-hierarchy-txt", color="info", outline=True, size="sm", className="mb-2"),
+            dbc.Button([html.I(className="bi bi-diagram-3 me-1"), "Hierarchy (TXT)"], id="btn-download-hierarchy-txt", color="info", outline=True, size="sm", className="me-2 mb-2"),
+            dbc.Button([html.I(className="bi bi-list-ul me-1"), "Level 1 Clusters (CSV)"], id="btn-download-level1-csv", color="info", outline=True, size="sm", className="mb-2"),
         ], className="mt-3 border-top pt-3")
 
         log_accordion_item = dbc.AccordionItem(
@@ -1019,9 +1020,9 @@ def create_results_layout(clusters_data: List[Dict], config_data: Dict, state_da
         return dbc.Container([dbc.Alert([html.I(className="bi bi-exclamation-triangle-fill me-2"), "Error: Failed to reconstruct cluster map."], color="danger")])
     max_level = state_data.get("max_level_achieved", 0)
     num_l0_items = state_data.get("num_l0_items", 0)
-    show_l0_default = num_l0_items < L0_DISPLAY_THRESHOLD
+    show_l0_default = False  # Always hide Level 0 by default
     default_l0_toggle_value = ["show_l0"] if show_l0_default else []
-    print(f"Initial L0 Visibility: {'Shown' if show_l0_default else 'Hidden'} ({num_l0_items} items vs threshold {L0_DISPLAY_THRESHOLD})")
+    print(f"Initial L0 Visibility: {'Shown' if show_l0_default else 'Hidden'} ({num_l0_items} items)")
     l0_clusters_ordered = []
     l0_orig_ids = state_data.get("_l0_original_ids_ordered", [])
     if l0_orig_ids and all_clusters_map:
@@ -1099,7 +1100,7 @@ app.layout = html.Div([
     dcc.Store(id='run-params-store'), dcc.Store(id='run-trigger-store'),
     dcc.Download(id='download-full-results-json'), dcc.Download(id='download-membership-csv'),
     dcc.Download(id='download-evaluation-json'), dcc.Download(id='download-hierarchy-txt'),
-    dcc.Download(id='download-run-log-txt'),
+    dcc.Download(id='download-run-log-txt'), dcc.Download(id='download-level1-csv'),
     html.Div(id='page-content', children=create_upload_layout())
 ])
 
@@ -2072,12 +2073,53 @@ def download_run_log(n_clicks, results_data, session_id):
     filename = get_download_filename("hercules_run_log", "txt", session_id)
     return dict(content=log_text, filename=filename)
 
+@callback(
+    Output('download-level1-csv', 'data'),
+    Input('btn-download-level1-csv', 'n_clicks'),
+    State('hercules-results-store', 'data'),
+    State('session-id-store', 'data'),
+    prevent_initial_call=True
+)
+def download_level1_csv(n_clicks, results_data, session_id):
+    """Downloads a CSV containing only Level 1 clusters with level, cluster_id, title, description columns."""
+    if not n_clicks or not results_data:
+        return no_update
+
+    clusters_data_list = results_data.get('clusters', [])  # Changed from 'clusters_data' to 'clusters'
+    if not clusters_data_list:
+        return dict(content="No cluster data available.", filename="error.txt")
+
+    # Filter for level 1 clusters only
+    level1_clusters = [c for c in clusters_data_list if c.get('level') == 1]
+
+    if not level1_clusters:
+        return dict(content="No Level 1 clusters found.", filename="error.txt")
+
+    # Create DataFrame with required columns
+    df_data = []
+    for cluster in level1_clusters:
+        df_data.append({
+            'level': cluster.get('level'),
+            'cluster_id': cluster.get('id'),
+            'title': cluster.get('title', ''),
+            'description': cluster.get('description', '')
+        })
+
+    df = pd.DataFrame(df_data)
+    
+    # Sort by cluster_id for consistent ordering
+    df = df.sort_values('cluster_id')
+
+    filename = get_download_filename("hercules_level1_clusters", "csv", session_id)
+    csv_string = df.to_csv(index=False)
+    return dict(content=csv_string, filename=filename)
+
 # --- Run the App ---
 if __name__ == '__main__':
     print("Starting Hercules Dash Application...")
     debug_mode = os.environ.get("DASH_DEBUG_MODE", "False").lower() in ["true", "1", "t"]
     host_ip = os.environ.get("DASH_HOST_IP", "0.0.0.0")
-    port = int(os.environ.get("DASH_PORT", 8050))
+    port = int(os.environ.get("DASH_PORT", 8051))
     print(f"Running in {'DEBUG' if debug_mode else 'PRODUCTION'} mode.")
     print(f"Accessible at http://{host_ip}:{port} (or http://127.0.0.1:{port} if host is 0.0.0.0)")
     app.run(debug=debug_mode, host=host_ip, port=port)
