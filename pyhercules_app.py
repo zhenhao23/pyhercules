@@ -652,6 +652,7 @@ def create_summary_content(cluster_id, cluster_map, config_data, state_data, eva
         downloads_section = html.Div([
             html.H6("Download Results", className="mt-4 mb-2 fw-bold"),
             dbc.Button([html.I(className="bi bi-table me-1"), "Membership DF (CSV)"], id="btn-download-membership-csv", color="info", outline=True, size="sm", className="me-2 mb-2"),
+            dbc.Button([html.I(className="bi bi-list-ul me-1"), "Cluster Details (CSV)"], id="btn-download-cluster-details-csv", color="info", outline=True, size="sm", className="me-2 mb-2"),
             dbc.Button([html.I(className="bi bi-graph-up me-1"), "Evaluation (JSON)"], id="btn-download-evaluation-json", color="info", outline=True, size="sm", className="me-2 mb-2"),
             dbc.Button([html.I(className="bi bi-diagram-3 me-1"), "Hierarchy (TXT)"], id="btn-download-hierarchy-txt", color="info", outline=True, size="sm", className="me-2 mb-2"),
             dbc.Button([html.I(className="bi bi-chat-left-text me-1"), "Cluster Prompts (CSV)"], id="btn-download-cluster-prompts", color="info", outline=True, size="sm", className="mb-2"),
@@ -1052,9 +1053,9 @@ def create_results_layout(clusters_data: List[Dict], config_data: Dict, state_da
         return dbc.Container([dbc.Alert([html.I(className="bi bi-exclamation-triangle-fill me-2"), "Error: Failed to reconstruct cluster map."], color="danger")])
     max_level = state_data.get("max_level_achieved", 0)
     num_l0_items = state_data.get("num_l0_items", 0)
-    show_l0_default = num_l0_items < L0_DISPLAY_THRESHOLD
+    show_l0_default = False  # Level 0 hidden by default
     default_l0_toggle_value = ["show_l0"] if show_l0_default else []
-    print(f"Initial L0 Visibility: {'Shown' if show_l0_default else 'Hidden'} ({num_l0_items} items vs threshold {L0_DISPLAY_THRESHOLD})")
+    print(f"Initial L0 Visibility: {'Shown' if show_l0_default else 'Hidden'} ({num_l0_items} items)")
     l0_clusters_ordered = []
     l0_orig_ids = state_data.get("_l0_original_ids_ordered", [])
     if l0_orig_ids and all_clusters_map:
@@ -1133,6 +1134,7 @@ app.layout = html.Div([
     dcc.Download(id='download-full-results-json'), dcc.Download(id='download-membership-csv'),
     dcc.Download(id='download-evaluation-json'), dcc.Download(id='download-hierarchy-txt'),
     dcc.Download(id='download-run-log-txt'), dcc.Download(id='download-cluster-prompts'),
+    dcc.Download(id='download-cluster-details-csv'),
     html.Div(id='page-content', children=create_upload_layout())
 ])
 
@@ -2086,6 +2088,46 @@ def download_membership_csv(n_clicks, results_data, session_id):
         return dict(content="No membership data to download.", filename="error.txt")
     filename = get_download_filename("hercules_membership", "csv", session_id)
     csv_string = df.to_csv(index=False) # Do not write DataFrame index to CSV
+    return dict(content=csv_string, filename=filename)
+
+@callback(
+    Output('download-cluster-details-csv', 'data'),
+    Input('btn-download-cluster-details-csv', 'n_clicks'),
+    State('hercules-results-store', 'data'),
+    State('session-id-store', 'data'),
+    prevent_initial_call=True
+)
+def download_cluster_details_csv(n_clicks, results_data, session_id):
+    if not n_clicks or not results_data:
+        return no_update
+    
+    clusters_data = results_data.get('clusters', [])
+    if not clusters_data:
+        return dict(content="No cluster data to download.", filename="error.txt")
+    
+    cluster_map = reconstruct_cluster_map_from_data(clusters_data)
+    if not cluster_map:
+        return dict(content="Failed to reconstruct cluster data.", filename="error.txt")
+    
+    # Build list of cluster details (excluding level 0)
+    cluster_details = []
+    for cluster_id in sorted(cluster_map.keys()):
+        cluster = cluster_map[cluster_id]
+        if cluster.level == 0:
+            continue
+        cluster_details.append({
+            'level': cluster.level,
+            'cluster_id': cluster.id,
+            'title': cluster.title if cluster.title else '',
+            'description': cluster.description if cluster.description else ''
+        })
+    
+    if not cluster_details:
+        return dict(content="No cluster details found.", filename="error.txt")
+    
+    df = pd.DataFrame(cluster_details)
+    filename = get_download_filename("hercules_cluster_details", "csv", session_id)
+    csv_string = df.to_csv(index=False)
     return dict(content=csv_string, filename=filename)
 
 @callback(
