@@ -260,6 +260,371 @@ def _parse_llm_response(llm_output_str: str, expected_ids: list[Union[int, str]]
         return None
 
 # =============================================================================
+# K* Means Algorithm for Star Mode
+# =============================================================================
+
+class KStarMeans:
+    """
+    K*-means clustering algorithm with automatic cluster number selection
+    using Minimum Description Length (MDL) principle.
+    """
+    
+    def __init__(self, patience=5, random_state=42):
+        self.patience = patience
+        self.random_state = random_state
+        self.centroids = None
+        self.labels = None
+        self.cost_history = []
+        
+    def _init_subcentroids(self, X):
+        """Initialize two sub-centroids for a cluster using k-means++."""
+        if len(X) < 2:
+            return [X[0].copy(), X[0].copy()]
+        from sklearn.cluster import kmeans_plusplus
+        centers, _ = kmeans_plusplus(X, n_clusters=min(2, len(X)), random_state=self.random_state)
+        return [centers[0], centers[1] if len(centers) > 1 else centers[0]]
+    
+    def _mdl_cost(self, X, centroids, clusters):
+        """Calculate MDL cost: Model Cost + Index Cost + Residual Cost."""
+        n, d = X.shape
+        k = len(centroids)
+        
+        if k == 0:
+            return np.inf
+        
+        X_flat = X.flatten()
+        unique_vals = np.unique(X_flat)
+        if len(unique_vals) > 1:
+            min_dist = np.min(np.diff(np.sort(unique_vals)))
+            floatprecision = max(-np.log(min_dist), 1e-10)
+        else:
+            floatprecision = 1.0
+        
+        floatcost = (np.max(X) - np.min(X)) / floatprecision
+        modelcost = k * d * floatcost
+        idxcost = n * np.log(k) if k > 1 else 0
+        
+        squared_distances = 0
+        for i, cluster_indices in enumerate(clusters):
+            if len(cluster_indices) > 0:
+                cluster_points = X[cluster_indices]
+                squared_distances += np.sum((cluster_points - centroids[i])**2)
+        
+        residualcost = (n * d * np.log(2 * np.pi) + squared_distances) / 2
+        return modelcost + idxcost + residualcost
+    
+    def _assign_to_centroids(self, X, centroids):
+        """Assign each point to nearest centroid."""
+        if len(centroids) == 0:
+            return []
+        distances = np.array([np.linalg.norm(X - c, axis=1) for c in centroids])
+        labels = np.argmin(distances, axis=0)
+        clusters = [np.where(labels == i)[0] for i in range(len(centroids))]
+        return clusters
+    
+    def _kmeans_step(self, X, centroids, clusters, subcentroids, subclusters):
+        """Perform one k-means iteration."""
+        clusters = self._assign_to_centroids(X, centroids)
+        new_centroids = []
+        new_subcentroids = []
+        new_subclusters = []
+        
+        for i, cluster_indices in enumerate(clusters):
+            if len(cluster_indices) > 0:
+                cluster_points = X[cluster_indices]
+                new_centroid = np.mean(cluster_points, axis=0)
+                new_centroids.append(new_centroid)
+                
+                if i < len(subcentroids):
+                    sub_c1, sub_c2 = subcentroids[i]
+                else:
+                    sub_c1, sub_c2 = self._init_subcentroids(cluster_points)
+                
+                sub_clusters = self._assign_to_centroids(cluster_points, [sub_c1, sub_c2])
+                if len(sub_clusters[0]) > 0:
+                    sub_c1 = np.mean(cluster_points[sub_clusters[0]], axis=0)
+                if len(sub_clusters[1]) > 0:
+                    sub_c2 = np.mean(cluster_points[sub_clusters[1]], axis=0)
+                
+                new_subcentroids.append([sub_c1, sub_c2])
+                new_subclusters.append(sub_clusters)
+            else:
+                new_centroids.append(centroids[i])
+                if i < len(subcentroids):
+                    new_subcentroids.append(subcentroids[i])
+                    new_subclusters.append(subclusters[i] if i < len(subclusters) else [[], []])
+        
+        return new_centroids, clusters, new_subcentroids, new_subclusters
+    
+    def _maybe_split(self, X, centroids, clusters, subcentroids, subclusters):
+        """Try to split each cluster and keep the best split if it reduces cost."""
+        n = len(X)
+        current_k = len(centroids)
+        best_costchange = 0
+        split_at = -1
+        
+        for i in range(len(centroids)):
+            if i >= len(subclusters) or len(clusters[i]) < 2:
+                continue
+            
+            cluster_points = X[clusters[i]]
+            subc1, subc2 = subclusters[i]
+            submu1, submu2 = subcentroids[i]
+            
+            cost_after_split = 0
+            if len(subc1) > 0:
+                cost_after_split += np.sum((cluster_points[subc1] - submu1)**2)
+            if len(subc2) > 0:
+                cost_after_split += np.sum((cluster_points[subc2] - submu2)**2)
+            
+            cost_before_split = np.sum((cluster_points - centroids[i])**2)
+            costchange = cost_after_split - cost_before_split + (n * np.log((current_k + 1) / current_k))
+            
+            if costchange < best_costchange:
+                best_costchange = costchange
+                split_at = i
+        
+        if best_costchange < 0 and split_at >= 0:
+            submu1, submu2 = subcentroids[split_at]
+            new_centroids = centroids[:split_at] + [submu1, submu2] + centroids[split_at+1:]
+            new_clusters = self._assign_to_centroids(X, new_centroids)
+            
+            new_subcentroids = []
+            new_subclusters = []
+            for cluster_indices in new_clusters:
+                if len(cluster_indices) > 0:
+                    cluster_points = X[cluster_indices]
+                    subs = self._init_subcentroids(cluster_points)
+                    sub_clusters = self._assign_to_centroids(cluster_points, subs)
+                    new_subcentroids.append(subs)
+                    new_subclusters.append(sub_clusters)
+                else:
+                    new_subcentroids.append([new_centroids[len(new_subcentroids)], new_centroids[len(new_subcentroids)]])
+                    new_subclusters.append([[], []])
+            
+            return new_centroids, new_clusters, new_subcentroids, new_subclusters, True
+        
+        return centroids, clusters, subcentroids, subclusters, False
+    
+    def _maybe_merge(self, X, centroids, clusters, subcentroids, subclusters):
+        """Find closest pair of centroids and merge if it reduces cost."""
+        k = len(centroids)
+        if k < 2:
+            return centroids, clusters, subcentroids, subclusters
+        
+        n = len(X)
+        min_dist = np.inf
+        i1, i2 = 0, 1
+        for i in range(k):
+            for j in range(i+1, k):
+                dist = np.linalg.norm(centroids[i] - centroids[j])
+                if dist < min_dist:
+                    min_dist = dist
+                    i1, i2 = i, j
+        
+        Z_indices = np.concatenate([clusters[i1], clusters[i2]])
+        if len(Z_indices) == 0:
+            return centroids, clusters, subcentroids, subclusters
+        
+        Z = X[Z_indices]
+        m_merged = np.mean(Z, axis=0)
+        
+        mainQ = np.sum((Z - m_merged)**2)
+        subcQ = 0
+        if len(clusters[i1]) > 0:
+            subcQ += np.sum((X[clusters[i1]] - centroids[i1])**2)
+        if len(clusters[i2]) > 0:
+            subcQ += np.sum((X[clusters[i2]] - centroids[i2])**2)
+        
+        costchange = mainQ - subcQ - (n * np.log(k / (k - 1)))
+        
+        if costchange < 0:
+            new_centroids = [c for idx, c in enumerate(centroids) if idx not in [i1, i2]]
+            new_centroids.insert(i1, m_merged)
+            new_clusters = self._assign_to_centroids(X, new_centroids)
+            
+            new_subcentroids = []
+            new_subclusters = []
+            for cluster_indices in new_clusters:
+                if len(cluster_indices) > 0:
+                    cluster_points = X[cluster_indices]
+                    subs = self._init_subcentroids(cluster_points)
+                    sub_clusters = self._assign_to_centroids(cluster_points, subs)
+                    new_subcentroids.append(subs)
+                    new_subclusters.append(sub_clusters)
+                else:
+                    new_subcentroids.append([new_centroids[len(new_subcentroids)], new_centroids[len(new_subcentroids)]])
+                    new_subclusters.append([[], []])
+            
+            return new_centroids, new_clusters, new_subcentroids, new_subclusters
+        
+        return centroids, clusters, subcentroids, subclusters
+    
+    def fit(self, X):
+        """Fit K*-means clustering to data."""
+        np.random.seed(self.random_state)
+        n, d = X.shape
+        
+        mu = np.mean(X, axis=0)
+        centroids = [mu]
+        clusters = [np.arange(n)]
+        subcentroids = [self._init_subcentroids(X)]
+        subclusters = [self._assign_to_centroids(X, subcentroids[0])]
+        
+        best_cost = np.inf
+        unimproved_count = 0
+        iteration = 0
+        
+        print(f"Starting K*-means with patience={self.patience}")
+        
+        while True:
+            iteration += 1
+            centroids, clusters, subcentroids, subclusters = self._kmeans_step(X, centroids, clusters, subcentroids, subclusters)
+            centroids, clusters, subcentroids, subclusters, did_split = self._maybe_split(X, centroids, clusters, subcentroids, subclusters)
+            
+            if did_split:
+                print(f"  Iteration {iteration}: Split performed, K={len(centroids)}")
+            
+            if not did_split:
+                centroids, clusters, subcentroids, subclusters = self._kmeans_step(X, centroids, clusters, subcentroids, subclusters)
+                old_k = len(centroids)
+                centroids, clusters, subcentroids, subclusters = self._maybe_merge(X, centroids, clusters, subcentroids, subclusters)
+                
+                if len(centroids) < old_k:
+                    print(f"  Iteration {iteration}: Merge performed, K={len(centroids)}")
+            
+            cost = self._mdl_cost(X, centroids, clusters)
+            self.cost_history.append(cost)
+            
+            if iteration % 5 == 0:
+                print(f"  Iteration {iteration}: K={len(centroids)}, Cost={cost:.2f}")
+            
+            if cost < best_cost:
+                best_cost = cost
+                unimproved_count = 0
+                self.centroids = [c.copy() for c in centroids]
+                self.labels = np.argmin(np.array([np.linalg.norm(X - c, axis=1) for c in centroids]), axis=0)
+            else:
+                unimproved_count += 1
+            
+            if unimproved_count >= self.patience:
+                print(f"\nConverged after {iteration} iterations")
+                print(f"Final K={len(self.centroids)}, Best Cost={best_cost:.2f}")
+                break
+        
+        return self
+    
+    def predict(self, X):
+        """Predict cluster labels for new data."""
+        if self.centroids is None:
+            raise ValueError("Model not fitted yet. Call fit() first.")
+        distances = np.array([np.linalg.norm(X - c, axis=1) for c in self.centroids])
+        return np.argmin(distances, axis=0)
+
+
+def find_optimal_level2_k_star(level1_centroids, level1_cluster_sizes, min_threshold_pct=10.0, random_state=42):
+    """
+    Automatically find the optimal K for Level 2 clustering in star mode.
+    
+    Parameters:
+    -----------
+    level1_centroids : ndarray
+        Level 1 cluster centroids
+    level1_cluster_sizes : ndarray
+        Level 1 cluster population sizes
+    min_threshold_pct : float
+        Minimum percentage of population per cluster (default 10%)
+    random_state : int
+        Random seed for reproducibility
+        
+    Returns:
+    --------
+    dict : Contains optimal_k, level2_kmeans model, and level2_centroid_labels
+    """
+    if not (5.0 <= min_threshold_pct <= 20.0):
+        min_threshold_pct = 10.0
+    
+    optimal_k_level1 = len(level1_centroids)
+    total_samples = np.sum(level1_cluster_sizes)
+    
+    print(f"\n{'='*80}")
+    print(f"STAR MODE - LEVEL 2: Automatic K Selection")
+    print(f"{'='*80}")
+    print(f"Level 1 K: {optimal_k_level1} micro-segments")
+    print(f"Total samples: {total_samples:,}")
+    print(f"Minimum threshold: {min_threshold_pct}% ({int(total_samples * min_threshold_pct / 100):,} samples)")
+    print(f"{'='*80}")
+    
+    level1_centroids_array = np.array(level1_centroids)
+    max_theoretical_k = int(100 // min_threshold_pct)  # floor of 100/threshold
+    initial_k = min(max_theoretical_k, optimal_k_level1)
+    print(f"\nStarting K heuristic: min({max_theoretical_k}, {optimal_k_level1}) = {initial_k}")
+    
+    best_k = None
+    best_result = None
+    
+    for k_candidate in range(initial_k, 1, -1):
+        print(f"\nTrying K={k_candidate}...")
+        
+        kmeans_l2 = KMeans(n_clusters=k_candidate, random_state=random_state, n_init=10, max_iter=300)
+        level2_centroid_labels = kmeans_l2.fit_predict(level1_centroids_array, sample_weight=level1_cluster_sizes)
+        
+        cluster_percentages = []
+        min_percentage = 100.0
+        
+        for l2_id in range(k_candidate):
+            l1_in_l2 = np.where(level2_centroid_labels == l2_id)[0]
+            count = np.sum(level1_cluster_sizes[l1_in_l2])
+            percentage = (count / total_samples) * 100
+            cluster_percentages.append(percentage)
+            min_percentage = min(min_percentage, percentage)
+        
+        meets_threshold = min_percentage >= min_threshold_pct
+        
+        print(f"  Minimum cluster: {min_percentage:.2f}%")
+        print(f"  {'✅ MEETS THRESHOLD' if meets_threshold else '❌ BELOW THRESHOLD'}")
+        
+        if meets_threshold:
+            best_k = k_candidate
+            best_result = {
+                'optimal_k': k_candidate,
+                'level2_kmeans': kmeans_l2,
+                'level2_centroid_labels': level2_centroid_labels,
+                'cluster_percentages': cluster_percentages,
+                'meets_threshold': True
+            }
+            print(f"\n🎯 SUCCESS! Found optimal K={k_candidate}")
+            break
+    
+    if best_k is None:
+        print(f"\n⚠️ No K met the threshold. Using K=2 as best-effort fallback")
+        k_candidate = 2
+        kmeans_l2 = KMeans(n_clusters=k_candidate, random_state=random_state, n_init=10, max_iter=300)
+        level2_centroid_labels = kmeans_l2.fit_predict(level1_centroids_array, sample_weight=level1_cluster_sizes)
+        
+        cluster_percentages = []
+        for l2_id in range(k_candidate):
+            l1_in_l2 = np.where(level2_centroid_labels == l2_id)[0]
+            count = np.sum(level1_cluster_sizes[l1_in_l2])
+            percentage = (count / total_samples) * 100
+            cluster_percentages.append(percentage)
+        
+        best_result = {
+            'optimal_k': 2,
+            'level2_kmeans': kmeans_l2,
+            'level2_centroid_labels': level2_centroid_labels,
+            'cluster_percentages': cluster_percentages,
+            'meets_threshold': False
+        }
+    
+    print(f"\n{'='*80}")
+    print(f"LEVEL 2 COMPLETE: Selected K={best_result['optimal_k']}")
+    print(f"{'='*80}\n")
+    
+    return best_result
+
+
+# =============================================================================
 # Cluster Data Structure
 # =============================================================================
 
@@ -547,17 +912,20 @@ class Cluster:
         return sampled_children
 
     def compute_numeric_statistics(self, variable_names: list[str],
-                                   numeric_stats_precision: int = 2
+                                   numeric_stats_precision: int = 2,
+                                   global_means: np.ndarray | None = None
                                    ) -> dict | None:
         """
         Computes statistics using aggregated *original, unscaled* numeric data.
+        Features are sorted by absolute deviation from global mean.
 
         Args:
             variable_names: Names of the numeric features.
             numeric_stats_precision: Decimal places for storing stats (not used for computation).
+            global_means: Global mean values for each feature (for deviation calculation).
 
         Returns:
-            Dictionary of statistics per variable, or None.
+            Dictionary of statistics per variable (sorted by deviation), or None.
         """
         if self.original_data_type != 'numeric': return None
         data_to_analyze = self.original_numeric_data if self.level > 0 else self._raw_item_data
@@ -579,7 +947,7 @@ class Cluster:
             var_names_to_use = variable_names
             num_features = len(var_names_to_use)
 
-        stats = {}
+        stats_list = []
         for i in range(num_features):
              var_name = var_names_to_use[i]
              try:
@@ -588,17 +956,58 @@ class Cluster:
                  if var_data_clean.size == 0: continue
 
                  is_single_item = (self.level == 0 or data.shape[0] == 1)
+                 
+                 cluster_mean = float(np.mean(var_data_clean))
+                 
+                 # Calculate deviation from global mean if available
+                 deviation_pct = 0.0
+                 abs_deviation_pct = 0.0
+                 global_mean = None
+                 
+                 if global_means is not None and i < len(global_means):
+                     global_mean = float(global_means[i])
+                     # Calculate percentage deviation
+                     if abs(global_mean) > 1e-10:  # Avoid division by zero
+                         deviation_pct = ((cluster_mean - global_mean) / abs(global_mean)) * 100
+                         abs_deviation_pct = abs(deviation_pct)
+                     else:
+                         # If global mean is ~0, use absolute difference
+                         deviation_pct = cluster_mean * 100
+                         abs_deviation_pct = abs(deviation_pct)
 
-                 stats[var_name] = {
-                     "mean": float(np.mean(var_data_clean)),
-                     "median": float(np.median(var_data_clean)) if not is_single_item else float(np.mean(var_data_clean)),
-                     "min": float(np.min(var_data_clean)) if not is_single_item else float(np.mean(var_data_clean)),
-                     "max": float(np.max(var_data_clean)) if not is_single_item else float(np.mean(var_data_clean)),
-                     "std": float(np.std(var_data_clean)) if not is_single_item else 0.0
-                 }
+                 stats_list.append({
+                     'var_name': var_name,
+                     'mean': cluster_mean,
+                     'median': float(np.median(var_data_clean)) if not is_single_item else cluster_mean,
+                     'min': float(np.min(var_data_clean)) if not is_single_item else cluster_mean,
+                     'max': float(np.max(var_data_clean)) if not is_single_item else cluster_mean,
+                     'std': float(np.std(var_data_clean)) if not is_single_item else 0.0,
+                     'global_mean': global_mean,
+                     'deviation_pct': deviation_pct,
+                     'abs_deviation_pct': abs_deviation_pct
+                 })
              except Exception as e:
                   warnings.warn(f"Error computing stats for var '{var_name}' in cluster {self.id}: {e}")
                   continue
+        
+        if not stats_list:
+            return None
+        
+        # Sort by absolute deviation (descending) - most defining features first
+        stats_list.sort(key=lambda x: x['abs_deviation_pct'], reverse=True)
+        
+        # Convert to dictionary keyed by variable name, preserving sorted order
+        stats = {item['var_name']: {
+            'mean': item['mean'],
+            'median': item['median'],
+            'min': item['min'],
+            'max': item['max'],
+            'std': item['std'],
+            'global_mean': item['global_mean'],
+            'deviation_pct': item['deviation_pct'],
+            'abs_deviation_pct': item['abs_deviation_pct']
+        } for item in stats_list}
+        
         return stats if stats else None
 
     def get_data_for_prompt(self,
@@ -613,7 +1022,8 @@ class Cluster:
                            variable_metadata_by_name: Optional[Dict[str, Dict[str, Any]]],
                            numeric_stats_precision: int,
                            max_stats_vars: int,
-                           child_sample_desc_trunc_len: int
+                           child_sample_desc_trunc_len: int,
+                           global_numeric_means: np.ndarray | None = None
                            ) -> dict:
         """
         Prepares data for generating LLM title/description prompt.
@@ -671,7 +1081,8 @@ class Cluster:
         if self.original_data_type == 'numeric' and variable_names:
              prompt_data["statistics"] = self.compute_numeric_statistics(
                  variable_names,
-                 numeric_stats_precision=numeric_stats_precision
+                 numeric_stats_precision=numeric_stats_precision,
+                 global_means=global_numeric_means
              )
 
         if self.level == 0 and self.original_data_type == 'image':
@@ -926,7 +1337,7 @@ class Hercules:
     DEFAULT_PROMPT_IMMEDIATE_CHILD_SAMPLE_STRATEGY = "random"
     DEFAULT_PROMPT_IMMEDIATE_CHILD_SAMPLE_SIZE = 3
     DEFAULT_PROMPT_CHILD_SAMPLE_DESC_TRUNC_LEN = 75
-    DEFAULT_PROMPT_MAX_STATS_VARS = 5
+    DEFAULT_PROMPT_MAX_STATS_VARS = 10
     DEFAULT_PROMPT_NUMERIC_STATS_PRECISION = 2
     DEFAULT_DIRECT_L0_TEXT_TRUNC_LEN = 150
     DEFAULT_CLUSTER_NUMERIC_STATS_PRECISION = 2
@@ -941,13 +1352,18 @@ class Hercules:
     DEFAULT_RESAMPLING_ITERATIONS = 10
     EMPTY_TEXT_PLACEHOLDER = "[EMPTY_CONTENT]"
 
+    # Star mode defaults
+    DEFAULT_STAR_MODE_MIN_THRESHOLD_PCT = 10.0
+    DEFAULT_STAR_MODE_PATIENCE = 5
+
     def __init__(self,
-                 level_cluster_counts: Optional[list[int]],
+                 level_cluster_counts: Optional[list[int] | str],
                  text_embedding_client: Optional[Callable[[list[str]], np.ndarray]] = None,
                  llm_client: Optional[Callable[[str], str]] = None,
                  image_embedding_client: Optional[Callable[[list[Any]], np.ndarray]] = None,
                  image_captioning_client: Optional[Callable[[list[Any], Optional[str]], list[str]]] = None,
                  representation_mode: str = DEFAULT_REPRESENTATION_MODE,
+                 industry_context: Optional[str] = None,
                  auto_k_method: str = DEFAULT_AUTO_K_METHOD,
                  auto_k_max: int = DEFAULT_AUTO_K_MAX,
                  auto_k_metric_params: dict = DEFAULT_AUTO_K_METRIC_PARAMS,
@@ -983,18 +1399,21 @@ class Hercules:
                  use_llm_for_l0_descriptions: bool = DEFAULT_USE_LLM_FOR_L0_DESCRIPTIONS,
                  use_resampling: bool = DEFAULT_USE_RESAMPLING,
                  resampling_points_per_cluster: int = DEFAULT_RESAMPLING_POINTS_PER_CLUSTER,
-                 resampling_iterations: int = DEFAULT_RESAMPLING_ITERATIONS
+                 resampling_iterations: int = DEFAULT_RESAMPLING_ITERATIONS,
+                 star_mode_min_threshold_pct: float = DEFAULT_STAR_MODE_MIN_THRESHOLD_PCT,
+                 star_mode_patience: int = DEFAULT_STAR_MODE_PATIENCE
                  ):
         """
         Initializes the Hercules clusterer.
 
         Args:
-            level_cluster_counts: List of desired clusters per level, or None for auto-k.
+            level_cluster_counts: List of desired clusters per level, None for auto-k, or 'star' for K* Means mode.
             text_embedding_client: Function for embedding text.
             llm_client: Function for LLM calls (description generation).
             image_embedding_client: Function for embedding images (optional).
             image_captioning_client: Function for captioning images (optional).
             representation_mode: 'direct' or 'description'.
+            industry_context: Industry context string ('telco', 'bank', 'retail') to guide LLM responses with domain-specific jargon.
             auto_k_method: Metric for auto-k ('silhouette', 'davies_bouldin', 'calinski_harabasz').
             auto_k_max: Max k to test per level for auto-k.
             auto_k_metric_params: Additional params for auto-k metric functions.
@@ -1089,12 +1508,15 @@ class Hercules:
         self._function_metadata['image_captioning'] = self._get_function_metadata(self.image_captioning_client)
 
         if level_cluster_counts is not None:
-            if not isinstance(level_cluster_counts, list) or not all(isinstance(k, int) and k > 0 for k in level_cluster_counts):
-                raise ValueError("`level_cluster_counts`, if provided, must be a list of positive integers.")
+            if level_cluster_counts != 'star':
+                if not isinstance(level_cluster_counts, list) or not all(isinstance(k, int) and k > 0 for k in level_cluster_counts):
+                    raise ValueError("`level_cluster_counts`, if provided, must be a list of positive integers or 'star'.")
         self.level_cluster_counts = level_cluster_counts
+        self.star_mode = (level_cluster_counts == 'star')
         if representation_mode not in ["direct", "description"]:
              raise ValueError("`representation_mode` must be 'direct' or 'description'")
         self.representation_mode = representation_mode
+        self.industry_context = industry_context  # Store industry context for LLM prompt generation
 
         if self.level_cluster_counts is None:
             valid_auto_k_methods = ['silhouette', 'davies_bouldin', 'calinski_harabasz']
@@ -1156,11 +1578,15 @@ class Hercules:
         self.use_resampling = use_resampling
         self.resampling_points_per_cluster = max(1, resampling_points_per_cluster)
         self.resampling_iterations = max(1, resampling_iterations)
+        
+        self.star_mode_patience = max(1, star_mode_patience)
+        self.star_mode_min_threshold_pct = max(0.0, star_mode_min_threshold_pct)
 
         self.variable_names: list[str] | None = None
         self.numeric_metadata_by_name: dict[str, dict[str, Any]] | None = None
         self.input_data_type: str | None = None
         self.original_numeric_data_: np.ndarray | None = None
+        self._global_numeric_means_: np.ndarray | None = None
         self._scaler: StandardScaler | None = None
 
         self._reducers_trained_ = {"text_embedding": False, "image_embedding": False, "numeric": False}
@@ -1169,7 +1595,7 @@ class Hercules:
         
         self._run_id: str | None = None
         self._prompt_log: list[dict] = []
-        self._current_topic_seed: str | None = None
+        self._current_business_goal: str | None = None
         self._all_clusters_map: dict[int, Cluster] = {}
         self._l0_clusters_ordered: list[Cluster] = []
         self._max_level: int = 0
@@ -1361,6 +1787,7 @@ class Hercules:
         self.variable_names = None
         self.numeric_metadata_by_name = None
         self.original_numeric_data_ = None
+        self._global_numeric_means_ = None
         self._scaler = None
         input_type = None
         standardized_data = None
@@ -1565,6 +1992,10 @@ class Hercules:
                  raise ValueError("Numeric data contains non-finite values (inf/-inf). Please handle them before clustering.")
 
             self.original_numeric_data_ = numeric_data_unscaled.copy()
+            
+            # Store global means for deviation calculations
+            self._global_numeric_means_ = np.mean(numeric_data_unscaled, axis=0)
+            self._log(f"Stored global means for {len(self._global_numeric_means_)} numeric features.", level=2)
 
             if original_numeric_keys is not None:
                 num_features = len(original_numeric_keys)
@@ -1801,11 +2232,15 @@ class Hercules:
         n_items_requested = len(item_ids_requested)
         self._log(f"Building LLM prompt {prompt_id} for {n_items_requested} {item_type_plural} (Level {level})...", level=2)
 
-        prompt = f"""Generate a concise 'title' (max 5-7 words) and 'description' (1-2 sentences) for EACH of the {item_type_plural} below (Level {level}).
+        prompt = f"""Generate a concise 'title' (max 5-7 words) and 'description' (3-4 sentences) for EACH of the {item_type_plural} below (Level {level}).
 """
-        if self._current_topic_seed:
-            escaped_seed = self._current_topic_seed.replace('"', '\\"').replace("'", "\\'")
-            prompt += f"CONTEXT FOCUS: Orient towards '{escaped_seed}', if relevant.\n"
+        if self._current_industry_context:
+            industry_names = {'telco': 'Telecommunications', 'bank': 'Banking & Finance', 'retail': 'Retail & E-commerce'}
+            industry_display = industry_names.get(self._current_industry_context, self._current_industry_context)
+            prompt += f"INDUSTRY CONTEXT: Use {industry_display} domain terminology and jargon in your responses.\n"
+        if self._current_business_goal:
+            escaped_goal = self._current_business_goal.replace('"', '\\"').replace("'", "\\'")
+            prompt += f"BUSINESS GOAL FOCUS: Orient towards '{escaped_goal}', if relevant.\n"
 
         prompt += f"""
 RESPONSE FORMAT: Respond ONLY with a single, valid JSON object.
@@ -1870,8 +2305,9 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
 
             stats = data.get("statistics")
             if stats:
-                 stat_desc = "Key Statistics (Original Scale)"
+                 stat_desc = "Most Defining Features (Top Deviations from Global Mean)"
                  cluster_block += f"{stat_desc}:\n"
+                 # Stats are already sorted by deviation, just take the first N
                  vars_to_show = list(stats.keys())[:self.prompt_max_stats_vars]
                  num_fmt = f"{{:.{self.prompt_numeric_stats_precision}f}}"
 
@@ -1880,22 +2316,23 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                       var_meta = variable_metadata.get(var_name) if variable_metadata else None
                       unit_str = f" ({var_meta['unit']})" if var_meta and var_meta.get('unit') else ""
                       desc_str = f" # {var_meta['description']}" if var_meta and var_meta.get('description') else ""
-                      is_single_item_or_l0 = (level == 0 or num_underlying == 1)
-
-                      if not is_single_item_or_l0:
-                          mean = s_data['mean']
-                          min_val = s_data['min']
-                          max_val = s_data['max']
-                          std = s_data['std']
-                          cluster_block += (f"- {var_name}{unit_str}: mean={num_fmt.format(mean)} "
-                                            f"(range: {num_fmt.format(min_val)} to {num_fmt.format(max_val)})"
-                                            f"{f', std={num_fmt.format(std)}' if std > 1e-9 else ''}"
-                                            f"{desc_str}\n")
+                      
+                      cluster_mean = s_data['mean']
+                      deviation_pct = s_data.get('deviation_pct', 0.0)
+                      global_mean = s_data.get('global_mean')
+                      
+                      # Format deviation string
+                      if global_mean is not None:
+                          direction = "↑" if deviation_pct > 0 else "↓"
+                          deviation_str = f" | {direction} Deviation: {abs(deviation_pct):.2f}%"
+                          comparison_str = f" (Cluster: {num_fmt.format(cluster_mean)} vs Global: {num_fmt.format(global_mean)})"
+                          cluster_block += f"- {var_name}{unit_str}:{comparison_str}{deviation_str}{desc_str}\n"
                       else:
-                           cluster_block += f"- {var_name}{unit_str}: {num_fmt.format(s_data['mean'])}{desc_str}\n"
+                          # Fallback if global means not available
+                          cluster_block += f"- {var_name}{unit_str}: mean={num_fmt.format(cluster_mean)}{desc_str}\n"
 
                  if len(stats) > self.prompt_max_stats_vars:
-                      cluster_block += "- ... (more variables exist)\n"
+                      cluster_block += f"- ... ({len(stats) - self.prompt_max_stats_vars} more features with lower deviations)\n"
 
             cluster_block += f"--- End {item_type} ID: {item_id_str} ---\n"
 
@@ -1909,7 +2346,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                           log_entry = {
                               "prompt_id": prompt_id, "run_id": self._run_id, "timestamp": timestamp,
                               "level": level, "item_ids_requested": [d["id"] for d in cluster_prompt_data_list],
-                              "item_ids_included": [], "item_type": item_type, "topic_seed_used": self._current_topic_seed,
+                              "item_ids_included": [], "item_type": item_type, "business_goal_used": self._current_business_goal,
                               "prompt_text": "Prompt too large for first item.", "estimated_tokens": prompt_tokens_estimate + cluster_block_tokens,
                               "token_limit": self.max_prompt_tokens, "llm_response": None, "llm_error": None,
                               "parsed_output": None, "parsing_error": "Prompt generation failed (too large for first item)"}
@@ -1930,7 +2367,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                  log_entry = {
                      "prompt_id": prompt_id, "run_id": self._run_id, "timestamp": timestamp,
                      "level": level, "item_ids_requested": [d["id"] for d in cluster_prompt_data_list],
-                     "item_ids_included": [], "item_type": item_type, "topic_seed_used": self._current_topic_seed,
+                     "item_ids_included": [], "item_type": item_type, "business_goal_used": self._current_business_goal,
                      "prompt_text": "No items fit within token limits.", "estimated_tokens": prompt_tokens_estimate,
                      "token_limit": self.max_prompt_tokens, "llm_response": None, "llm_error": None,
                      "parsed_output": None, "parsing_error": "Prompt generation failed (no items fit)"}
@@ -1943,7 +2380,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                 "prompt_id": prompt_id, "run_id": self._run_id, "timestamp": timestamp,
                 "level": level, "item_ids_requested": [d["id"] for d in cluster_prompt_data_list],
                 "item_ids_included": item_ids_included, "item_type": item_type,
-                "topic_seed_used": self._current_topic_seed, "prompt_text": prompt,
+                "business_goal_used": self._current_business_goal, "prompt_text": prompt,
                 "estimated_tokens": 0, "token_limit": self.max_prompt_tokens,
                 "llm_response": None, "llm_error": None, "parsed_output": None, "parsing_error": None
              }
@@ -1978,7 +2415,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                        f.write(f"--- PROMPT {i+1} / ID: {entry.get('prompt_id', 'N/A')} / Level: {entry.get('level', 'N/A')} ---\n")
                        f.write(f"Timestamp: {entry.get('timestamp', 'N/A')}\n")
                        f.write(f"Item Type: {entry.get('item_type', 'N/A')}\n")
-                       f.write(f"Topic Seed: {entry.get('topic_seed_used', 'None')}\n")
+                       f.write(f"Business Goal: {entry.get('business_goal_used', 'None')}\n")
                        f.write(f"Item IDs Requested: {[str(x) for x in entry.get('item_ids_requested', [])]}\n")
                        f.write(f"Item IDs Included : {[str(x) for x in entry.get('item_ids_included', [])]}\n")
                        f.write(f"Estimated Tokens: {entry.get('estimated_tokens', 'N/A')}\n")
@@ -2042,6 +2479,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                         variable_names=self.variable_names,
                         variable_metadata_by_name=self.numeric_metadata_by_name,
                         numeric_stats_precision=self.cluster_numeric_stats_precision,
+                        global_numeric_means=self._global_numeric_means_,
                         max_stats_vars=self.prompt_max_stats_vars,
                         child_sample_desc_trunc_len=self.prompt_child_sample_desc_trunc_len
                     ) for c in batch_chunk
@@ -2245,7 +2683,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                 self._log(f"  Attempting IMAGE captioning for {len(standardized_data)} items...", level=2)
                 try:
                     image_identifiers = [c._raw_item_data for c in l0_clusters]
-                    image_captions = self.image_captioning_client(image_identifiers, prompt=self._current_topic_seed)
+                    image_captions = self.image_captioning_client(image_identifiers, prompt=self._current_business_goal)
                     if len(image_captions) != len(l0_clusters): raise ValueError("Captioning client returned incorrect number of captions.")
                     captions_generated = 0
                     for i, cluster in enumerate(l0_clusters):
@@ -2729,7 +3167,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         return current_clusters
 
     def cluster(self, data: Any,
-                topic_seed: str | None = None,
+                business_goal: str | None = None,
                 numeric_metadata: Optional[Dict[Union[str, int], Dict[str, Any]]] = None
                 ) -> list[Cluster]:
         """
@@ -2748,16 +3186,26 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         self.variable_names = None
         self.numeric_metadata_by_name = None
         Cluster.reset_id_counter()
-        self._current_topic_seed = topic_seed
+        self._current_business_goal = business_goal
+        self._current_industry_context = self.industry_context
 
         self._log(f"--- Starting Hercules Clustering Run: {self._run_id} ---", level=1)
         self._log(f"Hercules Version: {self.HERCULES_VERSION}", level=1)
         self._log(f"Verbosity Level: {self.verbose}", level=1)
         self._log(f"Representation Mode: {self.representation_mode}", level=1)
-        if self.level_cluster_counts is None: self._log(f"Automatic K Mode: Enabled (Method: {self.auto_k_method}, Max K: {self.auto_k_max})", level=1)
-        else: self._log(f"Automatic K Mode: Disabled (Using level_cluster_counts: {self.level_cluster_counts})", level=1)
+        if self.star_mode:
+            self._log(f"Star Mode: Enabled (K* Means for L1, Auto K with threshold for L2)", level=1)
+            self._log(f"  Star L2 threshold: {self.star_mode_min_threshold_pct}%", level=1)
+        elif self.level_cluster_counts is None:
+            self._log(f"Automatic K Mode: Enabled (Method: {self.auto_k_method}, Max K: {self.auto_k_max})", level=1)
+        else:
+            self._log(f"Automatic K Mode: Disabled (Using level_cluster_counts: {self.level_cluster_counts})", level=1)
         if self.reduction_methods: self._log(f"Reduction Methods: {self.reduction_methods} ({self.n_reduction_components} components)", level=1)
-        if self._current_topic_seed: self._log(f"Topic Seed: '{self._current_topic_seed}'", level=1)
+        if self._current_industry_context:
+            industry_names = {'telco': 'Telecommunications', 'bank': 'Banking & Finance', 'retail': 'Retail & E-commerce'}
+            industry_display = industry_names.get(self._current_industry_context, self._current_industry_context)
+            self._log(f"Industry Context: {industry_display}", level=1)
+        if self._current_business_goal: self._log(f"Business Goal: '{self._current_business_goal}'", level=1)
         if numeric_metadata: self._log("Numeric metadata provided.", level=1)
         if self.prompt_include_immediate_children: self._log(f"Prompting includes immediate children (Strategy: {self.prompt_immediate_child_sample_strategy}, Size: {self.prompt_immediate_child_sample_size}).", level=1)
 
@@ -2805,7 +3253,12 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
             return [] if not self._l0_clusters_ordered else self._l0_clusters_ordered
 
         self._log(f"Starting hierarchical loop with {len(valid_l0_clusters)} valid L0 clusters.", level=1)
-        top_level_clusters = self._perform_hierarchical_clustering_loop(valid_l0_clusters)
+        
+        # Use star mode if enabled
+        if self.star_mode:
+            top_level_clusters = self._perform_star_mode_clustering(valid_l0_clusters)
+        else:
+            top_level_clusters = self._perform_hierarchical_clustering_loop(valid_l0_clusters)
 
         if self.save_run_details: self._save_prompt_log()
         self._log(f"\n--- Hercules Clustering Run Finished ---", level=1)
@@ -2813,6 +3266,140 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         self._log(f"Returning {len(top_level_clusters)} top-level clusters.", level=1)
 
         return top_level_clusters
+
+    def _perform_star_mode_clustering(self, l0_clusters: list[Cluster]) -> list[Cluster]:
+        """
+        Performs K* Means two-level hierarchical clustering (Star Mode).
+        Level 1: K* Means with MDL-based automatic K selection
+        Level 2: Weighted K-Means with business-driven threshold
+        """
+        if self.input_data_type != 'numeric':
+            print("Warning: Star mode is optimized for numeric data. Proceeding with available representation vectors.")
+        
+        # Extract representation vectors from L0 clusters
+        valid_l0_clusters = [c for c in l0_clusters if c.representation_vector is not None]
+        if not valid_l0_clusters:
+            print("Error: No valid L0 clusters with representation vectors for star mode.")
+            return []
+        
+        vectors_l0 = np.array([c.representation_vector for c in valid_l0_clusters])
+        
+        self._log(f"\n--- STAR MODE: Level 1 (K* Means) ---", level=1)
+        self._log(f"Input: {vectors_l0.shape[0]} L0 clusters", level=1)
+        
+        # Level 1: K* Means clustering
+        kstar = KStarMeans(patience=self.star_mode_patience, random_state=self.random_state)
+        kstar.fit(vectors_l0)
+        
+        optimal_k_level1 = len(kstar.centroids)
+        labels_level1 = kstar.labels
+        
+        self._log(f"K* Means determined K={optimal_k_level1} for Level 1", level=1)
+        
+        # Create Level 1 clusters
+        level1_clusters = []
+        level1_cluster_map = {}
+        
+        for i in range(optimal_k_level1):
+            level1_cluster = Cluster(level=1, original_data_type=self.input_data_type)
+            level1_cluster.representation_vector = kstar.centroids[i]
+            level1_cluster.representation_vector_space = valid_l0_clusters[0].representation_vector_space
+            level1_clusters.append(level1_cluster)
+            level1_cluster_map[i] = level1_cluster
+            self._all_clusters_map[level1_cluster.id] = level1_cluster
+        
+        # Assign L0 clusters to Level 1
+        for idx, l0_cluster in enumerate(valid_l0_clusters):
+            l1_label = labels_level1[idx]
+            parent_l1 = level1_cluster_map[l1_label]
+            parent_l1.children.append(l0_cluster)
+            l0_cluster.parent = parent_l1
+        
+        # Aggregate numeric data and get descriptions for Level 1
+        clusters_needing_llm_desc = []
+        for parent in level1_clusters:
+            parent._aggregate_numeric_data_from_children()
+            clusters_needing_llm_desc.append(parent)
+        
+        if clusters_needing_llm_desc:
+            processed_llm_results, _ = self._get_llm_descriptions_batched(clusters_needing_llm_desc)
+            for parent in level1_clusters:
+                key = parent.id
+                if key in processed_llm_results:
+                    parent.title, parent.description = processed_llm_results[key]
+        
+        self._generate_and_assign_description_embeddings(level1_clusters)
+        
+        if self.reduction_methods:
+            self._apply_reductions_to_embeddings(level1_clusters, 'representation_vector')
+            self._apply_reductions_to_embeddings(level1_clusters, 'description_embedding')
+        
+        self._log(f"Level 1 complete: {len(level1_clusters)} clusters created", level=1)
+        
+        # Level 2: Weighted K-Means with automatic K selection
+        self._log(f"\n--- STAR MODE: Level 2 (Weighted K-Means Auto K) ---", level=1)
+        
+        level1_centroids = np.array([c.representation_vector for c in level1_clusters])
+        level1_cluster_sizes = np.array([len(c.get_level0_descendants()) for c in level1_clusters])
+        
+        level2_result = find_optimal_level2_k_star(
+            level1_centroids=level1_centroids,
+            level1_cluster_sizes=level1_cluster_sizes,
+            min_threshold_pct=self.star_mode_min_threshold_pct,
+            random_state=self.random_state
+        )
+        
+        optimal_k_level2 = level2_result['optimal_k']
+        level2_kmeans = level2_result['level2_kmeans']
+        level2_centroid_labels = level2_result['level2_centroid_labels']
+        
+        self._log(f"Level 2 determined K={optimal_k_level2}", level=1)
+        
+        # Create Level 2 clusters
+        level2_clusters = []
+        level2_cluster_map = {}
+        
+        for i in range(optimal_k_level2):
+            level2_cluster = Cluster(level=2, original_data_type=self.input_data_type)
+            level2_cluster.representation_vector = level2_kmeans.cluster_centers_[i]
+            level2_cluster.representation_vector_space = level1_clusters[0].representation_vector_space
+            level2_clusters.append(level2_cluster)
+            level2_cluster_map[i] = level2_cluster
+            self._all_clusters_map[level2_cluster.id] = level2_cluster
+        
+        # Assign Level 1 clusters to Level 2
+        for idx, l1_cluster in enumerate(level1_clusters):
+            l2_label = level2_centroid_labels[idx]
+            parent_l2 = level2_cluster_map[l2_label]
+            parent_l2.children.append(l1_cluster)
+            l1_cluster.parent = parent_l2
+        
+        # Aggregate and describe Level 2
+        clusters_needing_llm_desc = []
+        for parent in level2_clusters:
+            parent._aggregate_numeric_data_from_children()
+            clusters_needing_llm_desc.append(parent)
+        
+        if clusters_needing_llm_desc:
+            processed_llm_results, _ = self._get_llm_descriptions_batched(clusters_needing_llm_desc)
+            for parent in level2_clusters:
+                key = parent.id
+                if key in processed_llm_results:
+                    parent.title, parent.description = processed_llm_results[key]
+        
+        self._generate_and_assign_description_embeddings(level2_clusters)
+        
+        if self.reduction_methods:
+            self._apply_reductions_to_embeddings(level2_clusters, 'representation_vector')
+            self._apply_reductions_to_embeddings(level2_clusters, 'description_embedding')
+        
+        self._max_level = 2
+        self._log(f"Level 2 complete: {len(level2_clusters)} macro-segments created", level=1)
+        self._log(f"\nStar mode clustering complete!", level=1)
+        self._log(f"  Level 1: {optimal_k_level1} micro-segments (K* Means)", level=1)
+        self._log(f"  Level 2: {optimal_k_level2} macro-segments (Weighted Auto K)", level=1)
+        
+        return level2_clusters
 
     @property
     def max_level(self) -> int:
@@ -2879,7 +3466,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
     def evaluate_level(self, level: int,
                        ground_truth_labels: Optional[Union[list, np.ndarray, pd.Series, Dict[Any, Any]]] = None,
                        calculate_llm_internal_metrics: bool = True,
-                       topic_seed: Optional[str] = None
+                       business_goal: Optional[str] = None
                       ) -> Dict[str, Any]:
         """
         Evaluates the clustering quality at a specified level of the hierarchy.
@@ -2890,14 +3477,14 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         - LLM-based internal metrics (Silhouette, DB, CH) based on L-1 description_embeddings
           and L0 description_embeddings (optional).
         - External metrics (ARI, NMI, V-Measure) if ground truth is provided.
-        - Topic alignment score if a topic_seed is provided.
+        - Topic alignment score if a business_goal is provided.
 
         Args:
             level: The hierarchy level to evaluate (> 0).
             ground_truth_labels: Optional ground truth labels for the original L0 items.
                                 Should match the order or keys/index of the input data.
             calculate_llm_internal_metrics: Whether to calculate LLM-based internal metrics. Defaults to True.
-            topic_seed: Optional seed text to evaluate topic alignment of clusters at the given level.
+            business_goal: Optional goal text to evaluate topic alignment of clusters at the given level.
 
         Returns:
             Dictionary containing evaluation metric scores and metadata.
@@ -2931,7 +3518,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
             "llm_davies_bouldin_on_l0": None,
             "llm_calinski_harabasz_on_l0": None,
 
-            "topic_seed_provided": bool(topic_seed),
+            "business_goal_provided": bool(business_goal),
             "topic_alignment_score": None,
             "num_clusters_in_topic_alignment": 0,
         }
@@ -2940,8 +3527,8 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
             self._log(f"  LLM-based internal metrics: Will be calculated.", level=2)
         else:
             self._log(f"  LLM-based internal metrics: Will NOT be calculated (calculate_llm_internal_metrics=False).", level=2)
-        if topic_seed:
-            self._log(f"  Topic seed provided for alignment: '{topic_seed[:50]}...'", level=2)
+        if business_goal:
+            self._log(f"  Business goal provided for alignment: '{business_goal[:50]}...'", level=2)
 
 
         if not self._l0_clusters_ordered or not self._all_clusters_map:
@@ -3276,14 +3863,14 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
         ]
         results["num_clusters_with_desc_embedding"] = len(target_level_cluster_objs_with_desc_emb)
 
-        if topic_seed:
-            self._log(f"\n  Calculating Topic Alignment for level {level} with seed: '{topic_seed[:50]}...'", level=2)
-            results["topic_seed_provided"] = True
+        if business_goal:
+            self._log(f"\n  Calculating Topic Alignment for level {level} with business goal: '{business_goal[:50]}...'", level=2)
+            results["business_goal_provided"] = True
             try:
-                topic_seed_embedding = self.text_embedding_client([topic_seed])
-                if topic_seed_embedding is None or topic_seed_embedding.shape[0] == 0 or not np.all(np.isfinite(topic_seed_embedding[0])):
-                    raise ValueError("Failed to generate a valid embedding for the topic seed.")
-                topic_seed_vec = topic_seed_embedding[0]
+                business_goal_embedding = self.text_embedding_client([business_goal])
+                if business_goal_embedding is None or business_goal_embedding.shape[0] == 0 or not np.all(np.isfinite(business_goal_embedding[0])):
+                    raise ValueError("Failed to generate a valid embedding for the business goal.")
+                business_goal_vec = business_goal_embedding[0]
 
                 cluster_desc_embeddings_for_alignment = []
                 for cluster_obj in target_level_cluster_objs_from_map:
@@ -3300,7 +3887,7 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                     self._log(f"  Warning: {results['topic_alignment_error']}", level=2)
 
                 else:
-                    alignment_similarities = cosine_similarity(topic_seed_vec.reshape(1, -1), np.array(cluster_desc_embeddings_for_alignment))
+                    alignment_similarities = cosine_similarity(business_goal_vec.reshape(1, -1), np.array(cluster_desc_embeddings_for_alignment))
                     results["topic_alignment_score"] = float(np.mean(alignment_similarities[0]))
                     self._log(f"  Calculated topic alignment score: {results['topic_alignment_score']:.4f} using {len(cluster_desc_embeddings_for_alignment)} clusters.", level=2)
 
@@ -3867,7 +4454,7 @@ if __name__ == '__main__':
         start_time = time.time()
         top_level_clusters = hercules_instance.cluster(
             input_data,
-            topic_seed=f"Insights from {EXAMPLE_DATA_TYPE} data", # Optional
+            business_goal=f"Insights from {EXAMPLE_DATA_TYPE} data", # Optional
             numeric_metadata=numeric_metadata_input
         )
         end_time = time.time()

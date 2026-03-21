@@ -8,21 +8,21 @@
 
 ### Key Features
 
--   **Hierarchical Clustering:** Automatically builds a tree of clusters from your data.
--   **Multi-Modal:** Natively handles text, numeric (NumPy, Pandas), and image data (file paths, URLs, PIL Images). (One modality at a time.)
--   **LLM-Powered Summarization:** Uses Large Language Models (LLMs) to generate human-readable titles and descriptions for each cluster.
--   **Flexible Representation:** Choose between `direct` mode (using original data embeddings) or `description` mode (using LLM-generated summary embeddings) for clustering at higher levels.
--   **Interactive Web App:** An included Dash application (`pyhercules_app.py`) allows for easy data upload, parameter configuration, and visualization of clustering results.
--   **Extensible:** The core library is dependency-light. Bring your own model functions or use the provided ones in `pyhercules_functions.py`.
+- **Hierarchical Clustering:** Automatically builds a tree of clusters from your data.
+- **Multi-Modal:** Natively handles text, numeric (NumPy, Pandas), and image data (file paths, URLs, PIL Images). (One modality at a time.)
+- **LLM-Powered Summarization:** Uses Large Language Models (LLMs) to generate human-readable titles and descriptions for each cluster.
+- **Flexible Representation:** Choose between `direct` mode (using original data embeddings) or `description` mode (using LLM-generated summary embeddings) for clustering at higher levels.
+- **Interactive Web App:** An included Dash application (`pyhercules_app.py`) allows for easy data upload, parameter configuration, and visualization of clustering results.
+- **Extensible:** The core library is dependency-light. Bring your own model functions or use the provided ones in `pyhercules_functions.py`.
 
 ### Project Structure
 
--   `pyhercules.py`: The core clustering library. Contains the `Hercules` and `Cluster` classes.
--   `pyhercules_functions.py`: A collection of ready-to-use functions for embedding, captioning, and LLM calls (using Hugging Face, Google Gemini, etc.).
--   `pyhercules_app.py`: A comprehensive Dash web application for interactive clustering and visualization.
--   `examples.ipynb`: A Jupyter Notebook demonstrating various use cases of the library.
--   `requirements-*.txt`: Dependency files for different use cases (for reference).
--   `setup.py`: The packaging configuration script.
+- `pyhercules.py`: The core clustering library. Contains the `Hercules` and `Cluster` classes.
+- `pyhercules_functions.py`: A collection of ready-to-use functions for embedding, captioning, and LLM calls (using Hugging Face, Google Gemini, etc.).
+- `pyhercules_app.py`: A comprehensive Dash web application for interactive clustering and visualization.
+- `examples.ipynb`: A Jupyter Notebook demonstrating various use cases of the library.
+- `requirements-*.txt`: Dependency files for different use cases (for reference).
+- `setup.py`: The packaging configuration script.
 
 ### Installation
 
@@ -118,13 +118,43 @@ if top_clusters:
         cluster.print_hierarchy(indent_increment=2, print_level_0=False)
 ```
 
+### Star Mode: Parameter-Free Hierarchical Clustering
+
+PyHercules includes **Star Mode**, a zero-parameter two-level hierarchical clustering algorithm perfect for customer segmentation and business analytics.
+
+**Star Mode automatically determines:**
+
+- **Level 1 K** using K\* Means with MDL principle (fine-grained micro-segments)
+- **Level 2 K** using business-driven threshold search (actionable macro-segments)
+
+**Usage in the Dash App:**
+Simply enter `star` in the "Cluster Counts/Level" field.
+
+**Usage in Python:**
+
+```python
+hercules = Hercules(
+    level_cluster_counts='star',  # Activate star mode
+    representation_mode='direct',
+    text_embedding_client=your_embedding_function,
+    llm_client=your_llm_function,
+    star_mode_min_threshold_pct=10.0,  # Optional: minimum % per Level 2 cluster
+    verbose=1
+)
+
+top_clusters = hercules.cluster(your_numeric_data)
+# Results in exactly 2 levels: many micro-segments → few macro-segments
+```
+
+**See [`STAR_MODE_README.md`](STAR_MODE_README.md) for detailed documentation.**
+
 ### Citation
 
 If you find `pyhercules` useful in your research, please consider citing our paper.
 
 ```bibtex
 @misc{petnehazi2025hercules,
-      title={HERCULES: Hierarchical Embedding-based Recursive Clustering Using LLMs for Efficient Summarization}, 
+      title={HERCULES: Hierarchical Embedding-based Recursive Clustering Using LLMs for Efficient Summarization},
       author={Petnehazi, Gabor and Aradi, Bernadett},
       year={2025},
       eprint={2506.19992},

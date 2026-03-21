@@ -1,0 +1,14 @@
+level,cluster_id,title,description
+1,4339,"High Monetary, Low Frequency",This cluster represents items with high monetary value and low frequency of purchase. These items are infrequent but valuable.
+1,4340,"Moderate Recency, Low Frequency",This cluster includes items with moderate recency and consistently low frequency. These items are purchased somewhat recently but infrequently.
+1,4341,"Low Recency, Mixed Frequency",This cluster contains items with low recency and mixed frequency of purchase. These items are older but their purchase frequency varies.
+1,4342,"Average Recency, Low Frequency",This cluster represents items with average recency and low frequency. These items are purchased moderately often and are not very recent.
+1,4343,"Mixed Recency, Moderate Frequency","This cluster features items with mixed recency and moderate frequency. Purchase recency varies, but frequency tends to be consistent."
+1,4344,"High Recency, Low Frequency",This cluster consists of items with high recency and low frequency. These items were purchased recently but not often.
+1,4345,"Moderate Recency, Low Frequency",This cluster captures items with moderate recency and low frequency. These items are bought somewhat frequently and are not very recent.
+1,4346,"Average Recency, Low Frequency",This cluster represents items with average recency and low frequency. These items are purchased moderately often and are not very recent.
+1,4347,"Mixed Recency, Low Frequency","This cluster includes items with mixed recency and low frequency. Purchase recency varies, but frequency is consistently low."
+1,4348,"Mixed Recency, Moderate Frequency","This cluster features items with mixed recency and moderate frequency. Purchase recency varies, but frequency tends to be consistent."
+1,4349,"Very Low Recency, High Frequency",This cluster identifies items with very low recency and high frequency of purchase. These items are old but bought often.
+1,4350,"Low Recency, Moderate Frequency",This cluster represents items with low recency and moderate frequency. These items are older but purchased somewhat often.
+1,4351,"Mixed Recency, Moderate Frequency","This cluster includes items with mixed recency and moderate frequency. Purchase recency varies, but frequency tends to be consistent."

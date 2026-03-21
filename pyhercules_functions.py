@@ -600,7 +600,7 @@ AVAILABLE_LLMS = {
 if _transformers_available and _torch_available: # Gemma needs these
     AVAILABLE_LLMS["Local Gemma-3-4B-IT"] = local_gemma_3_4b_it_llm
 if _google_genai_available:
-    AVAILABLE_LLMS["Google Gemini-2.0-Flash"] = google_gemini_llm
+    AVAILABLE_LLMS["Google Gemini-2.5-Flash-Lite"] = google_gemini_llm
 
 AVAILABLE_IMAGE_EMBEDDERS = {
     "Dummy": dummy_image_embedding,
@@ -651,6 +651,6 @@ if __name__ == "__main__":
         try_huggingface_login()
     
     # Example: Trigger Google API configuration check
-    if "Google Gemini-2.0-Flash" in AVAILABLE_LLMS or "Google Embedding-001" in AVAILABLE_TEXT_EMBEDDERS:
+    if "Google Gemini-2.5-Flash-Lite" in AVAILABLE_LLMS or "Google Embedding-001" in AVAILABLE_TEXT_EMBEDDERS:
         print("\nAttempting to check/configure Google API access...")
         configure_google_api()

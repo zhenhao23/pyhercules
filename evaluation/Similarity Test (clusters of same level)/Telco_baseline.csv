@@ -1,0 +1,5 @@
+level,cluster_id,title,description
+1,7043,Demographic Features: Gender and Seniority,This cluster represents individuals' gender and senior citizen status. The data indicates a near-equal split between genders and a majority of non-seniors.
+1,7044,Demographics: Seniority and Partner Status,This cluster contains demographic information focusing on senior citizen status and whether individuals have a partner. A significant majority are not senior citizens.
+1,7045,Demographics: Predominantly Non-Senior,"This cluster is characterized by a strong prevalence of non-senior citizens. Gender distribution is balanced, with a slight majority of males."
+1,7046,"Demographic Features: Gender, Seniority, Partner","This cluster encompasses gender, senior citizen status, and partner information. Most individuals are not senior citizens, and there's a near-even gender split."

@@ -1,0 +1,32 @@
+Generate a concise 'title' (max 5-7 words) and 'description' (3-4 sentences) for the Cluster below (Level 1).
+
+Industry Context: You are analyzing customer purchase behavior in the online grocery delivery market.
+Business Goal: Identify distinct customer segments to power hyper-personalized recommendations and targeted email campaigns.
+
+RESPONSE FORMAT: Respond ONLY with a single, valid JSON object.
+- Top-level key MUST be the string representation of the 'Cluster ID' provided (e.g., "5").
+- Value MUST be a JSON object containing non-empty "title" and "description" string keys.
+
+EXAMPLE:
+{
+  "5": { "title": "Example Title", "description": "Example description." }
+}
+
+IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fences (```json ... ```) or any text outside the JSON structure.
+
+--- Cluster Information ---
+
+--- Cluster ID: 5 (L1, 29607 base items) ---
+
+Most Defining Features (Top Non-Negative Deviations from Global Mean):
+- dept_pct_produce: (Cluster: 0.55 vs Global: 0.28) | Deviation: 96.87%
+- dept_pct_bulk: (Cluster: 0.00 vs Global: 0.00) | Deviation: 62.14%
+- reorder_rate: (Cluster: 0.47 vs Global: 0.43) | Deviation: 9.06%
+- dept_pct_meat_seafood: (Cluster: 0.02 vs Global: 0.02) | Deviation: 5.45%
+- avg_days_between_orders: (Cluster: 15.36 vs Global: 15.21) | Deviation: 0.97%
+
+--- End Cluster ID: 5 ---
+
+--- End Clusters Information ---
+
+Generate the JSON output for the Cluster ID: 5

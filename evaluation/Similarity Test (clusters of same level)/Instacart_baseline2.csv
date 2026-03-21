@@ -1,0 +1,3 @@
+level,cluster_id,title,description
+1,0,"Frequent Reordering, Moderate Basket Size",Customers in this cluster reorder frequently with a moderate number of items per basket. They show a strong tendency to repurchase products.
+1,1,"High Frequency, Moderate Basket Size","This cluster represents customers with frequent orders and a substantial average basket size. They reorder often, indicating strong loyalty."

@@ -1,0 +1,5 @@
+cluster_id,title,description,run_number,clustering_seed,size
+0,"Majority Non-Senior, Mixed Gender Customers",This cluster represents a large group of customers with a balanced gender distribution.  The majority are not senior citizens and show a slight tendency towards not having a partner.,1,42,3251.0
+1,"Mostly Younger, No Partner Customers","This cluster primarily represents younger individuals without partners, with a slight tendency towards female representation. The 'Senior Citizen_No' variable has a noticeable negative mean.",1,42,1584.0
+2,"Slightly More Females, Few Senior Citizens",This cluster primarily consists of individuals who are not senior citizens. There's a slight overrepresentation of females compared to males.,1,42,1526.0
+3,"Demographics: Gender, Seniority, Partner","This cluster primarily represents demographic information including gender, senior citizen status, and whether a customer has a partner. The data is standardized for analysis.",1,42,682.0

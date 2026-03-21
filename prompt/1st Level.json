@@ -1,0 +1,18 @@
+{
+  "7043": {
+    "title": "Churn Drivers: Offers and Network Issues",
+    "description": "This cluster represents customers who churn due to competitive offers, network reliability, and perceived extra data or long-distance charges. Retention efforts should focus on value proposition and service stability."
+  },
+  "7044": {
+    "title": "DSL Internet and No Phone Service",
+    "description": "Customers in this cluster primarily use DSL internet and lack phone service or multiple lines. Focus on upselling or ensuring satisfaction with their current DSL setup to improve retention."
+  },
+  "7045": {
+    "title": "No Internet Services, Mailed Check Payments",
+    "description": "This group lacks various internet-dependent services and prefers mailed check payments. Retention strategies could involve highlighting the benefits of internet services and offering more convenient payment options."
+  },
+  "7046": {
+    "title": "No Services, No Churn Reasons",
+    "description": "These customers do not utilize phone, internet, or related services and have no specific churn reasons. Retention may focus on proactive engagement and ensuring basic needs are met without issue."
+  }
+}

@@ -85,9 +85,12 @@ def get_download_filename(base: str, ext: str, session_id_str: Optional[str] = N
         return f"{base}_{session_id_str}_{ts}.{ext}"
     return f"{base}_{ts}.{ext}"
 
-def parse_cluster_counts(counts_str: str) -> Optional[List[int]]:
+def parse_cluster_counts(counts_str: str) -> Optional[List[int] | str]:
     if not counts_str:
         return None
+    # Check for star mode
+    if counts_str.strip().lower() == 'star':
+        return 'star'
     try:
         counts = [int(c.strip()) for c in counts_str.split(',') if c.strip()]
         if not counts or any(c <= 0 for c in counts):
@@ -581,8 +584,14 @@ def create_summary_content(cluster_id, cluster_map, config_data, state_data, eva
         add_config_row("Rep. Mode:", get_config_str('representation_mode', data_dict=config_data))
         level_counts = config_data.get('level_cluster_counts',[]) if config_data else []
         level_counts = level_counts if level_counts is not None else []
-        add_config_row("Hierarchy:", f"{get_config_str('level_cluster_counts', data_dict=config_data)} (Levels={len(level_counts)})")
-        add_config_row("Topic Seed:", get_config_str('topic_seed', default="(Not Set)", data_dict=config_data))
+        # Handle star mode
+        if level_counts == 'star':
+            add_config_row("Hierarchy:", "Star Mode (K* Means + Auto K, Levels=2)")
+        elif isinstance(level_counts, list):
+            add_config_row("Hierarchy:", f"{get_config_str('level_cluster_counts', data_dict=config_data)} (Levels={len(level_counts)})")
+        else:
+            add_config_row("Hierarchy:", f"{get_config_str('level_cluster_counts', data_dict=config_data)}")
+        add_config_row("Business Goal:", get_config_str('business_goal', default="(Not Set)", data_dict=config_data))
         add_config_row("Text Embedder:", get_config_str('selected_text_embedder', default='N/A', data_dict=config_data))
         add_config_row("LLM:", get_config_str('selected_llm', default='N/A', data_dict=config_data))
         if input_data_type.lower() == 'image':
@@ -643,8 +652,10 @@ def create_summary_content(cluster_id, cluster_map, config_data, state_data, eva
         downloads_section = html.Div([
             html.H6("Download Results", className="mt-4 mb-2 fw-bold"),
             dbc.Button([html.I(className="bi bi-table me-1"), "Membership DF (CSV)"], id="btn-download-membership-csv", color="info", outline=True, size="sm", className="me-2 mb-2"),
+            dbc.Button([html.I(className="bi bi-list-ul me-1"), "Cluster Details (CSV)"], id="btn-download-cluster-details-csv", color="info", outline=True, size="sm", className="me-2 mb-2"),
             dbc.Button([html.I(className="bi bi-graph-up me-1"), "Evaluation (JSON)"], id="btn-download-evaluation-json", color="info", outline=True, size="sm", className="me-2 mb-2"),
-            dbc.Button([html.I(className="bi bi-diagram-3 me-1"), "Hierarchy (TXT)"], id="btn-download-hierarchy-txt", color="info", outline=True, size="sm", className="mb-2"),
+            dbc.Button([html.I(className="bi bi-diagram-3 me-1"), "Hierarchy (TXT)"], id="btn-download-hierarchy-txt", color="info", outline=True, size="sm", className="me-2 mb-2"),
+            dbc.Button([html.I(className="bi bi-chat-left-text me-1"), "Cluster Prompts (CSV)"], id="btn-download-cluster-prompts", color="info", outline=True, size="sm", className="mb-2"),
         ], className="mt-3 border-top pt-3")
 
         log_accordion_item = dbc.AccordionItem(
@@ -951,23 +962,46 @@ def create_upload_layout():
                                  html.I(className="bi bi-info-circle ms-1", id="tooltip-counts", style={'cursor': 'pointer'}),
                                  dbc.Tooltip(
                                      "Comma-separated list of desired clusters per level (e.g., 10,5,2). "
+                                     "Enter 'star' for K* Means two-level hierarchy mode. "
                                      "Leave empty for automatic K determination (experimental).",
                                      target="tooltip-counts", placement="top"
                                  ),
-                                 dbc.Input(id='cluster-counts-input', placeholder='e.g., 5, 3, 2 or blank for auto-k', value='5, 2'),
-                                 dbc.FormText("Comma-separated.", className="small")
+                                 dbc.Input(id='cluster-counts-input', placeholder="e.g., 5,3,2 or 'star' or blank for auto-k", value='5, 2'),
+                                 dbc.FormText("Comma-separated, 'star' for K* mode, or blank.", className="small")
                              ]),
                          ], className="mb-3"),
                          dbc.Row([
                              dbc.Col([
-                                 dbc.Label("Topic Seed (Optional)", html_for='topic-seed-input', className="fw-bold"),
-                                 html.I(className="bi bi-info-circle ms-1", id="tooltip-seed", style={'cursor': 'pointer'}),
+                                 dbc.Label("Industry Context (Optional)", html_for='industry-select', className="fw-bold"),
+                                 html.I(className="bi bi-info-circle ms-1", id="tooltip-industry", style={'cursor': 'pointer'}),
                                  dbc.Tooltip(
-                                     "A phrase to guide LLM topic focus (e.g., 'financial performance', 'customer sentiment'). "
-                                     "More effective with 'description' mode.",
-                                     target="tooltip-seed", placement="top"
+                                     "Select the industry to guide LLM responses with domain-specific terminology and jargon.",
+                                     target="tooltip-industry", placement="top"
                                  ),
-                                 dbc.Input(id='topic-seed-input', placeholder='Guides LLM topic focus')
+                                 dcc.Dropdown(
+                                     id='industry-select',
+                                     options=[
+                                         {'label': 'None (General)', 'value': ''},
+                                         {'label': 'Telecommunications', 'value': 'telco'},
+                                         {'label': 'Banking & Finance', 'value': 'bank'},
+                                         {'label': 'Retail & E-commerce', 'value': 'retail'}
+                                     ],
+                                     value='',
+                                     placeholder='Select industry',
+                                     clearable=True
+                                 )
+                             ])
+                         ], className="mb-3"),
+                         dbc.Row([
+                             dbc.Col([
+                                 dbc.Label("Business Goal (Optional)", html_for='business-goal-input', className="fw-bold"),
+                                 html.I(className="bi bi-info-circle ms-1", id="tooltip-goal", style={'cursor': 'pointer'}),
+                                 dbc.Tooltip(
+                                     "A phrase to guide LLM-generated descriptions toward your business objective (e.g., 'increase retention', 'identify churn risk'). "
+                                     "More effective with 'description' mode.",
+                                     target="tooltip-goal", placement="top"
+                                 ),
+                                 dbc.Input(id='business-goal-input', placeholder='Guides LLM descriptions toward business objective')
                              ])
                          ], className="mb-3"),
                          html.Hr(),
@@ -1019,9 +1053,9 @@ def create_results_layout(clusters_data: List[Dict], config_data: Dict, state_da
         return dbc.Container([dbc.Alert([html.I(className="bi bi-exclamation-triangle-fill me-2"), "Error: Failed to reconstruct cluster map."], color="danger")])
     max_level = state_data.get("max_level_achieved", 0)
     num_l0_items = state_data.get("num_l0_items", 0)
-    show_l0_default = num_l0_items < L0_DISPLAY_THRESHOLD
+    show_l0_default = False  # Level 0 hidden by default
     default_l0_toggle_value = ["show_l0"] if show_l0_default else []
-    print(f"Initial L0 Visibility: {'Shown' if show_l0_default else 'Hidden'} ({num_l0_items} items vs threshold {L0_DISPLAY_THRESHOLD})")
+    print(f"Initial L0 Visibility: {'Shown' if show_l0_default else 'Hidden'} ({num_l0_items} items)")
     l0_clusters_ordered = []
     l0_orig_ids = state_data.get("_l0_original_ids_ordered", [])
     if l0_orig_ids and all_clusters_map:
@@ -1099,7 +1133,8 @@ app.layout = html.Div([
     dcc.Store(id='run-params-store'), dcc.Store(id='run-trigger-store'),
     dcc.Download(id='download-full-results-json'), dcc.Download(id='download-membership-csv'),
     dcc.Download(id='download-evaluation-json'), dcc.Download(id='download-hierarchy-txt'),
-    dcc.Download(id='download-run-log-txt'),
+    dcc.Download(id='download-run-log-txt'), dcc.Download(id='download-cluster-prompts'),
+    dcc.Download(id='download-cluster-details-csv'),
     html.Div(id='page-content', children=create_upload_layout())
 ])
 
@@ -1435,17 +1470,17 @@ def update_column_types(override_values, current_types, override_ids):
     Output('log-interval', 'disabled'),
     Output('status-updates', 'children', allow_duplicate=True),
     Input('run-button', 'n_clicks'),
-    State('representation-mode-input', 'value'), State('cluster-counts-input', 'value'), State('topic-seed-input', 'value'),
+    State('representation-mode-input', 'value'), State('cluster-counts-input', 'value'), State('industry-select', 'value'), State('business-goal-input', 'value'),
     State('text-embedder-select', 'value'), State('llm-select', 'value'), State('image-embedder-select', 'value'),
     State('image-captioner-select', 'value'), State('column-types-store', 'data'),
     prevent_initial_call=True
 )
-def initiate_run(n_clicks, rep_mode, counts_str, topic_seed, txt_emb, llm, img_emb, img_cap, column_types):
+def initiate_run(n_clicks, rep_mode, counts_str, industry_context, business_goal, txt_emb, llm, img_emb, img_cap, column_types):
     if not n_clicks:
         return no_update, no_update, no_update, no_update, no_update, no_update
 
     params = {
-        'rep_mode': rep_mode, 'counts_str': counts_str, 'topic_seed': topic_seed,
+        'rep_mode': rep_mode, 'counts_str': counts_str, 'industry_context': industry_context, 'business_goal': business_goal,
         'txt_emb_name': txt_emb, 'llm_name': llm, 'img_emb_name': img_emb,
         'img_cap_name': img_cap, 'column_types': column_types  # Changed from selected_columns
     }
@@ -1495,7 +1530,8 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
     # Unpack parameters
     rep_mode = run_params.get('rep_mode')
     counts_str = run_params.get('counts_str')
-    topic_seed = run_params.get('topic_seed')
+    industry_context = run_params.get('industry_context', '')
+    business_goal = run_params.get('business_goal')
     txt_emb_name = run_params.get('txt_emb_name')
     llm_name = run_params.get('llm_name')
     img_emb_name = run_params.get('img_emb_name')
@@ -1509,10 +1545,12 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
 
             level_counts = parse_cluster_counts(counts_str)
             if level_counts is None and counts_str and counts_str.strip():
-                raise ValueError("Invalid Cluster Counts. Use comma-separated positive integers (e.g., 10, 5).")
+                raise ValueError("Invalid Cluster Counts. Use comma-separated positive integers (e.g., 10, 5), 'star' for K* mode, or leave empty for auto-k.")
 
-            seed = topic_seed.strip() if topic_seed else None
-            print(f"Run params: Mode={rep_mode}, Counts={level_counts or 'Auto'}, Seed={seed}", file=log_stream)
+            seed = business_goal.strip() if business_goal else None
+            industry_display = {'telco': 'Telecommunications', 'bank': 'Banking & Finance', 'retail': 'Retail & E-commerce'}.get(industry_context, 'None') if industry_context else 'None'
+            counts_display = 'Star Mode' if level_counts == 'star' else (level_counts or 'Auto')
+            print(f"Run params: Mode={rep_mode}, Counts={counts_display}, Industry={industry_display}, Seed={seed}", file=log_stream)
             
             if ground_truth_data and isinstance(ground_truth_data, dict):
                 parsed_gt = ground_truth_data
@@ -1603,15 +1641,15 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
             sel_img_cap = hf.get_function_by_name(img_cap_name, hf.AVAILABLE_IMAGE_CAPTIONERS) if data_type == 'image' else None
 
             print("Instantiating Hercules...", file=log_stream)
-            hercules = Hercules(level_cluster_counts=level_counts, representation_mode=rep_mode, text_embedding_client=sel_txt_emb, llm_client=sel_llm, image_embedding_client=sel_img_emb, image_captioning_client=sel_img_cap, reduction_methods=['pca'], random_state=42, verbose=True, save_run_details=False)
+            hercules = Hercules(level_cluster_counts=level_counts, representation_mode=rep_mode, industry_context=industry_context, text_embedding_client=sel_txt_emb, llm_client=sel_llm, image_embedding_client=sel_img_emb, image_captioning_client=sel_img_cap, reduction_methods=['pca'], random_state=42, verbose=True, save_run_details=False)
             
             with contextlib.redirect_stdout(log_stream):
                 print(f"\n--- Starting Hercules Clustering ({data_type.upper()}) ---")
                 # Pass numeric_metadata if available (for mixed data types)
                 if data_type == 'numeric' and 'numeric_metadata' in locals() and numeric_metadata:
-                    top_clusters = hercules.cluster(input_data, topic_seed=seed, numeric_metadata=numeric_metadata)
+                    top_clusters = hercules.cluster(input_data, business_goal=seed, numeric_metadata=numeric_metadata)
                 else:
-                    top_clusters = hercules.cluster(input_data, topic_seed=seed)
+                    top_clusters = hercules.cluster(input_data, business_goal=seed)
                 print("\n--- Clustering Finished ---\n")
                 if not hercules._all_clusters_map:
                     raise ValueError("Clustering finished, but no clusters were generated.")
@@ -1636,7 +1674,7 @@ def run_hercules_clustering_logic(trigger, run_params, temp_data_dir, uploaded_f
             cfg = {k: getattr(hercules, k, 'N/A') for k in ['level_cluster_counts', 'representation_mode', 'reduction_methods', 'random_state']}
             cfg.update({"selected_text_embedder": txt_emb_name, "selected_llm": llm_name, "selected_image_embedder": img_emb_name, "selected_image_captioner": img_cap_name})
             state = {"variable_names": getattr(hercules, 'variable_names', None), "input_data_type": getattr(hercules, 'input_data_type', 'unknown'), "embedding_dims": getattr(hercules, 'embedding_dims_', {}), "max_level_achieved": getattr(hercules, 'max_level', 0), "num_l0_items": len(getattr(hercules, '_l0_clusters_ordered', [])), "_l0_original_ids_ordered": [str(c.original_id) for c in getattr(hercules, '_l0_clusters_ordered', [])], "tabular_load_params": load_params, "data_source_description": data_desc}
-            results_pkg = {"clusters": clusters_serial, "config": cfg, "state": state, "eval_results": eval_results}
+            results_pkg = {"clusters": clusters_serial, "config": cfg, "state": state, "eval_results": eval_results, "prompt_log": getattr(hercules, '_prompt_log', [])}
             
             duration = time.time() - start_time
             final_status_alert = dbc.Alert([html.I(className="bi bi-check-circle-fill me-2"), html.Strong(f"Finished in {duration:.2f}s. Results ready.")], color="success", duration=8000)
@@ -2053,6 +2091,46 @@ def download_membership_csv(n_clicks, results_data, session_id):
     return dict(content=csv_string, filename=filename)
 
 @callback(
+    Output('download-cluster-details-csv', 'data'),
+    Input('btn-download-cluster-details-csv', 'n_clicks'),
+    State('hercules-results-store', 'data'),
+    State('session-id-store', 'data'),
+    prevent_initial_call=True
+)
+def download_cluster_details_csv(n_clicks, results_data, session_id):
+    if not n_clicks or not results_data:
+        return no_update
+    
+    clusters_data = results_data.get('clusters', [])
+    if not clusters_data:
+        return dict(content="No cluster data to download.", filename="error.txt")
+    
+    cluster_map = reconstruct_cluster_map_from_data(clusters_data)
+    if not cluster_map:
+        return dict(content="Failed to reconstruct cluster data.", filename="error.txt")
+    
+    # Build list of cluster details (excluding level 0)
+    cluster_details = []
+    for cluster_id in sorted(cluster_map.keys()):
+        cluster = cluster_map[cluster_id]
+        if cluster.level == 0:
+            continue
+        cluster_details.append({
+            'level': cluster.level,
+            'cluster_id': cluster.id,
+            'title': cluster.title if cluster.title else '',
+            'description': cluster.description if cluster.description else ''
+        })
+    
+    if not cluster_details:
+        return dict(content="No cluster details found.", filename="error.txt")
+    
+    df = pd.DataFrame(cluster_details)
+    filename = get_download_filename("hercules_cluster_details", "csv", session_id)
+    csv_string = df.to_csv(index=False)
+    return dict(content=csv_string, filename=filename)
+
+@callback(
     Output('download-run-log-txt', 'data'),
     Input('btn-download-run-log', 'n_clicks'),
     State('hercules-results-store', 'data'),
@@ -2071,6 +2149,56 @@ def download_run_log(n_clicks, results_data, session_id):
     log_text = log_content if isinstance(log_content, str) else "Log content not available as simple text."
     filename = get_download_filename("hercules_run_log", "txt", session_id)
     return dict(content=log_text, filename=filename)
+
+@app.callback(Output('download-cluster-prompts', 'data'),
+              [Input('btn-download-cluster-prompts', 'n_clicks')],
+              [State('hercules-results-store', 'data'), State('session-id-store', 'data')],
+              prevent_initial_call=True)
+def download_cluster_prompts_callback(n_clicks, results_pkg, session_id):
+    if not results_pkg or not n_clicks:
+        return no_update
+    
+    prompt_log = results_pkg.get('prompt_log', [])
+    if not prompt_log:
+        return no_update
+    
+    # Build CSV content with actual prompt_log fields
+    csv_lines = ["prompt_id,run_id,timestamp,level,item_ids_requested,item_ids_included,item_type,business_goal,estimated_tokens,token_limit,prompt_text,llm_response,llm_error,parsed_output,parsing_error"]
+    
+    for entry in prompt_log:
+        prompt_id = str(entry.get('prompt_id', ''))
+        run_id = str(entry.get('run_id', ''))
+        timestamp = str(entry.get('timestamp', ''))
+        level = str(entry.get('level', ''))
+        
+        # Convert lists to semicolon-separated strings
+        item_ids_requested = '; '.join([str(x) for x in entry.get('item_ids_requested', [])])
+        item_ids_included = '; '.join([str(x) for x in entry.get('item_ids_included', [])])
+        
+        item_type = str(entry.get('item_type', ''))
+        business_goal = str(entry.get('business_goal_used', ''))
+        estimated_tokens = str(entry.get('estimated_tokens', ''))
+        token_limit = str(entry.get('token_limit', ''))
+        
+        # Get full prompt and response, preserving newlines
+        prompt_text = str(entry.get('prompt_text', '')).replace('"', '""')
+        llm_response = str(entry.get('llm_response', '') or '').replace('"', '""')
+        llm_error = str(entry.get('llm_error', '') or '').replace('"', '""')
+        
+        # Handle parsed_output which might be a dict/list
+        parsed_output = entry.get('parsed_output', '')
+        if parsed_output:
+            parsed_output = str(parsed_output).replace('"', '""')
+        else:
+            parsed_output = ''
+        
+        parsing_error = str(entry.get('parsing_error', '') or '').replace('"', '""')
+        
+        csv_lines.append(f'"{prompt_id}","{run_id}","{timestamp}","{level}","{item_ids_requested}","{item_ids_included}","{item_type}","{business_goal}","{estimated_tokens}","{token_limit}","{prompt_text}","{llm_response}","{llm_error}","{parsed_output}","{parsing_error}"')
+    
+    csv_content = '\n'.join(csv_lines)
+    filename = get_download_filename("cluster_prompts", "csv", session_id)
+    return dict(content=csv_content, filename=filename)
 
 # --- Run the App ---
 if __name__ == '__main__':

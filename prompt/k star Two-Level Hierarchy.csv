@@ -1,0 +1,1810 @@
+prompt_id,run_id,timestamp,level,item_ids_requested,item_ids_included,item_type,topic_seed,estimated_tokens,token_limit,prompt_text,llm_response,llm_error,parsed_output,parsing_error
+"15198e3b-7eee-416f-9292-1ecf959f01e4","20260303_192149","2026-03-03T19:22:00.720655","1","7043; 7044; 7045; 7046; 7047; 7048; 7049; 7050; 7051; 7052; 7053; 7054; 7055; 7056; 7057; 7058; 7059; 7060; 7061; 7062; 7063; 7064; 7065; 7066; 7067; 7068; 7069; 7070; 7071; 7072; 7073; 7074","7043; 7044; 7045; 7046; 7047; 7048; 7049; 7050; 7051; 7052; 7053; 7054; 7055; 7056; 7057; 7058; 7059; 7060; 7061; 7062; 7063; 7064; 7065; 7066; 7067; 7068; 7069; 7070; 7071; 7072; 7073; 7074","Cluster","Retention strategy for newly subscribed customers","0","1048576","Generate a concise 'title' (max 5-7 words) and 'description' (1-2 sentences) for EACH of the Clusters below (Level 1).
+CONTEXT FOCUS: Orient towards 'Retention strategy for newly subscribed customers', if relevant.
+
+RESPONSE FORMAT: Respond ONLY with a single, valid JSON object.
+- Top-level keys MUST be the string representation of the 'Cluster ID' provided (e.g., ""7043"").
+- Values MUST be JSON objects containing non-empty ""title"" and ""description"" string keys.
+
+EXAMPLE (for IDs ""id_A"", ""id_B""):
+{
+  ""id_A"": { ""title"": ""Title A"", ""description"": ""Desc A."" },
+  ""id_B"": { ""title"": ""Title B"", ""description"": ""Desc B."" }
+}
+
+IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fences (```json ... ```) or any text outside the JSON structure.
+
+--- Clusters Information ---
+
+--- Cluster ID: 7043 (L1 (133 base items), BaseType: Numeric, InternalID: 7043) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 5920) ""Numeric Orig Item 5920: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6761) ""Numeric Orig Item 6761: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4934) ""Numeric Orig Item 4934: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5656) ""Numeric Orig Item 5656: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2920) ""Numeric Orig Item 2920: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Dependents_Yes: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 332.88%
+- Contract_Two year: (Cluster: 0.86 vs Global: 0.24) | ↑ Deviation: 259.28%
+- Multiple Lines_Yes: (Cluster: 1.00 vs Global: 0.42) | ↑ Deviation: 137.06%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7043 ---
+
+--- Cluster ID: 7044 (L1 (121 base items), BaseType: Numeric, InternalID: 7044) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6712) ""Numeric Orig Item 6712: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6430) ""Numeric Orig Item 6430: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4220) ""Numeric Orig Item 4220: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6540) ""Numeric Orig Item 6540: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3000) ""Numeric Orig Item 3000: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Dependents_Yes: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 332.88%
+- Contract_Two year: (Cluster: 0.88 vs Global: 0.24) | ↑ Deviation: 267.44%
+- Payment Method_Credit card (automatic): (Cluster: 0.53 vs Global: 0.22) | ↑ Deviation: 144.76%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7044 ---
+
+--- Cluster ID: 7045 (L1 (101 base items), BaseType: Numeric, InternalID: 7045) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6351) ""Numeric Orig Item 6351: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6098) ""Numeric Orig Item 6098: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3776) ""Numeric Orig Item 3776: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2046) ""Numeric Orig Item 2046: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5399) ""Numeric Orig Item 5399: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Payment Method_Credit card (automatic): (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 362.75%
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Contract_Two year: (Cluster: 1.00 vs Global: 0.24) | ↑ Deviation: 315.52%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7045 ---
+
+--- Cluster ID: 7046 (L1 (101 base items), BaseType: Numeric, InternalID: 7046) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6265) ""Numeric Orig Item 6265: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6279) ""Numeric Orig Item 6279: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4072) ""Numeric Orig Item 4072: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4649) ""Numeric Orig Item 4649: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5381) ""Numeric Orig Item 5381: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Payment Method_Bank transfer (automatic): (Cluster: 0.93 vs Global: 0.22) | ↑ Deviation: 324.54%
+- Contract_Two year: (Cluster: 0.99 vs Global: 0.24) | ↑ Deviation: 311.40%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7046 ---
+
+--- Cluster ID: 7047 (L1 (138 base items), BaseType: Numeric, InternalID: 7047) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 5113) ""Numeric Orig Item 5113: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3706) ""Numeric Orig Item 3706: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2604) ""Numeric Orig Item 2604: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5275) ""Numeric Orig Item 5275: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6865) ""Numeric Orig Item 6865: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Dependents_Yes: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 332.88%
+- Senior Citizen_Yes: (Cluster: 0.00 vs Global: 0.16) | ↓ Deviation: 100.00%
+- Dependents_No: (Cluster: 0.00 vs Global: 0.77) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7047 ---
+
+--- Cluster ID: 7048 (L1 (155 base items), BaseType: Numeric, InternalID: 7048) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6617) ""Numeric Orig Item 6617: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3945) ""Numeric Orig Item 3945: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4260) ""Numeric Orig Item 4260: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5980) ""Numeric Orig Item 5980: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5801) ""Numeric Orig Item 5801: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Payment Method_Mailed check: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 336.91%
+- Dependents_Yes: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 332.88%
+- Contract_Two year: (Cluster: 0.64 vs Global: 0.24) | ↑ Deviation: 165.39%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7048 ---
+
+--- Cluster ID: 7049 (L1 (121 base items), BaseType: Numeric, InternalID: 7049) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6105) ""Numeric Orig Item 6105: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5377) ""Numeric Orig Item 5377: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4155) ""Numeric Orig Item 4155: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4092) ""Numeric Orig Item 4092: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4993) ""Numeric Orig Item 4993: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Contract_One year: (Cluster: 1.00 vs Global: 0.21) | ↑ Deviation: 378.14%
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Payment Method_Mailed check: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 336.91%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7049 ---
+
+--- Cluster ID: 7050 (L1 (108 base items), BaseType: Numeric, InternalID: 7050) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6599) ""Numeric Orig Item 6599: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2725) ""Numeric Orig Item 2725: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4809) ""Numeric Orig Item 4809: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6868) ""Numeric Orig Item 6868: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3112) ""Numeric Orig Item 3112: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Payment Method_Mailed check: (Cluster: 0.98 vs Global: 0.23) | ↑ Deviation: 328.82%
+- Contract_Two year: (Cluster: 1.00 vs Global: 0.24) | ↑ Deviation: 315.52%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7050 ---
+
+--- Cluster ID: 7051 (L1 (107 base items), BaseType: Numeric, InternalID: 7051) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 3623) ""Numeric Orig Item 3623: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5159) ""Numeric Orig Item 5159: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5944) ""Numeric Orig Item 5944: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5848) ""Numeric Orig Item 5848: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4253) ""Numeric Orig Item 4253: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Payment Method_Mailed check: (Cluster: 0.95 vs Global: 0.23) | ↑ Deviation: 316.49%
+- Churn Reason_Attitude of support person: (Cluster: 0.06 vs Global: 0.03) | ↑ Deviation: 105.70%
+- Gender_Female: (Cluster: 0.00 vs Global: 0.50) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7051 ---
+
+--- Cluster ID: 7052 (L1 (13 base items), BaseType: Numeric, InternalID: 7052) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 7) ""Numeric Orig Item 7: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen_Y...""
+- (Orig. ID: 1070) ""Numeric Orig Item 1070: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1562) ""Numeric Orig Item 1562: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1173) ""Numeric Orig Item 1173: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 270) ""Numeric Orig Item 270: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Competitor made better offer: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 4930.71%
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7052 ---
+
+--- Cluster ID: 7053 (L1 (112 base items), BaseType: Numeric, InternalID: 7053) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 4583) ""Numeric Orig Item 4583: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6116) ""Numeric Orig Item 6116: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5468) ""Numeric Orig Item 5468: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4216) ""Numeric Orig Item 4216: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2247) ""Numeric Orig Item 2247: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Payment Method_Mailed check: (Cluster: 0.95 vs Global: 0.23) | ↑ Deviation: 313.50%
+- Churn Reason_Attitude of support person: (Cluster: 0.09 vs Global: 0.03) | ↑ Deviation: 227.52%
+- Gender_Female: (Cluster: 1.00 vs Global: 0.50) | ↑ Deviation: 101.92%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7053 ---
+
+--- Cluster ID: 7054 (L1 (128 base items), BaseType: Numeric, InternalID: 7054) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 2167) ""Numeric Orig Item 2167: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6480) ""Numeric Orig Item 6480: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4339) ""Numeric Orig Item 4339: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3271) ""Numeric Orig Item 3271: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5849) ""Numeric Orig Item 5849: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Contract_One year: (Cluster: 0.58 vs Global: 0.21) | ↑ Deviation: 176.42%
+- Gender_Female: (Cluster: 1.00 vs Global: 0.50) | ↑ Deviation: 101.92%
+- Gender_Male: (Cluster: 0.00 vs Global: 0.50) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7054 ---
+
+--- Cluster ID: 7055 (L1 (134 base items), BaseType: Numeric, InternalID: 7055) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 2549) ""Numeric Orig Item 2549: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5192) ""Numeric Orig Item 5192: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4960) ""Numeric Orig Item 4960: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4961) ""Numeric Orig Item 4961: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4613) ""Numeric Orig Item 4613: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Contract_One year: (Cluster: 0.53 vs Global: 0.21) | ↑ Deviation: 153.34%
+- Gender_Female: (Cluster: 0.00 vs Global: 0.50) | ↓ Deviation: 100.00%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7055 ---
+
+--- Cluster ID: 7056 (L1 (44 base items), BaseType: Numeric, InternalID: 7056) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 744) ""Numeric Orig Item 744: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 641) ""Numeric Orig Item 641: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 983) ""Numeric Orig Item 983: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1292) ""Numeric Orig Item 1292: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 763) ""Numeric Orig Item 763: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Limited range of services: (Cluster: 1.00 vs Global: 0.01) | ↑ Deviation: 15906.82%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Senior Citizen_Yes: (Cluster: 0.36 vs Global: 0.16) | ↑ Deviation: 124.26%
+- Contract_Two year: (Cluster: 0.00 vs Global: 0.24) | ↓ Deviation: 100.00%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7056 ---
+
+--- Cluster ID: 7057 (L1 (44 base items), BaseType: Numeric, InternalID: 7057) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 985) ""Numeric Orig Item 985: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1158) ""Numeric Orig Item 1158: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 765) ""Numeric Orig Item 765: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1191) ""Numeric Orig Item 1191: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 746) ""Numeric Orig Item 746: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Long distance charges: (Cluster: 1.00 vs Global: 0.01) | ↑ Deviation: 15906.82%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered higher download speeds: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered more data: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7057 ---
+
+--- Cluster ID: 7058 (L1 (46 base items), BaseType: Numeric, InternalID: 7058) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1487) ""Numeric Orig Item 1487: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 204) ""Numeric Orig Item 204: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1748) ""Numeric Orig Item 1748: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1519) ""Numeric Orig Item 1519: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 572) ""Numeric Orig Item 572: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Attitude of service provider: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 5117.04%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Streaming TV_Yes: (Cluster: 0.89 vs Global: 0.38) | ↑ Deviation: 131.90%
+- Streaming Movies_Yes: (Cluster: 0.87 vs Global: 0.39) | ↑ Deviation: 124.17%
+- Internet Service_Fiber optic: (Cluster: 0.98 vs Global: 0.44) | ↑ Deviation: 122.54%
+- Senior Citizen_Yes: (Cluster: 0.35 vs Global: 0.16) | ↑ Deviation: 114.51%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7058 ---
+
+--- Cluster ID: 7059 (L1 (69 base items), BaseType: Numeric, InternalID: 7059) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1834) ""Numeric Orig Item 1834: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1542) ""Numeric Orig Item 1542: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 410) ""Numeric Orig Item 410: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1481) ""Numeric Orig Item 1481: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 592) ""Numeric Orig Item 592: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Attitude of service provider: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 5117.04%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Contract_Two year: (Cluster: 0.00 vs Global: 0.24) | ↓ Deviation: 100.00%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7059 ---
+
+--- Cluster ID: 7060 (L1 (17 base items), BaseType: Numeric, InternalID: 7060) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 608) ""Numeric Orig Item 608: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 717) ""Numeric Orig Item 717: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1530) ""Numeric Orig Item 1530: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1336) ""Numeric Orig Item 1336: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 301) ""Numeric Orig Item 301: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Attitude of service provider: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 5117.04%
+- Phone Service_No: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Multiple Lines_No phone service: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Internet Service_DSL: (Cluster: 1.00 vs Global: 0.34) | ↑ Deviation: 190.91%
+- Device Protection_No: (Cluster: 0.88 vs Global: 0.44) | ↑ Deviation: 100.79%
+- Phone Service_Yes: (Cluster: 0.00 vs Global: 0.90) | ↓ Deviation: 100.00%
+- Multiple Lines_No: (Cluster: 0.00 vs Global: 0.48) | ↓ Deviation: 100.00%
+- Multiple Lines_Yes: (Cluster: 0.00 vs Global: 0.42) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7060 ---
+
+--- Cluster ID: 7061 (L1 (61 base items), BaseType: Numeric, InternalID: 7061) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1029) ""Numeric Orig Item 1029: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 502) ""Numeric Orig Item 502: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1841) ""Numeric Orig Item 1841: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 612) ""Numeric Orig Item 612: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 449) ""Numeric Orig Item 449: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Attitude of support person: (Cluster: 1.00 vs Global: 0.03) | ↑ Deviation: 3568.23%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Senior Citizen_Yes: (Cluster: 0.38 vs Global: 0.16) | ↑ Deviation: 132.54%
+- Streaming Movies_Yes: (Cluster: 0.84 vs Global: 0.39) | ↑ Deviation: 115.53%
+- Internet Service_Fiber optic: (Cluster: 0.89 vs Global: 0.44) | ↑ Deviation: 101.38%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7061 ---
+
+--- Cluster ID: 7062 (L1 (113 base items), BaseType: Numeric, InternalID: 7062) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1497) ""Numeric Orig Item 1497: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 456) ""Numeric Orig Item 456: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 200) ""Numeric Orig Item 200: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 588) ""Numeric Orig Item 588: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 491) ""Numeric Orig Item 491: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Attitude of support person: (Cluster: 1.00 vs Global: 0.03) | ↑ Deviation: 3568.23%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Device Protection_No: (Cluster: 0.91 vs Global: 0.44) | ↑ Deviation: 107.42%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Tech Support_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Streaming TV_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7062 ---
+
+--- Cluster ID: 7063 (L1 (49 base items), BaseType: Numeric, InternalID: 7063) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 293) ""Numeric Orig Item 293: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citizen...""
+- (Orig. ID: 1349) ""Numeric Orig Item 1349: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1556) ""Numeric Orig Item 1556: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 250) ""Numeric Orig Item 250: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citizen...""
+- (Orig. ID: 141) ""Numeric Orig Item 141: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Competitor offered higher download speeds: (Cluster: 1.00 vs Global: 0.03) | ↑ Deviation: 3626.46%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Senior Citizen_Yes: (Cluster: 0.45 vs Global: 0.16) | ↑ Deviation: 176.90%
+- Streaming TV_Yes: (Cluster: 0.92 vs Global: 0.38) | ↑ Deviation: 138.94%
+- Streaming Movies_Yes: (Cluster: 0.90 vs Global: 0.39) | ↑ Deviation: 131.49%
+- Multiple Lines_Yes: (Cluster: 0.88 vs Global: 0.42) | ↑ Deviation: 108.03%
+- Internet Service_Fiber optic: (Cluster: 0.90 vs Global: 0.44) | ↑ Deviation: 104.27%
+- Device Protection_Yes: (Cluster: 0.69 vs Global: 0.34) | ↑ Deviation: 101.77%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7063 ---
+
+--- Cluster ID: 7064 (L1 (133 base items), BaseType: Numeric, InternalID: 7064) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1074) ""Numeric Orig Item 1074: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1550) ""Numeric Orig Item 1550: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 249) ""Numeric Orig Item 249: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1177) ""Numeric Orig Item 1177: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 938) ""Numeric Orig Item 938: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Competitor offered higher download speeds: (Cluster: 1.00 vs Global: 0.03) | ↑ Deviation: 3626.46%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Contract_Two year: (Cluster: 0.00 vs Global: 0.24) | ↓ Deviation: 100.00%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered more data: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7064 ---
+
+--- Cluster ID: 7065 (L1 (57 base items), BaseType: Numeric, InternalID: 7065) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1089) ""Numeric Orig Item 1089: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 438) ""Numeric Orig Item 438: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 443) ""Numeric Orig Item 443: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 747) ""Numeric Orig Item 747: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1707) ""Numeric Orig Item 1707: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Extra data charges: (Cluster: 1.00 vs Global: 0.01) | ↑ Deviation: 12256.14%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Senior Citizen_Yes: (Cluster: 0.33 vs Global: 0.16) | ↑ Deviation: 105.58%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered higher download speeds: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7065 ---
+
+--- Cluster ID: 7066 (L1 (88 base items), BaseType: Numeric, InternalID: 7066) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 821) ""Numeric Orig Item 821: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 957) ""Numeric Orig Item 957: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1711) ""Numeric Orig Item 1711: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 990) ""Numeric Orig Item 990: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 658) ""Numeric Orig Item 658: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Lack of self-service on Website: (Cluster: 1.00 vs Global: 0.01) | ↑ Deviation: 7903.41%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered higher download speeds: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered more data: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7066 ---
+
+--- Cluster ID: 7067 (L1 (19 base items), BaseType: Numeric, InternalID: 7067) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1786) ""Numeric Orig Item 1786: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1168) ""Numeric Orig Item 1168: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 35) ""Numeric Orig Item 35: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen_...""
+- (Orig. ID: 73) ""Numeric Orig Item 73: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citizen_...""
+- (Orig. ID: 92) ""Numeric Orig Item 92: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen_...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Poor expertise of online support: (Cluster: 1.00 vs Global: 0.00) | ↑ Deviation: 36968.42%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Device Protection_No: (Cluster: 0.95 vs Global: 0.44) | ↑ Deviation: 115.58%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Tech Support_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7067 ---
+
+--- Cluster ID: 7068 (L1 (50 base items), BaseType: Numeric, InternalID: 7068) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 388) ""Numeric Orig Item 388: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1273) ""Numeric Orig Item 1273: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1718) ""Numeric Orig Item 1718: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1376) ""Numeric Orig Item 1376: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 158) ""Numeric Orig Item 158: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Competitor had better devices: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 5317.69%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Streaming TV_Yes: (Cluster: 0.90 vs Global: 0.38) | ↑ Deviation: 134.16%
+- Internet Service_Fiber optic: (Cluster: 0.98 vs Global: 0.44) | ↑ Deviation: 122.94%
+- Streaming Movies_Yes: (Cluster: 0.82 vs Global: 0.39) | ↑ Deviation: 111.39%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7068 ---
+
+--- Cluster ID: 7069 (L1 (60 base items), BaseType: Numeric, InternalID: 7069) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1656) ""Numeric Orig Item 1656: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 360) ""Numeric Orig Item 360: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1343) ""Numeric Orig Item 1343: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1039) ""Numeric Orig Item 1039: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 964) ""Numeric Orig Item 964: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Competitor had better devices: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 5317.69%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Streaming TV_No: (Cluster: 0.92 vs Global: 0.40) | ↑ Deviation: 129.75%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Contract_Two year: (Cluster: 0.00 vs Global: 0.24) | ↓ Deviation: 100.00%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7069 ---
+
+--- Cluster ID: 7070 (L1 (17 base items), BaseType: Numeric, InternalID: 7070) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1554) ""Numeric Orig Item 1554: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1348) ""Numeric Orig Item 1348: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 9) ""Numeric Orig Item 9: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen_Y...""
+- (Orig. ID: 1793) ""Numeric Orig Item 1793: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1719) ""Numeric Orig Item 1719: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Competitor had better devices: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 5317.69%
+- Phone Service_No: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Multiple Lines_No phone service: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Internet Service_DSL: (Cluster: 1.00 vs Global: 0.34) | ↑ Deviation: 190.91%
+- Senior Citizen_Yes: (Cluster: 0.41 vs Global: 0.16) | ↑ Deviation: 153.95%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- Phone Service_Yes: (Cluster: 0.00 vs Global: 0.90) | ↓ Deviation: 100.00%
+- Multiple Lines_No: (Cluster: 0.00 vs Global: 0.48) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7070 ---
+
+--- Cluster ID: 7071 (L1 (89 base items), BaseType: Numeric, InternalID: 7071) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 341) ""Numeric Orig Item 341: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 670) ""Numeric Orig Item 670: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 342) ""Numeric Orig Item 342: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 89) ""Numeric Orig Item 89: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen_...""
+- (Orig. ID: 446) ""Numeric Orig Item 446: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Don't know: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 4473.38%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Internet Service_Fiber optic: (Cluster: 1.00 vs Global: 0.44) | ↑ Deviation: 127.49%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_DSL: (Cluster: 0.00 vs Global: 0.34) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7071 ---
+
+--- Cluster ID: 7072 (L1 (6 base items), BaseType: Numeric, InternalID: 7072) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 927) ""Numeric Orig Item 927: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1236) ""Numeric Orig Item 1236: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1442) ""Numeric Orig Item 1442: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 1030) ""Numeric Orig Item 1030: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1545) ""Numeric Orig Item 1545: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Deceased: (Cluster: 1.00 vs Global: 0.00) | ↑ Deviation: 117283.33%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Payment Method_Electronic check: (Cluster: 1.00 vs Global: 0.34) | ↑ Deviation: 197.80%
+- Streaming TV_No: (Cluster: 0.83 vs Global: 0.40) | ↑ Deviation: 108.87%
+- Senior Citizen_Yes: (Cluster: 0.33 vs Global: 0.16) | ↑ Deviation: 105.58%
+- Tech Support_No: (Cluster: 1.00 vs Global: 0.49) | ↑ Deviation: 102.79%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7072 ---
+
+--- Cluster ID: 7073 (L1 (44 base items), BaseType: Numeric, InternalID: 7073) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 924) ""Numeric Orig Item 924: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 324) ""Numeric Orig Item 324: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 875) ""Numeric Orig Item 875: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 32) ""Numeric Orig Item 32: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen_...""
+- (Orig. ID: 51) ""Numeric Orig Item 51: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen_...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Don't know: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 4473.38%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Internet Service_DSL: (Cluster: 0.82 vs Global: 0.34) | ↑ Deviation: 138.02%
+- Streaming Movies_No: (Cluster: 0.91 vs Global: 0.40) | ↑ Deviation: 129.90%
+- Device Protection_No: (Cluster: 0.93 vs Global: 0.44) | ↑ Deviation: 112.05%
+- Streaming TV_No: (Cluster: 0.82 vs Global: 0.40) | ↑ Deviation: 105.07%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7073 ---
+
+--- Cluster ID: 7074 (L1 (15 base items), BaseType: Numeric, InternalID: 7074) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 445) ""Numeric Orig Item 445: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1433) ""Numeric Orig Item 1433: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1062) ""Numeric Orig Item 1062: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 297) ""Numeric Orig Item 297: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 992) ""Numeric Orig Item 992: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Don't know: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 4473.38%
+- Phone Service_No: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Multiple Lines_No phone service: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Internet Service_DSL: (Cluster: 1.00 vs Global: 0.34) | ↑ Deviation: 190.91%
+- Phone Service_Yes: (Cluster: 0.00 vs Global: 0.90) | ↓ Deviation: 100.00%
+- Multiple Lines_No: (Cluster: 0.00 vs Global: 0.48) | ↓ Deviation: 100.00%
+- Multiple Lines_Yes: (Cluster: 0.00 vs Global: 0.42) | ↓ Deviation: 100.00%
+- Internet Service_Fiber optic: (Cluster: 0.00 vs Global: 0.44) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7074 ---
+","{
+  ""7043"": {
+    ""title"": ""No Internet, Long-Term Contract Customers"",
+    ""description"": ""This cluster represents customers who do not have internet service and are on two-year contracts. They may be older or have dependents.""
+  },
+  ""7044"": {
+    ""title"": ""No Internet, Long-Term Contract, Auto Credit Card"",
+    ""description"": ""Customers in this cluster lack internet service and have two-year contracts, paying automatically via credit card. They may have dependents.""
+  },
+  ""7045"": {
+    ""title"": ""No Internet, Auto Credit Card, Two-Year Contract"",
+    ""description"": ""This segment comprises customers without internet service, on two-year contracts, and utilizing automatic credit card payments. They do not have dependents.""
+  },
+  ""7046"": {
+    ""title"": ""No Internet, Auto Bank Transfer, Two-Year Contract"",
+    ""description"": ""These customers do not have internet service, are on two-year contracts, and use automatic bank transfers for payment. They also lack dependents.""
+  },
+  ""7047"": {
+    ""title"": ""No Internet, Dependents, No Senior Citizens"",
+    ""description"": ""This cluster consists of customers without internet service who have dependents but are not senior citizens. They generally have longer-term contracts.""
+  },
+  ""7048"": {
+    ""title"": ""No Internet, Dependents, Mail Check Payment"",
+    ""description"": ""Customers without internet service, with dependents, and paying by mailed check are in this segment. They often have two-year contracts.""
+  },
+  ""7049"": {
+    ""title"": ""One-Year Contract, No Internet, Mail Check"",
+    ""description"": ""This group has one-year contracts, lacks internet service, and pays by mailed check. They also do not have phone service.""
+  },
+  ""7050"": {
+    ""title"": ""No Internet, Two-Year Contract, Mail Check"",
+    ""description"": ""These customers do not have internet service, have two-year contracts, and pay by mailed check. They also do not have dependents.""
+  },
+  ""7051"": {
+    ""title"": ""No Internet, Mail Check Payment, Female"",
+    ""description"": ""This cluster features customers without internet service, paying by mailed check, and are exclusively female. They may have churned due to support attitude.""
+  },
+  ""7052"": {
+    ""title"": ""High Churn Risk, No Internet, Competitor Offer"",
+    ""description"": ""Customers with no internet service and a high churn likelihood, often citing competitor offers. They may have also churned due to contract type.""
+  },
+  ""7053"": {
+    ""title"": ""Female Customers, No Internet, Mail Check"",
+    ""description"": ""This segment consists of female customers who do not have internet service and pay by mailed check. They may have churned due to support issues.""
+  },
+  ""7054"": {
+    ""title"": ""Female Customers, One-Year Contract, No Internet"",
+    ""description"": ""Female customers with one-year contracts and no internet service are found here. They do not have male counterparts and are not senior citizens.""
+  },
+  ""7055"": {
+    ""title"": ""No Internet, One-Year Contract, No Dependents"",
+    ""description"": ""Customers without internet service and on one-year contracts, who also do not have dependents. They are exclusively female.""
+  },
+  ""7056"": {
+    ""title"": ""High Churn Risk, Senior Citizens, Limited Services"",
+    ""description"": ""This group exhibits high churn risk, with senior citizens citing limited service range as a reason. They are unlikely to have two-year contracts.""
+  },
+  ""7057"": {
+    ""title"": ""High Churn Risk, Long Distance Charges"",
+    ""description"": ""Customers with a high propensity to churn, often due to long distance charges. They do not have reasons like competitor offers or service provider attitudes.""
+  },
+  ""7058"": {
+    ""title"": ""High Churn Risk, Service Provider Attitude"",
+    ""description"": ""Customers at high risk of churn, frequently citing the attitude of the service provider. They tend to have fiber optic internet and streaming services.""
+  },
+  ""7059"": {
+    ""title"": ""High Churn Risk, Service Provider Attitude, No Phone"",
+    ""description"": ""This cluster represents customers with a high churn risk, motivated by the service provider's attitude, and lacking phone service. They also avoid two-year contracts.""
+  },
+  ""7060"": {
+    ""title"": ""High Churn Risk, No Phone Service, DSL Internet"",
+    ""description"": ""Customers with a high churn risk who lack phone service but have DSL internet. They are also likely to pay with mailed checks.""
+  },
+  ""7061"": {
+    ""title"": ""High Churn Risk, Support Person Attitude, Senior"",
+    ""description"": ""This segment consists of customers at high churn risk, often due to the support person's attitude. They are more likely to be senior citizens.""
+  },
+  ""7062"": {
+    ""title"": ""High Churn Risk, Support Person Attitude, No Internet"",
+    ""description"": ""Customers at high risk of churn, frequently citing the support person's attitude, and lacking internet service. They have high device protection values.""
+  },
+  ""7063"": {
+    ""title"": ""High Churn Risk, Competitor Speed, Senior Citizens"",
+    ""description"": ""This cluster exhibits high churn risk, with customers citing competitor download speeds and being senior citizens. They are more likely to have fiber optic internet.""
+  },
+  ""7064"": {
+    ""title"": ""High Churn Risk, Competitor Speed, No Two-Year Contract"",
+    ""description"": ""Customers at high risk of churn, citing competitor download speeds, and not having two-year contracts. They exhibit high churn labels and values.""
+  },
+  ""7065"": {
+    ""title"": ""High Churn Risk, Extra Data Charges"",
+    ""description"": ""Customers with a high churn risk, often due to extra data charges. They are more likely to be senior citizens and have lower churn reasons.""
+  },
+  ""7066"": {
+    ""title"": ""High Churn Risk, Website Self-Service Issues"",
+    ""description"": ""This group represents customers at high churn risk, primarily due to a lack of self-service options on the website. They exhibit high churn labels.""
+  },
+  ""7067"": {
+    ""title"": ""High Churn Risk, Poor Online Support"",
+    ""description"": ""Customers with a high likelihood of churn, citing poor online support expertise. They tend to have no internet service and high device protection.""
+  },
+  ""7068"": {
+    ""title"": ""High Churn Risk, Competitor Devices, Fiber Optic"",
+    ""description"": ""This cluster comprises customers at high churn risk, citing competitor devices, and predominantly using fiber optic internet. They have high streaming service usage.""
+  },
+  ""7069"": {
+    ""title"": ""High Churn Risk, Competitor Devices, No Phone"",
+    ""description"": ""Customers with a high churn risk, motivated by competitor devices, and lacking phone service. They also avoid two-year contracts and have high churn labels.""
+  },
+  ""7070"": {
+    ""title"": ""High Churn Risk, Competitor Devices, No Phone Service"",
+    ""description"": ""This group faces high churn risk due to competitor devices and a lack of phone service. They often have DSL internet and are senior citizens.""
+  },
+  ""7071"": {
+    ""title"": ""High Churn Risk, 'Don't Know' Reason, Fiber Optic"",
+    ""description"": ""Customers at high churn risk who cite 'Don't Know' as their reason. They predominantly use fiber optic internet and have high churn labels.""
+  },
+  ""7072"": {
+    ""title"": ""High Churn Risk, Deceased, Electronic Check"",
+    ""description"": ""This cluster represents customers with a high churn risk, with 'Deceased' as a primary reason. They utilize electronic checks for payment.""
+  },
+  ""7073"": {
+    ""title"": ""High Churn Risk, 'Don't Know' Reason, DSL Internet"",
+    ""description"": ""Customers with a high churn risk, citing 'Don't Know' as their reason, and using DSL internet. They are less likely to have phone service.""
+  },
+  ""7074"": {
+    ""title"": ""High Churn Risk, 'Don't Know' Reason, No Phone"",
+    ""description"": ""This group has a high churn risk, citing 'Don't Know' as their reason, and lacks phone service. They often have DSL internet.""
+  }
+}","","{'7043': ['No Internet, Long-Term Contract Customers', 'This cluster represents customers who do not have internet service and are on two-year contracts. They may be older or have dependents.'], '7044': ['No Internet, Long-Term Contract, Auto Credit Card', 'Customers in this cluster lack internet service and have two-year contracts, paying automatically via credit card. They may have dependents.'], '7045': ['No Internet, Auto Credit Card, Two-Year Contract', 'This segment comprises customers without internet service, on two-year contracts, and utilizing automatic credit card payments. They do not have dependents.'], '7046': ['No Internet, Auto Bank Transfer, Two-Year Contract', 'These customers do not have internet service, are on two-year contracts, and use automatic bank transfers for payment. They also lack dependents.'], '7047': ['No Internet, Dependents, No Senior Citizens', 'This cluster consists of customers without internet service who have dependents but are not senior citizens. They generally have longer-term contracts.'], '7048': ['No Internet, Dependents, Mail Check Payment', 'Customers without internet service, with dependents, and paying by mailed check are in this segment. They often have two-year contracts.'], '7049': ['One-Year Contract, No Internet, Mail Check', 'This group has one-year contracts, lacks internet service, and pays by mailed check. They also do not have phone service.'], '7050': ['No Internet, Two-Year Contract, Mail Check', 'These customers do not have internet service, have two-year contracts, and pay by mailed check. They also do not have dependents.'], '7051': ['No Internet, Mail Check Payment, Female', 'This cluster features customers without internet service, paying by mailed check, and are exclusively female. They may have churned due to support attitude.'], '7052': ['High Churn Risk, No Internet, Competitor Offer', 'Customers with no internet service and a high churn likelihood, often citing competitor offers. They may have also churned due to contract type.'], '7053': ['Female Customers, No Internet, Mail Check', 'This segment consists of female customers who do not have internet service and pay by mailed check. They may have churned due to support issues.'], '7054': ['Female Customers, One-Year Contract, No Internet', 'Female customers with one-year contracts and no internet service are found here. They do not have male counterparts and are not senior citizens.'], '7055': ['No Internet, One-Year Contract, No Dependents', 'Customers without internet service and on one-year contracts, who also do not have dependents. They are exclusively female.'], '7056': ['High Churn Risk, Senior Citizens, Limited Services', 'This group exhibits high churn risk, with senior citizens citing limited service range as a reason. They are unlikely to have two-year contracts.'], '7057': ['High Churn Risk, Long Distance Charges', 'Customers with a high propensity to churn, often due to long distance charges. They do not have reasons like competitor offers or service provider attitudes.'], '7058': ['High Churn Risk, Service Provider Attitude', 'Customers at high risk of churn, frequently citing the attitude of the service provider. They tend to have fiber optic internet and streaming services.'], '7059': ['High Churn Risk, Service Provider Attitude, No Phone', ""This cluster represents customers with a high churn risk, motivated by the service provider's attitude, and lacking phone service. They also avoid two-year contracts.""], '7060': ['High Churn Risk, No Phone Service, DSL Internet', 'Customers with a high churn risk who lack phone service but have DSL internet. They are also likely to pay with mailed checks.'], '7061': ['High Churn Risk, Support Person Attitude, Senior', ""This segment consists of customers at high churn risk, often due to the support person's attitude. They are more likely to be senior citizens.""], '7062': ['High Churn Risk, Support Person Attitude, No Internet', ""Customers at high risk of churn, frequently citing the support person's attitude, and lacking internet service. They have high device protection values.""], '7063': ['High Churn Risk, Competitor Speed, Senior Citizens', 'This cluster exhibits high churn risk, with customers citing competitor download speeds and being senior citizens. They are more likely to have fiber optic internet.'], '7064': ['High Churn Risk, Competitor Speed, No Two-Year Contract', 'Customers at high risk of churn, citing competitor download speeds, and not having two-year contracts. They exhibit high churn labels and values.'], '7065': ['High Churn Risk, Extra Data Charges', 'Customers with a high churn risk, often due to extra data charges. They are more likely to be senior citizens and have lower churn reasons.'], '7066': ['High Churn Risk, Website Self-Service Issues', 'This group represents customers at high churn risk, primarily due to a lack of self-service options on the website. They exhibit high churn labels.'], '7067': ['High Churn Risk, Poor Online Support', 'Customers with a high likelihood of churn, citing poor online support expertise. They tend to have no internet service and high device protection.'], '7068': ['High Churn Risk, Competitor Devices, Fiber Optic', 'This cluster comprises customers at high churn risk, citing competitor devices, and predominantly using fiber optic internet. They have high streaming service usage.'], '7069': ['High Churn Risk, Competitor Devices, No Phone', 'Customers with a high churn risk, motivated by competitor devices, and lacking phone service. They also avoid two-year contracts and have high churn labels.'], '7070': ['High Churn Risk, Competitor Devices, No Phone Service', 'This group faces high churn risk due to competitor devices and a lack of phone service. They often have DSL internet and are senior citizens.'], '7071': [""High Churn Risk, 'Don't Know' Reason, Fiber Optic"", ""Customers at high churn risk who cite 'Don't Know' as their reason. They predominantly use fiber optic internet and have high churn labels.""], '7072': ['High Churn Risk, Deceased, Electronic Check', ""This cluster represents customers with a high churn risk, with 'Deceased' as a primary reason. They utilize electronic checks for payment.""], '7073': [""High Churn Risk, 'Don't Know' Reason, DSL Internet"", ""Customers with a high churn risk, citing 'Don't Know' as their reason, and using DSL internet. They are less likely to have phone service.""], '7074': [""High Churn Risk, 'Don't Know' Reason, No Phone"", ""This group has a high churn risk, citing 'Don't Know' as their reason, and lacks phone service. They often have DSL internet.""]}",""
+"cc03dbb6-f4de-408a-b82c-69c7976d3984","20260303_192149","2026-03-03T19:22:10.001845","1","7075; 7076; 7077; 7078; 7079; 7080; 7081; 7082; 7083; 7084; 7085; 7086; 7087; 7088; 7089; 7090; 7091; 7092; 7093; 7094; 7095; 7096; 7097; 7098; 7099; 7100; 7101; 7102; 7103; 7104; 7105; 7106","7075; 7076; 7077; 7078; 7079; 7080; 7081; 7082; 7083; 7084; 7085; 7086; 7087; 7088; 7089; 7090; 7091; 7092; 7093; 7094; 7095; 7096; 7097; 7098; 7099; 7100; 7101; 7102; 7103; 7104; 7105; 7106","Cluster","Retention strategy for newly subscribed customers","0","1048576","Generate a concise 'title' (max 5-7 words) and 'description' (1-2 sentences) for EACH of the Clusters below (Level 1).
+CONTEXT FOCUS: Orient towards 'Retention strategy for newly subscribed customers', if relevant.
+
+RESPONSE FORMAT: Respond ONLY with a single, valid JSON object.
+- Top-level keys MUST be the string representation of the 'Cluster ID' provided (e.g., ""7075"").
+- Values MUST be JSON objects containing non-empty ""title"" and ""description"" string keys.
+
+EXAMPLE (for IDs ""id_A"", ""id_B""):
+{
+  ""id_A"": { ""title"": ""Title A"", ""description"": ""Desc A."" },
+  ""id_B"": { ""title"": ""Title B"", ""description"": ""Desc B."" }
+}
+
+IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fences (```json ... ```) or any text outside the JSON structure.
+
+--- Clusters Information ---
+
+--- Cluster ID: 7075 (L1 (20 base items), BaseType: Numeric, InternalID: 7075) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1272) ""Numeric Orig Item 1272: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 74) ""Numeric Orig Item 74: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen_...""
+- (Orig. ID: 242) ""Numeric Orig Item 242: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1581) ""Numeric Orig Item 1581: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 551) ""Numeric Orig Item 551: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Poor expertise of phone support: (Cluster: 1.00 vs Global: 0.00) | ↑ Deviation: 35115.00%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered higher download speeds: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered more data: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7075 ---
+
+--- Cluster ID: 7076 (L1 (103 base items), BaseType: Numeric, InternalID: 7076) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 329) ""Numeric Orig Item 329: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 897) ""Numeric Orig Item 897: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1741) ""Numeric Orig Item 1741: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1712) ""Numeric Orig Item 1712: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1806) ""Numeric Orig Item 1806: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Network reliability: (Cluster: 1.00 vs Global: 0.01) | ↑ Deviation: 6737.86%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered higher download speeds: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered more data: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7076 ---
+
+--- Cluster ID: 7077 (L1 (102 base items), BaseType: Numeric, InternalID: 7077) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 95) ""Numeric Orig Item 95: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen_...""
+- (Orig. ID: 699) ""Numeric Orig Item 699: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 749) ""Numeric Orig Item 749: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 542) ""Numeric Orig Item 542: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1709) ""Numeric Orig Item 1709: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Product dissatisfaction: (Cluster: 1.00 vs Global: 0.01) | ↑ Deviation: 6804.90%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered higher download speeds: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered more data: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7077 ---
+
+--- Cluster ID: 7078 (L1 (89 base items), BaseType: Numeric, InternalID: 7078) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1092) ""Numeric Orig Item 1092: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 123) ""Numeric Orig Item 123: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 647) ""Numeric Orig Item 647: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1627) ""Numeric Orig Item 1627: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 803) ""Numeric Orig Item 803: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Service dissatisfaction: (Cluster: 1.00 vs Global: 0.01) | ↑ Deviation: 7813.48%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered higher download speeds: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered more data: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7078 ---
+
+--- Cluster ID: 7079 (L1 (44 base items), BaseType: Numeric, InternalID: 7079) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1293) ""Numeric Orig Item 1293: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1087) ""Numeric Orig Item 1087: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 745) ""Numeric Orig Item 745: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1322) ""Numeric Orig Item 1322: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1190) ""Numeric Orig Item 1190: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Lack of affordable download/upload speed: (Cluster: 1.00 vs Global: 0.01) | ↑ Deviation: 15906.82%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered higher download speeds: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered more data: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7079 ---
+
+--- Cluster ID: 7080 (L1 (75 base items), BaseType: Numeric, InternalID: 7080) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1551) ""Numeric Orig Item 1551: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1179) ""Numeric Orig Item 1179: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 390) ""Numeric Orig Item 390: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 357) ""Numeric Orig Item 357: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 245) ""Numeric Orig Item 245: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Competitor offered more data: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 4247.53%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Streaming TV_Yes: (Cluster: 0.87 vs Global: 0.38) | ↑ Deviation: 125.49%
+- Streaming Movies_Yes: (Cluster: 0.87 vs Global: 0.39) | ↑ Deviation: 123.42%
+- Internet Service_Fiber optic: (Cluster: 0.89 vs Global: 0.44) | ↑ Deviation: 103.22%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7080 ---
+
+--- Cluster ID: 7081 (L1 (78 base items), BaseType: Numeric, InternalID: 7081) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1416) ""Numeric Orig Item 1416: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1765) ""Numeric Orig Item 1765: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1282) ""Numeric Orig Item 1282: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 385) ""Numeric Orig Item 385: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1107) ""Numeric Orig Item 1107: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Competitor offered more data: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 4247.53%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Streaming Movies_No: (Cluster: 0.87 vs Global: 0.40) | ↑ Deviation: 120.47%
+- Streaming TV_No: (Cluster: 0.86 vs Global: 0.40) | ↑ Deviation: 115.29%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7081 ---
+
+--- Cluster ID: 7082 (L1 (127 base items), BaseType: Numeric, InternalID: 7082) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1079) ""Numeric Orig Item 1079: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1212) ""Numeric Orig Item 1212: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1006) ""Numeric Orig Item 1006: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 274) ""Numeric Orig Item 274: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1408) ""Numeric Orig Item 1408: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Competitor made better offer: (Cluster: 1.00 vs Global: 0.02) | ↑ Deviation: 4930.71%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Senior Citizen_Yes: (Cluster: 0.38 vs Global: 0.16) | ↑ Deviation: 133.09%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Tech Support_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Streaming TV_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7082 ---
+
+--- Cluster ID: 7083 (L1 (53 base items), BaseType: Numeric, InternalID: 7083) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1135) ""Numeric Orig Item 1135: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1547) ""Numeric Orig Item 1547: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1754) ""Numeric Orig Item 1754: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 928) ""Numeric Orig Item 928: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 312) ""Numeric Orig Item 312: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Moved: (Cluster: 1.00 vs Global: 0.01) | ↑ Deviation: 13188.68%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Contract_Two year: (Cluster: 0.00 vs Global: 0.24) | ↓ Deviation: 100.00%
+- Churn Label_No: (Cluster: 0.00 vs Global: 0.73) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of support person: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor had better devices: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor made better offer: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- Churn Reason_Competitor offered higher download speeds: (Cluster: 0.00 vs Global: 0.03) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7083 ---
+
+--- Cluster ID: 7084 (L1 (89 base items), BaseType: Numeric, InternalID: 7084) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 842) ""Numeric Orig Item 842: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 978) ""Numeric Orig Item 978: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 689) ""Numeric Orig Item 689: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 809) ""Numeric Orig Item 809: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 84) ""Numeric Orig Item 84: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen_...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Price too high: (Cluster: 1.00 vs Global: 0.01) | ↑ Deviation: 7086.73%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Senior Citizen_Yes: (Cluster: 0.38 vs Global: 0.16) | ↑ Deviation: 135.60%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Tech Support_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Streaming TV_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7084 ---
+
+--- Cluster ID: 7085 (L1 (9 base items), BaseType: Numeric, InternalID: 7085) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 681) ""Numeric Orig Item 681: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 103) ""Numeric Orig Item 103: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 1325) ""Numeric Orig Item 1325: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1366) ""Numeric Orig Item 1366: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1625) ""Numeric Orig Item 1625: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Price too high: (Cluster: 1.00 vs Global: 0.01) | ↑ Deviation: 7086.73%
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Churn Label_Yes: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- Churn Value: (Cluster: 1.00 vs Global: 0.27) | ↑ Deviation: 276.83%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7085 ---
+
+--- Cluster ID: 7086 (L1 (186 base items), BaseType: Numeric, InternalID: 7086) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1963) ""Numeric Orig Item 1963: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4811) ""Numeric Orig Item 4811: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6624) ""Numeric Orig Item 6624: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3180) ""Numeric Orig Item 3180: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2949) ""Numeric Orig Item 2949: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Dependents_Yes: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 332.88%
+- Internet Service_DSL: (Cluster: 0.94 vs Global: 0.34) | ↑ Deviation: 173.71%
+- Streaming TV_No: (Cluster: 0.89 vs Global: 0.40) | ↑ Deviation: 123.69%
+- Streaming Movies_No: (Cluster: 0.85 vs Global: 0.40) | ↑ Deviation: 116.18%
+- Online Security_Yes: (Cluster: 0.59 vs Global: 0.29) | ↑ Deviation: 104.43%
+- Senior Citizen_Yes: (Cluster: 0.00 vs Global: 0.16) | ↓ Deviation: 100.00%
+- Dependents_No: (Cluster: 0.00 vs Global: 0.77) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7086 ---
+
+--- Cluster ID: 7087 (L1 (162 base items), BaseType: Numeric, InternalID: 7087) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 5988) ""Numeric Orig Item 5988: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2586) ""Numeric Orig Item 2586: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2493) ""Numeric Orig Item 2493: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5009) ""Numeric Orig Item 5009: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6531) ""Numeric Orig Item 6531: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Dependents_Yes: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 332.88%
+- Internet Service_Fiber optic: (Cluster: 0.90 vs Global: 0.44) | ↑ Deviation: 105.02%
+- Dependents_No: (Cluster: 0.00 vs Global: 0.77) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Tech Support_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7087 ---
+
+--- Cluster ID: 7088 (L1 (210 base items), BaseType: Numeric, InternalID: 7088) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 3299) ""Numeric Orig Item 3299: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3082) ""Numeric Orig Item 3082: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2627) ""Numeric Orig Item 2627: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5943) ""Numeric Orig Item 5943: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1874) ""Numeric Orig Item 1874: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Contract_One year: (Cluster: 0.69 vs Global: 0.21) | ↑ Deviation: 227.87%
+- Online Security_Yes: (Cluster: 0.88 vs Global: 0.29) | ↑ Deviation: 207.31%
+- Internet Service_DSL: (Cluster: 0.89 vs Global: 0.34) | ↑ Deviation: 157.67%
+- Tech Support_Yes: (Cluster: 0.66 vs Global: 0.29) | ↑ Deviation: 128.07%
+- Streaming TV_No: (Cluster: 0.85 vs Global: 0.40) | ↑ Deviation: 113.64%
+- Streaming Movies_No: (Cluster: 0.83 vs Global: 0.40) | ↑ Deviation: 109.54%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7088 ---
+
+--- Cluster ID: 7089 (L1 (176 base items), BaseType: Numeric, InternalID: 7089) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 3172) ""Numeric Orig Item 3172: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2083) ""Numeric Orig Item 2083: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6981) ""Numeric Orig Item 6981: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3072) ""Numeric Orig Item 3072: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6065) ""Numeric Orig Item 6065: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_DSL: (Cluster: 1.00 vs Global: 0.34) | ↑ Deviation: 190.91%
+- Streaming Movies_No: (Cluster: 0.86 vs Global: 0.40) | ↑ Deviation: 118.41%
+- Streaming TV_No: (Cluster: 0.85 vs Global: 0.40) | ↑ Deviation: 112.19%
+- Gender_Female: (Cluster: 0.99 vs Global: 0.50) | ↑ Deviation: 100.77%
+- Senior Citizen_Yes: (Cluster: 0.00 vs Global: 0.16) | ↓ Deviation: 100.00%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_Fiber optic: (Cluster: 0.00 vs Global: 0.44) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7089 ---
+
+--- Cluster ID: 7090 (L1 (206 base items), BaseType: Numeric, InternalID: 7090) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6214) ""Numeric Orig Item 6214: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3248) ""Numeric Orig Item 3248: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4418) ""Numeric Orig Item 4418: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5037) ""Numeric Orig Item 5037: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2991) ""Numeric Orig Item 2991: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_DSL: (Cluster: 0.91 vs Global: 0.34) | ↑ Deviation: 164.08%
+- Payment Method_Mailed check: (Cluster: 0.50 vs Global: 0.23) | ↑ Deviation: 116.33%
+- Streaming TV_No: (Cluster: 0.84 vs Global: 0.40) | ↑ Deviation: 111.71%
+- Streaming Movies_No: (Cluster: 0.83 vs Global: 0.40) | ↑ Deviation: 109.92%
+- Gender_Female: (Cluster: 0.00 vs Global: 0.50) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7090 ---
+
+--- Cluster ID: 7091 (L1 (153 base items), BaseType: Numeric, InternalID: 7091) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 3794) ""Numeric Orig Item 3794: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4329) ""Numeric Orig Item 4329: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3563) ""Numeric Orig Item 3563: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1993) ""Numeric Orig Item 1993: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2977) ""Numeric Orig Item 2977: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_Fiber optic: (Cluster: 1.00 vs Global: 0.44) | ↑ Deviation: 127.49%
+- Senior Citizen_Yes: (Cluster: 0.00 vs Global: 0.16) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_DSL: (Cluster: 0.00 vs Global: 0.34) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Tech Support_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7091 ---
+
+--- Cluster ID: 7092 (L1 (226 base items), BaseType: Numeric, InternalID: 7092) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 5599) ""Numeric Orig Item 5599: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2215) ""Numeric Orig Item 2215: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3222) ""Numeric Orig Item 3222: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4535) ""Numeric Orig Item 4535: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5675) ""Numeric Orig Item 5675: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_Fiber optic: (Cluster: 0.98 vs Global: 0.44) | ↑ Deviation: 123.46%
+- Device Protection_No: (Cluster: 0.92 vs Global: 0.44) | ↑ Deviation: 108.43%
+- Senior Citizen_Yes: (Cluster: 0.00 vs Global: 0.16) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Tech Support_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7092 ---
+
+--- Cluster ID: 7093 (L1 (198 base items), BaseType: Numeric, InternalID: 7093) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 2486) ""Numeric Orig Item 2486: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6652) ""Numeric Orig Item 6652: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3698) ""Numeric Orig Item 3698: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2211) ""Numeric Orig Item 2211: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4533) ""Numeric Orig Item 4533: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_Fiber optic: (Cluster: 0.97 vs Global: 0.44) | ↑ Deviation: 120.59%
+- Online Backup_Yes: (Cluster: 0.72 vs Global: 0.34) | ↑ Deviation: 109.41%
+- Streaming TV_Yes: (Cluster: 0.80 vs Global: 0.38) | ↑ Deviation: 108.93%
+- Streaming Movies_Yes: (Cluster: 0.78 vs Global: 0.39) | ↑ Deviation: 101.81%
+- Senior Citizen_Yes: (Cluster: 0.00 vs Global: 0.16) | ↓ Deviation: 100.00%
+- Partner_Yes: (Cluster: 0.00 vs Global: 0.48) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7093 ---
+
+--- Cluster ID: 7094 (L1 (132 base items), BaseType: Numeric, InternalID: 7094) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6802) ""Numeric Orig Item 6802: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4255) ""Numeric Orig Item 4255: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2255) ""Numeric Orig Item 2255: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5347) ""Numeric Orig Item 5347: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5798) ""Numeric Orig Item 5798: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Contract_One year: (Cluster: 0.94 vs Global: 0.21) | ↑ Deviation: 349.16%
+- Dependents_Yes: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 332.88%
+- Total Charges: (Cluster: 4980.91 vs Global: 2283.30) | ↑ Deviation: 118.15%
+- Dependents_No: (Cluster: 0.00 vs Global: 0.77) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7094 ---
+
+--- Cluster ID: 7095 (L1 (175 base items), BaseType: Numeric, InternalID: 7095) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6992) ""Numeric Orig Item 6992: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4531) ""Numeric Orig Item 4531: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6132) ""Numeric Orig Item 6132: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4718) ""Numeric Orig Item 4718: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4340) ""Numeric Orig Item 4340: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Contract_One year: (Cluster: 0.57 vs Global: 0.21) | ↑ Deviation: 173.22%
+- Total Charges: (Cluster: 5297.92 vs Global: 2283.30) | ↑ Deviation: 132.03%
+- Streaming Movies_Yes: (Cluster: 0.83 vs Global: 0.39) | ↑ Deviation: 115.08%
+- Internet Service_Fiber optic: (Cluster: 0.93 vs Global: 0.44) | ↑ Deviation: 110.59%
+- Partner_Yes: (Cluster: 1.00 vs Global: 0.48) | ↑ Deviation: 107.03%
+- Streaming TV_Yes: (Cluster: 0.79 vs Global: 0.38) | ↑ Deviation: 106.66%
+- Senior Citizen_Yes: (Cluster: 0.00 vs Global: 0.16) | ↓ Deviation: 100.00%
+- Partner_No: (Cluster: 0.00 vs Global: 0.52) | ↓ Deviation: 100.00%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7095 ---
+
+--- Cluster ID: 7096 (L1 (196 base items), BaseType: Numeric, InternalID: 7096) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 5182) ""Numeric Orig Item 5182: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 4787) ""Numeric Orig Item 4787: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 5763) ""Numeric Orig Item 5763: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 4321) ""Numeric Orig Item 4321: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 2187) ""Numeric Orig Item 2187: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Senior Citizen_Yes: (Cluster: 1.00 vs Global: 0.16) | ↑ Deviation: 516.73%
+- Total Charges: (Cluster: 6114.10 vs Global: 2283.30) | ↑ Deviation: 167.77%
+- Contract_One year: (Cluster: 0.49 vs Global: 0.21) | ↑ Deviation: 136.63%
+- Device Protection_Yes: (Cluster: 0.80 vs Global: 0.34) | ↑ Deviation: 131.45%
+- Online Backup_Yes: (Cluster: 0.78 vs Global: 0.34) | ↑ Deviation: 124.86%
+- Streaming Movies_Yes: (Cluster: 0.81 vs Global: 0.39) | ↑ Deviation: 107.82%
+- Internet Service_Fiber optic: (Cluster: 0.91 vs Global: 0.44) | ↑ Deviation: 106.60%
+- Streaming TV_Yes: (Cluster: 0.78 vs Global: 0.38) | ↑ Deviation: 101.77%
+- Senior Citizen_No: (Cluster: 0.00 vs Global: 0.84) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7096 ---
+
+--- Cluster ID: 7097 (L1 (154 base items), BaseType: Numeric, InternalID: 7097) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 4779) ""Numeric Orig Item 4779: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 4909) ""Numeric Orig Item 4909: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 5295) ""Numeric Orig Item 5295: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 2090) ""Numeric Orig Item 2090: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 2162) ""Numeric Orig Item 2162: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=0.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Senior Citizen_Yes: (Cluster: 1.00 vs Global: 0.16) | ↑ Deviation: 516.73%
+- Internet Service_Fiber optic: (Cluster: 0.98 vs Global: 0.44) | ↑ Deviation: 123.06%
+- Payment Method_Electronic check: (Cluster: 0.71 vs Global: 0.34) | ↑ Deviation: 110.78%
+- Senior Citizen_No: (Cluster: 0.00 vs Global: 0.84) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7097 ---
+
+--- Cluster ID: 7098 (L1 (151 base items), BaseType: Numeric, InternalID: 7098) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6408) ""Numeric Orig Item 6408: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 4551) ""Numeric Orig Item 4551: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 6353) ""Numeric Orig Item 6353: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 3662) ""Numeric Orig Item 3662: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=0.00, Senior Citize...""
+- (Orig. ID: 3682) ""Numeric Orig Item 3682: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=0.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Senior Citizen_Yes: (Cluster: 1.00 vs Global: 0.16) | ↑ Deviation: 516.73%
+- Streaming TV_No: (Cluster: 0.90 vs Global: 0.40) | ↑ Deviation: 125.74%
+- Streaming Movies_No: (Cluster: 0.87 vs Global: 0.40) | ↑ Deviation: 119.40%
+- Senior Citizen_No: (Cluster: 0.00 vs Global: 0.84) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7098 ---
+
+--- Cluster ID: 7099 (L1 (130 base items), BaseType: Numeric, InternalID: 7099) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 2638) ""Numeric Orig Item 2638: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6694) ""Numeric Orig Item 6694: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6579) ""Numeric Orig Item 6579: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5816) ""Numeric Orig Item 5816: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4833) ""Numeric Orig Item 4833: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Dependents_Yes: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 332.88%
+- Contract_Two year: (Cluster: 0.98 vs Global: 0.24) | ↑ Deviation: 309.12%
+- Total Charges: (Cluster: 7036.57 vs Global: 2283.30) | ↑ Deviation: 208.18%
+- Tech Support_Yes: (Cluster: 0.78 vs Global: 0.29) | ↑ Deviation: 167.70%
+- Online Security_Yes: (Cluster: 0.72 vs Global: 0.29) | ↑ Deviation: 149.55%
+- Device Protection_Yes: (Cluster: 0.82 vs Global: 0.34) | ↑ Deviation: 137.11%
+- Internet Service_Fiber optic: (Cluster: 1.00 vs Global: 0.44) | ↑ Deviation: 127.49%
+- Streaming Movies_Yes: (Cluster: 0.86 vs Global: 0.39) | ↑ Deviation: 122.10%
+- Streaming TV_Yes: (Cluster: 0.84 vs Global: 0.38) | ↑ Deviation: 118.15%
+- Online Backup_Yes: (Cluster: 0.71 vs Global: 0.34) | ↑ Deviation: 105.20%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7099 ---
+
+--- Cluster ID: 7100 (L1 (153 base items), BaseType: Numeric, InternalID: 7100) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 4064) ""Numeric Orig Item 4064: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4120) ""Numeric Orig Item 4120: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6921) ""Numeric Orig Item 6921: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3769) ""Numeric Orig Item 3769: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4336) ""Numeric Orig Item 4336: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Dependents_Yes: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 332.88%
+- Contract_Two year: (Cluster: 0.79 vs Global: 0.24) | ↑ Deviation: 228.61%
+- Tech Support_Yes: (Cluster: 0.88 vs Global: 0.29) | ↑ Deviation: 201.78%
+- Online Security_Yes: (Cluster: 0.85 vs Global: 0.29) | ↑ Deviation: 196.40%
+- Internet Service_DSL: (Cluster: 1.00 vs Global: 0.34) | ↑ Deviation: 190.91%
+- Device Protection_Yes: (Cluster: 0.76 vs Global: 0.34) | ↑ Deviation: 122.37%
+- Online Backup_Yes: (Cluster: 0.75 vs Global: 0.34) | ↑ Deviation: 117.94%
+- Dependents_No: (Cluster: 0.00 vs Global: 0.77) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7100 ---
+
+--- Cluster ID: 7101 (L1 (170 base items), BaseType: Numeric, InternalID: 7101) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 2672) ""Numeric Orig Item 2672: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6195) ""Numeric Orig Item 6195: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4363) ""Numeric Orig Item 4363: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2820) ""Numeric Orig Item 2820: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2299) ""Numeric Orig Item 2299: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Contract_One year: (Cluster: 0.69 vs Global: 0.21) | ↑ Deviation: 229.07%
+- Tech Support_Yes: (Cluster: 0.80 vs Global: 0.29) | ↑ Deviation: 175.66%
+- Internet Service_DSL: (Cluster: 0.89 vs Global: 0.34) | ↑ Deviation: 160.11%
+- Device Protection_Yes: (Cluster: 0.77 vs Global: 0.34) | ↑ Deviation: 124.08%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7101 ---
+
+--- Cluster ID: 7102 (L1 (135 base items), BaseType: Numeric, InternalID: 7102) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 2360) ""Numeric Orig Item 2360: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3188) ""Numeric Orig Item 3188: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4677) ""Numeric Orig Item 4677: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2503) ""Numeric Orig Item 2503: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6700) ""Numeric Orig Item 6700: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Payment Method_Credit card (automatic): (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 362.75%
+- Contract_Two year: (Cluster: 0.91 vs Global: 0.24) | ↑ Deviation: 278.58%
+- Tech Support_Yes: (Cluster: 0.85 vs Global: 0.29) | ↑ Deviation: 193.52%
+- Internet Service_DSL: (Cluster: 0.99 vs Global: 0.34) | ↑ Deviation: 188.76%
+- Online Security_Yes: (Cluster: 0.81 vs Global: 0.29) | ↑ Deviation: 184.24%
+- Device Protection_Yes: (Cluster: 0.87 vs Global: 0.34) | ↑ Deviation: 152.02%
+- Online Backup_Yes: (Cluster: 0.80 vs Global: 0.34) | ↑ Deviation: 131.96%
+- Total Charges: (Cluster: 5028.62 vs Global: 2283.30) | ↑ Deviation: 120.23%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7102 ---
+
+--- Cluster ID: 7103 (L1 (153 base items), BaseType: Numeric, InternalID: 7103) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1997) ""Numeric Orig Item 1997: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5178) ""Numeric Orig Item 5178: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3057) ""Numeric Orig Item 3057: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3079) ""Numeric Orig Item 3079: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5016) ""Numeric Orig Item 5016: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Contract_Two year: (Cluster: 0.93 vs Global: 0.24) | ↑ Deviation: 288.36%
+- Tech Support_Yes: (Cluster: 0.86 vs Global: 0.29) | ↑ Deviation: 195.02%
+- Payment Method_Bank transfer (automatic): (Cluster: 0.64 vs Global: 0.22) | ↑ Deviation: 192.18%
+- Internet Service_DSL: (Cluster: 1.00 vs Global: 0.34) | ↑ Deviation: 190.91%
+- Online Security_Yes: (Cluster: 0.75 vs Global: 0.29) | ↑ Deviation: 159.92%
+- Device Protection_Yes: (Cluster: 0.88 vs Global: 0.34) | ↑ Deviation: 154.68%
+- Total Charges: (Cluster: 5128.29 vs Global: 2283.30) | ↑ Deviation: 124.60%
+- Online Backup_Yes: (Cluster: 0.74 vs Global: 0.34) | ↑ Deviation: 114.15%
+- Streaming Movies_Yes: (Cluster: 0.82 vs Global: 0.39) | ↑ Deviation: 110.62%
+- Streaming TV_Yes: (Cluster: 0.78 vs Global: 0.38) | ↑ Deviation: 104.06%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7103 ---
+
+--- Cluster ID: 7104 (L1 (183 base items), BaseType: Numeric, InternalID: 7104) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 5014) ""Numeric Orig Item 5014: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3617) ""Numeric Orig Item 3617: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5367) ""Numeric Orig Item 5367: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4161) ""Numeric Orig Item 4161: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3253) ""Numeric Orig Item 3253: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Contract_Two year: (Cluster: 0.85 vs Global: 0.24) | ↑ Deviation: 251.94%
+- Total Charges: (Cluster: 7021.49 vs Global: 2283.30) | ↑ Deviation: 207.51%
+- Tech Support_Yes: (Cluster: 0.82 vs Global: 0.29) | ↑ Deviation: 182.43%
+- Online Security_Yes: (Cluster: 0.75 vs Global: 0.29) | ↑ Deviation: 161.15%
+- Device Protection_Yes: (Cluster: 0.84 vs Global: 0.34) | ↑ Deviation: 144.71%
+- Online Backup_Yes: (Cluster: 0.80 vs Global: 0.34) | ↑ Deviation: 132.91%
+- Internet Service_Fiber optic: (Cluster: 1.00 vs Global: 0.44) | ↑ Deviation: 127.49%
+- Streaming TV_Yes: (Cluster: 0.85 vs Global: 0.38) | ↑ Deviation: 120.37%
+- Multiple Lines_Yes: (Cluster: 0.90 vs Global: 0.42) | ↑ Deviation: 113.74%
+- Streaming Movies_Yes: (Cluster: 0.81 vs Global: 0.39) | ↑ Deviation: 109.90%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7104 ---
+
+--- Cluster ID: 7105 (L1 (129 base items), BaseType: Numeric, InternalID: 7105) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 3423) ""Numeric Orig Item 3423: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3567) ""Numeric Orig Item 3567: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5791) ""Numeric Orig Item 5791: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4537) ""Numeric Orig Item 4537: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5474) ""Numeric Orig Item 5474: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Phone Service_No: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Multiple Lines_No phone service: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Contract_Two year: (Cluster: 0.74 vs Global: 0.24) | ↑ Deviation: 209.22%
+- Tech Support_Yes: (Cluster: 0.86 vs Global: 0.29) | ↑ Deviation: 196.49%
+- Internet Service_DSL: (Cluster: 1.00 vs Global: 0.34) | ↑ Deviation: 190.91%
+- Online Security_Yes: (Cluster: 0.81 vs Global: 0.29) | ↑ Deviation: 181.23%
+- Device Protection_Yes: (Cluster: 0.78 vs Global: 0.34) | ↑ Deviation: 127.67%
+- Payment Method_Bank transfer (automatic): (Cluster: 0.45 vs Global: 0.22) | ↑ Deviation: 105.09%
+- Dependents_Yes: (Cluster: 0.00 vs Global: 0.23) | ↓ Deviation: 100.00%
+- Phone Service_Yes: (Cluster: 0.00 vs Global: 0.90) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7105 ---
+
+--- Cluster ID: 7106 (L1 (106 base items), BaseType: Numeric, InternalID: 7106) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6792) ""Numeric Orig Item 6792: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2127) ""Numeric Orig Item 2127: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5047) ""Numeric Orig Item 5047: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3266) ""Numeric Orig Item 3266: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6271) ""Numeric Orig Item 6271: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Phone Service_No: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Multiple Lines_No phone service: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Internet Service_DSL: (Cluster: 1.00 vs Global: 0.34) | ↑ Deviation: 190.91%
+- Senior Citizen_Yes: (Cluster: 0.43 vs Global: 0.16) | ↑ Deviation: 167.64%
+- Phone Service_Yes: (Cluster: 0.00 vs Global: 0.90) | ↓ Deviation: 100.00%
+- Multiple Lines_No: (Cluster: 0.00 vs Global: 0.48) | ↓ Deviation: 100.00%
+- Multiple Lines_Yes: (Cluster: 0.00 vs Global: 0.42) | ↓ Deviation: 100.00%
+- Internet Service_Fiber optic: (Cluster: 0.00 vs Global: 0.44) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7106 ---
+","{
+  ""7075"": {
+    ""title"": ""High Churn Due to Poor Support"",
+    ""description"": ""This cluster represents customers churning due to issues with phone support expertise. This indicates a need to improve support quality for retention.""
+  },
+  ""7076"": {
+    ""title"": ""Churn due to Network Reliability"",
+    ""description"": ""Customers in this cluster are leaving because of network reliability issues. Improving network performance is key for retaining these subscribers.""
+  },
+  ""7077"": {
+    ""title"": ""Product Dissatisfaction Leads to Churn"",
+    ""description"": ""This cluster highlights customers churning due to dissatisfaction with the product. Focus on product improvements and customer feedback for retention.""
+  },
+  ""7078"": {
+    ""title"": ""Service Dissatisfaction Drives Churn"",
+    ""description"": ""Customers are churning because of general service dissatisfaction. Addressing service quality and customer experience is crucial for retention.""
+  },
+  ""7079"": {
+    ""title"": ""Speed and Affordability Drive Churn"",
+    ""description"": ""This group churns due to a lack of affordable download/upload speeds. Offering competitive pricing and speed tiers is important for retention.""
+  },
+  ""7080"": {
+    ""title"": ""Better Data Offers Cause Churn"",
+    ""description"": ""Customers are leaving due to competitors offering more data. Enhancing data plans and value propositions can help retain these subscribers.""
+  },
+  ""7081"": {
+    ""title"": ""Competitor Data Offers Lead to Churn"",
+    ""description"": ""This cluster indicates churn driven by competitor data offers. A focus on competitive data packages is essential for customer retention.""
+  },
+  ""7082"": {
+    ""title"": ""Competitor Offers Drive Churn"",
+    ""description"": ""Customers in this group are churning because competitors are making better offers. Understanding and matching competitor value is key for retention.""
+  },
+  ""7083"": {
+    ""title"": ""Moving Leads to Customer Churn"",
+    ""description"": ""This cluster represents customers churning because they have moved. Strategies to re-engage or offer services at new locations could aid retention.""
+  },
+  ""7084"": {
+    ""title"": ""High Prices Cause Customer Churn"",
+    ""description"": ""Customers are churning due to high prices. Offering competitive pricing strategies and value bundles can improve retention.""
+  },
+  ""7085"": {
+    ""title"": ""Price and Lack of Services Cause Churn"",
+    ""description"": ""This cluster shows churn driven by high prices and a lack of internet services. Addressing pricing and core service offerings is vital.""
+  },
+  ""7086"": {
+    ""title"": ""Dependents and DSL Users Churn"",
+    ""description"": ""This group has a high proportion of customers with dependents using DSL, who are churning. Tailored retention strategies for this demographic are needed.""
+  },
+  ""7087"": {
+    ""title"": ""Dependents and Fiber Optic Users Churn"",
+    ""description"": ""Customers with dependents using fiber optic services are churning. Focus on retention efforts for this specific segment and their service needs.""
+  },
+  ""7088"": {
+    ""title"": ""One-Year Contracts and Online Security"",
+    ""description"": ""This cluster comprises customers on one-year contracts, with a focus on online security, who are churning. Retention efforts could target contract renewals and security benefits.""
+  },
+  ""7089"": {
+    ""title"": ""DSL Users, Female Subscribers Churn"",
+    ""description"": ""This group consists of DSL users, predominantly female, who are churning. Retention strategies should consider their service preferences and gender demographics.""
+  },
+  ""7090"": {
+    ""title"": ""DSL and Maelled Check Payment Churn"",
+    ""description"": ""Customers using DSL and paying by mailed check are churning. Simplifying payment options and optimizing DSL service could aid retention.""
+  },
+  ""7091"": {
+    ""title"": ""Fiber Optic Users Churn"",
+    ""description"": ""This cluster represents customers churning despite having fiber optic internet. Retention strategies should focus on perceived value beyond just speed.""
+  },
+  ""7092"": {
+    ""title"": ""Fiber Optic and Device Protection Churn"",
+    ""description"": ""Customers with fiber optic and device protection are churning. Retention efforts should explore the reasons for dissatisfaction beyond these features.""
+  },
+  ""7093"": {
+    ""title"": ""Fiber Optic Users and Online Backup Churn"",
+    ""description"": ""This group comprises fiber optic users who also utilize online backup and are churning. Retention strategies should investigate service satisfaction and competitor offers.""
+  },
+  ""7094"": {
+    ""title"": ""One-Year Contracts and Dependents Churn"",
+    ""description"": ""Customers on one-year contracts with dependents are churning. Retention strategies should focus on contract renewals and the value of services for families.""
+  },
+  ""7095"": {
+    ""title"": ""One-Year Contracts and Fiber Optic Churn"",
+    ""description"": ""Customers on one-year contracts with fiber optic services are churning. Retention efforts should aim to increase perceived value and long-term commitment.""
+  },
+  ""7096"": {
+    ""title"": ""Senior Citizens and Fiber Optic Churn"",
+    ""description"": ""This cluster represents senior citizens with fiber optic services who are churning. Retention strategies should address the specific needs and service experience of older customers.""
+  },
+  ""7097"": {
+    ""title"": ""Senior Citizens and Fiber Optic Churn"",
+    ""description"": ""Senior citizens using fiber optic services are churning. Retention efforts should focus on ease of use and perceived value for this demographic.""
+  },
+  ""7098"": {
+    ""title"": ""Senior Citizens and Streaming Service Churn"",
+    ""description"": ""This group consists of senior citizens churning from streaming services. Retention strategies should focus on content value and user experience for this age group.""
+  },
+  ""7099"": {
+    ""title"": ""Dependents and Two-Year Contracts Churn"",
+    ""description"": ""Customers with dependents on two-year contracts are churning. Retention efforts should focus on contract value and family-oriented service benefits.""
+  },
+  ""7100"": {
+    ""title"": ""Dependents and Two-Year Contracts Churn"",
+    ""description"": ""This cluster represents customers with dependents on two-year contracts who are churning. Retention strategies should highlight long-term value and family benefits.""
+  },
+  ""7101"": {
+    ""title"": ""One-Year Contracts and DSL Churn"",
+    ""description"": ""Customers on one-year contracts with DSL services are churning. Retention efforts should focus on improving DSL service and contract renewal incentives.""
+  },
+  ""7102"": {
+    ""title"": ""Automatic Payments and Two-Year Contracts Churn"",
+    ""description"": ""Customers with automatic payments and two-year contracts are churning. Retention strategies should focus on reinforcing contract value and ease of service.""
+  },
+  ""7103"": {
+    ""title"": ""Two-Year Contracts and DSL Churn"",
+    ""description"": ""This cluster represents customers on two-year contracts with DSL services who are churning. Retention efforts should focus on service value and long-term commitment.""
+  },
+  ""7104"": {
+    ""title"": ""Two-Year Contracts and High Charges Churn"",
+    ""description"": ""Customers on two-year contracts with higher charges are churning. Retention strategies should focus on demonstrating value and justifying costs.""
+  },
+  ""7105"": {
+    ""title"": ""No Phone Service and Two-Year Contracts Churn"",
+    ""description"": ""Customers without phone service on two-year contracts are churning. Retention efforts should focus on the comprehensive value of bundled services.""
+  },
+  ""7106"": {
+    ""title"": ""No Phone Service and DSL Users Churn"",
+    ""description"": ""This cluster represents customers with no phone service using DSL who are churning. Retention strategies should focus on the overall service package and reliability.""
+  }
+}","","{'7075': ['High Churn Due to Poor Support', 'This cluster represents customers churning due to issues with phone support expertise. This indicates a need to improve support quality for retention.'], '7076': ['Churn due to Network Reliability', 'Customers in this cluster are leaving because of network reliability issues. Improving network performance is key for retaining these subscribers.'], '7077': ['Product Dissatisfaction Leads to Churn', 'This cluster highlights customers churning due to dissatisfaction with the product. Focus on product improvements and customer feedback for retention.'], '7078': ['Service Dissatisfaction Drives Churn', 'Customers are churning because of general service dissatisfaction. Addressing service quality and customer experience is crucial for retention.'], '7079': ['Speed and Affordability Drive Churn', 'This group churns due to a lack of affordable download/upload speeds. Offering competitive pricing and speed tiers is important for retention.'], '7080': ['Better Data Offers Cause Churn', 'Customers are leaving due to competitors offering more data. Enhancing data plans and value propositions can help retain these subscribers.'], '7081': ['Competitor Data Offers Lead to Churn', 'This cluster indicates churn driven by competitor data offers. A focus on competitive data packages is essential for customer retention.'], '7082': ['Competitor Offers Drive Churn', 'Customers in this group are churning because competitors are making better offers. Understanding and matching competitor value is key for retention.'], '7083': ['Moving Leads to Customer Churn', 'This cluster represents customers churning because they have moved. Strategies to re-engage or offer services at new locations could aid retention.'], '7084': ['High Prices Cause Customer Churn', 'Customers are churning due to high prices. Offering competitive pricing strategies and value bundles can improve retention.'], '7085': ['Price and Lack of Services Cause Churn', 'This cluster shows churn driven by high prices and a lack of internet services. Addressing pricing and core service offerings is vital.'], '7086': ['Dependents and DSL Users Churn', 'This group has a high proportion of customers with dependents using DSL, who are churning. Tailored retention strategies for this demographic are needed.'], '7087': ['Dependents and Fiber Optic Users Churn', 'Customers with dependents using fiber optic services are churning. Focus on retention efforts for this specific segment and their service needs.'], '7088': ['One-Year Contracts and Online Security', 'This cluster comprises customers on one-year contracts, with a focus on online security, who are churning. Retention efforts could target contract renewals and security benefits.'], '7089': ['DSL Users, Female Subscribers Churn', 'This group consists of DSL users, predominantly female, who are churning. Retention strategies should consider their service preferences and gender demographics.'], '7090': ['DSL and Maelled Check Payment Churn', 'Customers using DSL and paying by mailed check are churning. Simplifying payment options and optimizing DSL service could aid retention.'], '7091': ['Fiber Optic Users Churn', 'This cluster represents customers churning despite having fiber optic internet. Retention strategies should focus on perceived value beyond just speed.'], '7092': ['Fiber Optic and Device Protection Churn', 'Customers with fiber optic and device protection are churning. Retention efforts should explore the reasons for dissatisfaction beyond these features.'], '7093': ['Fiber Optic Users and Online Backup Churn', 'This group comprises fiber optic users who also utilize online backup and are churning. Retention strategies should investigate service satisfaction and competitor offers.'], '7094': ['One-Year Contracts and Dependents Churn', 'Customers on one-year contracts with dependents are churning. Retention strategies should focus on contract renewals and the value of services for families.'], '7095': ['One-Year Contracts and Fiber Optic Churn', 'Customers on one-year contracts with fiber optic services are churning. Retention efforts should aim to increase perceived value and long-term commitment.'], '7096': ['Senior Citizens and Fiber Optic Churn', 'This cluster represents senior citizens with fiber optic services who are churning. Retention strategies should address the specific needs and service experience of older customers.'], '7097': ['Senior Citizens and Fiber Optic Churn', 'Senior citizens using fiber optic services are churning. Retention efforts should focus on ease of use and perceived value for this demographic.'], '7098': ['Senior Citizens and Streaming Service Churn', 'This group consists of senior citizens churning from streaming services. Retention strategies should focus on content value and user experience for this age group.'], '7099': ['Dependents and Two-Year Contracts Churn', 'Customers with dependents on two-year contracts are churning. Retention efforts should focus on contract value and family-oriented service benefits.'], '7100': ['Dependents and Two-Year Contracts Churn', 'This cluster represents customers with dependents on two-year contracts who are churning. Retention strategies should highlight long-term value and family benefits.'], '7101': ['One-Year Contracts and DSL Churn', 'Customers on one-year contracts with DSL services are churning. Retention efforts should focus on improving DSL service and contract renewal incentives.'], '7102': ['Automatic Payments and Two-Year Contracts Churn', 'Customers with automatic payments and two-year contracts are churning. Retention strategies should focus on reinforcing contract value and ease of service.'], '7103': ['Two-Year Contracts and DSL Churn', 'This cluster represents customers on two-year contracts with DSL services who are churning. Retention efforts should focus on service value and long-term commitment.'], '7104': ['Two-Year Contracts and High Charges Churn', 'Customers on two-year contracts with higher charges are churning. Retention strategies should focus on demonstrating value and justifying costs.'], '7105': ['No Phone Service and Two-Year Contracts Churn', 'Customers without phone service on two-year contracts are churning. Retention efforts should focus on the comprehensive value of bundled services.'], '7106': ['No Phone Service and DSL Users Churn', 'This cluster represents customers with no phone service using DSL who are churning. Retention strategies should focus on the overall service package and reliability.']}",""
+"f06f7ab0-8465-4a9c-b74f-0069f2776c47","20260303_192149","2026-03-03T19:22:18.385347","1","7107; 7108","7107; 7108","Cluster","Retention strategy for newly subscribed customers","0","1048576","Generate a concise 'title' (max 5-7 words) and 'description' (1-2 sentences) for EACH of the Clusters below (Level 1).
+CONTEXT FOCUS: Orient towards 'Retention strategy for newly subscribed customers', if relevant.
+
+RESPONSE FORMAT: Respond ONLY with a single, valid JSON object.
+- Top-level keys MUST be the string representation of the 'Cluster ID' provided (e.g., ""7107"").
+- Values MUST be JSON objects containing non-empty ""title"" and ""description"" string keys.
+
+EXAMPLE (for IDs ""id_A"", ""id_B""):
+{
+  ""id_A"": { ""title"": ""Title A"", ""description"": ""Desc A."" },
+  ""id_B"": { ""title"": ""Title B"", ""description"": ""Desc B."" }
+}
+
+IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fences (```json ... ```) or any text outside the JSON structure.
+
+--- Clusters Information ---
+
+--- Cluster ID: 7107 (L1 (96 base items), BaseType: Numeric, InternalID: 7107) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 6393) ""Numeric Orig Item 6393: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6970) ""Numeric Orig Item 6970: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4214) ""Numeric Orig Item 4214: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5803) ""Numeric Orig Item 5803: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4199) ""Numeric Orig Item 4199: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Phone Service_No: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Multiple Lines_No phone service: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Dependents_Yes: (Cluster: 1.00 vs Global: 0.23) | ↑ Deviation: 332.88%
+- Internet Service_DSL: (Cluster: 1.00 vs Global: 0.34) | ↑ Deviation: 190.91%
+- Online Security_Yes: (Cluster: 0.69 vs Global: 0.29) | ↑ Deviation: 139.82%
+- Tech Support_Yes: (Cluster: 0.67 vs Global: 0.29) | ↑ Deviation: 129.71%
+- Dependents_No: (Cluster: 0.00 vs Global: 0.77) | ↓ Deviation: 100.00%
+- Phone Service_Yes: (Cluster: 0.00 vs Global: 0.90) | ↓ Deviation: 100.00%
+- Multiple Lines_No: (Cluster: 0.00 vs Global: 0.48) | ↓ Deviation: 100.00%
+- Multiple Lines_Yes: (Cluster: 0.00 vs Global: 0.42) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7107 ---
+
+--- Cluster ID: 7108 (L1 (181 base items), BaseType: Numeric, InternalID: 7108) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 2149) ""Numeric Orig Item 2149: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1949) ""Numeric Orig Item 1949: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5296) ""Numeric Orig Item 5296: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2851) ""Numeric Orig Item 2851: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6362) ""Numeric Orig Item 6362: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Most Defining Features (Top Deviations from Global Mean):
+- Phone Service_No: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Multiple Lines_No phone service: (Cluster: 1.00 vs Global: 0.10) | ↑ Deviation: 932.70%
+- Internet Service_DSL: (Cluster: 1.00 vs Global: 0.34) | ↑ Deviation: 190.91%
+- Streaming Movies_No: (Cluster: 0.93 vs Global: 0.40) | ↑ Deviation: 136.12%
+- Streaming TV_No: (Cluster: 0.94 vs Global: 0.40) | ↑ Deviation: 135.41%
+- Phone Service_Yes: (Cluster: 0.00 vs Global: 0.90) | ↓ Deviation: 100.00%
+- Multiple Lines_No: (Cluster: 0.00 vs Global: 0.48) | ↓ Deviation: 100.00%
+- Multiple Lines_Yes: (Cluster: 0.00 vs Global: 0.42) | ↓ Deviation: 100.00%
+- Internet Service_Fiber optic: (Cluster: 0.00 vs Global: 0.44) | ↓ Deviation: 100.00%
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7108 ---
+","{
+  ""7107"": {
+    ""title"": ""No Phone, DSL, Dependents"",
+    ""description"": ""Customers without phone service, using DSL internet, and with dependents. Focus on retention through bundled services and family-oriented benefits.""
+  },
+  ""7108"": {
+    ""title"": ""No Phone, DSL, No Streaming"",
+    ""description"": ""Subscribers lacking phone service and streaming, but using DSL internet. Target retention with enhanced internet packages and entertainment add-ons.""
+  }
+}","","{'7107': ['No Phone, DSL, Dependents', 'Customers without phone service, using DSL internet, and with dependents. Focus on retention through bundled services and family-oriented benefits.'], '7108': ['No Phone, DSL, No Streaming', 'Subscribers lacking phone service and streaming, but using DSL internet. Target retention with enhanced internet packages and entertainment add-ons.']}",""
+"6d1823a4-eb2d-4f09-8dbe-29683e9eddf3","20260303_192149","2026-03-03T19:22:20.542334","2","7109; 7110; 7111","7109; 7110; 7111","Cluster","Retention strategy for newly subscribed customers","0","1048576","Generate a concise 'title' (max 5-7 words) and 'description' (1-2 sentences) for EACH of the Clusters below (Level 2).
+CONTEXT FOCUS: Orient towards 'Retention strategy for newly subscribed customers', if relevant.
+
+RESPONSE FORMAT: Respond ONLY with a single, valid JSON object.
+- Top-level keys MUST be the string representation of the 'Cluster ID' provided (e.g., ""7109"").
+- Values MUST be JSON objects containing non-empty ""title"" and ""description"" string keys.
+
+EXAMPLE (for IDs ""id_A"", ""id_B""):
+{
+  ""id_A"": { ""title"": ""Title A"", ""description"": ""Desc A."" },
+  ""id_B"": { ""title"": ""Title B"", ""description"": ""Desc B."" }
+}
+
+IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fences (```json ... ```) or any text outside the JSON structure.
+
+--- Clusters Information ---
+
+--- Cluster ID: 7109 (L2 (3761 base items), BaseType: Numeric, InternalID: 7109) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 4166) ""Numeric Orig Item 4166: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3429) ""Numeric Orig Item 3429: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 4244) ""Numeric Orig Item 4244: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 5373) ""Numeric Orig Item 5373: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3218) ""Numeric Orig Item 3218: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+Representative Immediate Children (Summaries):
+- Child ID 7094: ""One-Year Contracts and Dependents Churn"" - Customers on one-year contracts with dependents are churning. Retention str...
+- Child ID 7093: ""Fiber Optic Users and Online Backup Churn"" - This group comprises fiber optic users who also utilize online backup and a...
+- Child ID 7090: ""DSL and Maelled Check Payment Churn"" - Customers using DSL and paying by mailed check are churning. Simplifying pa...
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Security_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Online Backup_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Device Protection_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Tech Support_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Streaming TV_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Streaming Movies_No internet service: (Cluster: 0.00 vs Global: 0.22) | ↓ Deviation: 100.00%
+- Churn Label_Yes: (Cluster: 0.00 vs Global: 0.27) | ↓ Deviation: 100.00%
+- Churn Value: (Cluster: 0.00 vs Global: 0.27) | ↓ Deviation: 100.00%
+- Churn Reason_Attitude of service provider: (Cluster: 0.00 vs Global: 0.02) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7109 ---
+
+--- Cluster ID: 7110 (L2 (1481 base items), BaseType: Numeric, InternalID: 7110) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 4809) ""Numeric Orig Item 4809: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 2050) ""Numeric Orig Item 2050: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6599) ""Numeric Orig Item 6599: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 3112) ""Numeric Orig Item 3112: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 6868) ""Numeric Orig Item 6868: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+Representative Immediate Children (Summaries):
+- Child ID 7054: ""Female Customers, One-Year Contract, No Internet"" - Female customers with one-year contracts and no internet service are found ...
+- Child ID 7044: ""No Internet, Long-Term Contract, Auto Credit Card"" - Customers in this cluster lack internet service and have two-year contracts...
+- Child ID 7053: ""Female Customers, No Internet, Mail Check"" - This segment consists of female customers who do not have internet service ...
+Most Defining Features (Top Deviations from Global Mean):
+- Internet Service_No: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Security_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Online Backup_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Device Protection_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Tech Support_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming TV_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Streaming Movies_No internet service: (Cluster: 1.00 vs Global: 0.22) | ↑ Deviation: 361.53%
+- Payment Method_Mailed check: (Cluster: 0.48 vs Global: 0.23) | ↑ Deviation: 111.23%
+- Phone Service_No: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- Multiple Lines_No phone service: (Cluster: 0.00 vs Global: 0.10) | ↓ Deviation: 100.00%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7110 ---
+
+--- Cluster ID: 7111 (L2 (1801 base items), BaseType: Numeric, InternalID: 7111) ---
+Representative Content/Samples (from L0 Descendants):
+- (Orig. ID: 1848) ""Numeric Orig Item 1848: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1497) ""Numeric Orig Item 1497: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 1496) ""Numeric Orig Item 1496: [Gender_Female=1.00, Gender_Male=0.00, Senior Citizen_No=1.00, Senior Citize...""
+- (Orig. ID: 492) ""Numeric Orig Item 492: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+- (Orig. ID: 456) ""Numeric Orig Item 456: [Gender_Female=0.00, Gender_Male=1.00, Senior Citizen_No=1.00, Senior Citizen...""
+Representative Immediate Children (Summaries):
+- Child ID 7079: ""Speed and Affordability Drive Churn"" - This group churns due to a lack of affordable download/upload speeds. Offer...
+- Child ID 7084: ""High Prices Cause Customer Churn"" - Customers are churning due to high prices. Offering competitive pricing str...
+- Child ID 7073: ""High Churn Risk, 'Don't Know' Reason, DSL Internet"" - Customers with a high churn risk, citing 'Don't Know' as their reason, and ...
+Most Defining Features (Top Deviations from Global Mean):
+- Churn Reason_Moved: (Cluster: 0.03 vs Global: 0.01) | ↑ Deviation: 291.06%
+- Churn Reason_Poor expertise of phone support: (Cluster: 0.01 vs Global: 0.00) | ↑ Deviation: 291.06%
+- Churn Reason_Extra data charges: (Cluster: 0.03 vs Global: 0.01) | ↑ Deviation: 291.06%
+- Churn Reason_Poor expertise of online support: (Cluster: 0.01 vs Global: 0.00) | ↑ Deviation: 291.06%
+- Churn Reason_Product dissatisfaction: (Cluster: 0.06 vs Global: 0.01) | ↑ Deviation: 291.06%
+- Churn Reason_Service dissatisfaction: (Cluster: 0.05 vs Global: 0.01) | ↑ Deviation: 291.06%
+- Churn Reason_Deceased: (Cluster: 0.00 vs Global: 0.00) | ↑ Deviation: 291.06%
+- Churn Reason_Lack of affordable download/upload speed: (Cluster: 0.02 vs Global: 0.01) | ↑ Deviation: 291.06%
+- Churn Reason_Lack of self-service on Website: (Cluster: 0.05 vs Global: 0.01) | ↑ Deviation: 291.06%
+- Churn Reason_Limited range of services: (Cluster: 0.02 vs Global: 0.01) | ↑ Deviation: 291.06%
+- ... (62 more features with lower deviations)
+--- End Cluster ID: 7111 ---
+","{
+  ""7109"": {
+    ""title"": ""No Internet Service Churn Drivers"",
+    ""description"": ""Customers with no internet service are churning. Retention efforts should focus on understanding their needs and potentially offering entry-level internet plans.""
+  },
+  ""7110"": {
+    ""title"": ""No Internet, Long Contract Churn"",
+    ""description"": ""Customers without internet service and long-term contracts, often paying by mail, are churning. Targeting these segments with tailored offers could improve retention.""
+  },
+  ""7111"": {
+    ""title"": ""Service and Price Dissatisfaction Churn"",
+    ""description"": ""Customers are churning due to dissatisfaction with service, pricing, or lack of speed. Addressing these core issues is crucial for retaining new subscribers.""
+  }
+}","","{'7109': ['No Internet Service Churn Drivers', 'Customers with no internet service are churning. Retention efforts should focus on understanding their needs and potentially offering entry-level internet plans.'], '7110': ['No Internet, Long Contract Churn', 'Customers without internet service and long-term contracts, often paying by mail, are churning. Targeting these segments with tailored offers could improve retention.'], '7111': ['Service and Price Dissatisfaction Churn', 'Customers are churning due to dissatisfaction with service, pricing, or lack of speed. Addressing these core issues is crucial for retaining new subscribers.']}",""

@@ -1,0 +1,5 @@
+cluster_id,title,description,run_number,clustering_seed,size
+0,"Majority Non-Senior, Balanced Genders","This cluster represents a majority of individuals who are not senior citizens, with a near-even distribution of genders. There's also a slight tendency for individuals in this cluster to not have a partner.",5,42,3251.0
+1,"Mostly Younger, No Partners",This cluster predominantly consists of individuals who are not senior citizens and do not have partners. The gender distribution is nearly balanced.,5,42,1584.0
+2,Predominantly Young Non-Senior Customers,This cluster primarily consists of younger individuals without partners. Senior citizens are significantly underrepresented.,5,42,1526.0
+3,"Demographics: Gender, Seniority, Partner Status","This cluster represents customer demographics focusing on gender, senior citizen status, and whether they have a partner. The standardized values indicate typical distributions for these attributes.",5,42,682.0

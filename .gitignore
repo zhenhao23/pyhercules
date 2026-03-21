@@ -26,3 +26,16 @@ hercules_minimal_*.json
 dist/
 build/
 *.egg-info/
+
+# Datasets
+dataset/Instacart Market Basket Analysis/
+dataset/online+retail/
+
+dataset/8th exploration instacart/instacart_kmeans_clustered.csv
+dataset/8th exploration instacart/instacart_user_features.csv
+
+dataset/9th exploration online retail/level1_kstarmeans_k31_defining_characteristics.csv
+dataset/9th exploration online retail/level2_weightedkmeans_k2_defining_characteristics.csv
+dataset/9th exploration online retail/online_retail_kmeans_clustered.csv
+dataset/9th exploration online retail/online_retail_user_features.csv
+dataset/9th exploration online retail/regular_kmeans_k13_defining_characteristics.csv
