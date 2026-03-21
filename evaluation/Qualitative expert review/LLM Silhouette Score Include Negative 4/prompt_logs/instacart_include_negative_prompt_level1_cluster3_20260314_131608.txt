@@ -1,0 +1,37 @@
+Generate a concise 'title' (max 5-7 words) and 'description' (3-4 sentences) for the Cluster below (Level 1).
+
+Industry Context: You are analyzing customer purchase behavior in the online grocery delivery market.
+Business Goal: Identify distinct customer segments to power hyper-personalized recommendations and targeted email campaigns.
+
+RESPONSE FORMAT: Respond ONLY with a single, valid JSON object.
+- Top-level key MUST be the string representation of the 'Cluster ID' provided (e.g., "3").
+- Value MUST be a JSON object containing non-empty "title" and "description" string keys.
+
+EXAMPLE:
+{
+  "3": { "title": "Example Title", "description": "Example description." }
+}
+
+IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fences (```json ... ```) or any text outside the JSON structure.
+
+--- Cluster Information ---
+
+--- Cluster ID: 3 (L1, 20211 base items) ---
+
+Most Defining Features (Top Deviations from Global Mean by Absolute Value):
+- total_products_purchased: (Cluster: 648.52 vs Global: 157.29) | Deviation: 312.31%
+- total_orders: (Cluster: 52.34 vs Global: 15.59) | Deviation: 235.74%
+- unique_products: (Cluster: 182.70 vs Global: 64.54) | Deviation: 183.10%
+- unique_aisles: (Cluster: 54.56 vs Global: 27.78) | Deviation: 96.36%
+- dept_pct_babies: (Cluster: 0.02 vs Global: 0.01) | Deviation: 87.23%
+- dept_pct_alcohol: (Cluster: 0.00 vs Global: 0.01) | Deviation: -62.83%
+- reorder_rate: (Cluster: 0.70 vs Global: 0.43) | Deviation: 60.85%
+- avg_products_per_aisle: (Cluster: 3.32 vs Global: 2.07) | Deviation: 60.56%
+- avg_days_between_orders: (Cluster: 7.10 vs Global: 15.21) | Deviation: -53.30%
+- product_exploration_rate: (Cluster: 0.30 vs Global: 0.57) | Deviation: -46.33%
+
+--- End Cluster ID: 3 ---
+
+--- End Clusters Information ---
+
+Generate the JSON output for the Cluster ID: 3

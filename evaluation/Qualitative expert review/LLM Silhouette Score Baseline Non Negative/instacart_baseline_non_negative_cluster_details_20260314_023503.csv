@@ -1,0 +1,8 @@
+level,cluster_id,title,description
+1,0,Frequent Buyers with High Purchase Volume,"These customers order frequently, have a high average basket size, and purchase a large number of products. They exhibit a solid reorder rate, indicating loyalty."
+1,1,Frequent buyers with diverse purchases,These customers order frequently with a high number of total products purchased. They exhibit a moderate reorder rate and a typical basket size.
+1,2,Frequent Reorderers with High Basket Size,"Customers in this cluster place orders frequently, reorder often, and have a consistently large average basket size. They purchase a substantial number of products per order."
+1,3,"High Reorder Rate, Moderate Orders",Customers in this cluster have a high reorder rate with a moderate number of total orders and basket size. They purchase a significant number of products on average.
+1,4,"Frequent, Moderate Reorder Customers",Customers in this cluster reorder frequently with a moderate basket size and a high reorder rate. They purchase a significant number of products.
+1,5,"Frequent, Moderate-Sized Basket Shoppers","These customers place a moderate number of orders with an average basket size. They reorder frequently, indicating a good level of engagement and satisfaction."
+1,6,"High Order Frequency, Moderate Reorder Rate","Customers in this cluster place a moderate to high number of orders with a good reorder rate. They tend to purchase a substantial number of products per order, suggesting engaged shoppers."

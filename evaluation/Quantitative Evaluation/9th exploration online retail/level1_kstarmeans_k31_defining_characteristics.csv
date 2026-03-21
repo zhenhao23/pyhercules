@@ -1,0 +1,85 @@
+Cluster_ID,Feature,Centroid_Value,Z_Score,Abs_Z_Score
+0,PreferredHour,-0.7896,-1.0514,1.0514
+1,PreferredHour,0.7447,1.4319,1.4319
+1,StdDaysBetweenOrders,0.8608,1.3274,1.3274
+2,PreferredDayOfWeek,1.3482,2.7142,2.7142
+2,StdDaysBetweenOrders,0.6701,1.0656,1.0656
+3,StdDaysBetweenOrders,3.3072,4.6853,4.6853
+4,AvgDaysBetweenOrders,3.7237,3.7151,3.7151
+4,PreferredDayOfWeek,0.7562,1.5956,1.5956
+5,Country_Italy,17.5764,5.4772,5.4772
+5,Country_United Kingdom,-3.0627,-1.3366,1.3366
+6,AvgDaysBetweenOrders,2.0372,2.0159,2.0159
+7,Recency,1.7819,2.3615,2.3615
+7,PreferredHour,-0.9268,-1.2735,1.2735
+7,PurchaseSpan,-0.874,-1.2175,1.2175
+8,Recency,1.9049,2.5165,2.5165
+8,PurchaseSpan,-0.9188,-1.2661,1.2661
+8,PreferredHour,0.6059,1.2073,1.2073
+9,ExplorationTendency,3.2937,2.2142,2.2142
+9,PurchaseSpan,-0.7972,-1.1341,1.1341
+10,AvgUnitPrice,59.311,5.4772,5.4772
+10,ExplorationTendency,7.0657,4.763,4.763
+10,PreferredHour,1.0824,1.9784,1.9784
+10,PurchaseSpan,-0.9878,-1.341,1.341
+11,PreferredHour,-0.9322,-1.2823,1.2823
+11,PurchaseSpan,-0.801,-1.1383,1.1383
+12,Country_Finland,18.989,5.4772,5.4772
+12,Country_United Kingdom,-3.0627,-1.3366,1.3366
+13,Country_Portugal,15.0787,5.4772,5.4772
+13,Country_United Kingdom,-3.0627,-1.3366,1.3366
+14,PreferredHour,1.0495,1.9252,1.9252
+14,PurchaseSpan,-0.8047,-1.1423,1.1423
+15,PreferredDayOfWeek,1.5078,3.0158,3.0158
+15,PurchaseSpan,-0.8135,-1.1519,1.1519
+16,Country_Switzerland,14.6952,5.4772,5.4772
+16,Country_United Kingdom,-3.0627,-1.3366,1.3366
+17,Country_Other,6.2296,3.6841,3.6841
+17,Country_United Kingdom,-3.0627,-1.3366,1.3366
+18,PurchaseSpan,1.5772,1.4423,1.4423
+19,UniqueProducts,18.3297,4.8961,4.8961
+19,Frequency,22.5919,4.7538,4.7538
+19,PurchaseSpan,1.8273,1.7137,1.7137
+19,PreferredDayOfWeek,-0.656,-1.0728,1.0728
+19,Recency,-0.9119,-1.0348,1.0348
+19,Country_Other,1.9695,1.0148,1.0148
+20,Monetary,25.0412,2.8639,2.8639
+20,PreferredDayOfWeek,-1.1076,-1.9261,1.9261
+20,PreferredHour,-1.2913,-1.8634,1.8634
+20,PurchaseSpan,1.7579,1.6384,1.6384
+20,TotalItems,13.0295,1.2361,1.2361
+20,Frequency,6.3245,1.1037,1.1037
+21,TotalItems,38.832,4.4778,4.4778
+21,Country_Other,6.2296,3.6841,3.6841
+21,Monetary,30.9498,3.6382,3.6382
+21,UniqueProducts,7.4924,1.8375,1.8375
+21,Frequency,9.0502,1.7153,1.7153
+21,PurchaseSpan,1.6859,1.5603,1.5603
+21,Country_United Kingdom,-3.0627,-1.3366,1.3366
+21,Recency,-0.9052,-1.0264,1.0264
+22,AvgBasketSize,55.7848,4.7908,4.7908
+22,AvgOrderValue,42.7392,3.6202,3.6202
+22,Recency,2.3349,3.0586,3.0586
+22,PreferredHour,-1.0755,-1.5142,1.5142
+22,PreferredDayOfWeek,-0.8366,-1.4141,1.4141
+22,TotalItems,14.4452,1.414,1.414
+22,PurchaseSpan,-0.9878,-1.341,1.341
+23,AvgOrderValue,46.6659,3.9788,3.9788
+23,AvgBasketSize,30.3534,2.4873,2.4873
+23,AvgDaysBetweenOrders,2.4801,2.4622,2.4622
+23,PreferredHour,-1.5071,-2.2127,2.2127
+23,Monetary,18.5173,2.0089,2.0089
+23,TotalItems,15.7868,1.5825,1.5825
+23,Recency,-0.9152,-1.039,1.039
+24,PurchaseSpan,1.2664,1.1051,1.1051
+25,PurchaseSpan,1.6234,1.4924,1.4924
+26,Country_Norway,20.8062,5.4772,5.4772
+26,Country_United Kingdom,-3.0627,-1.3366,1.3366
+27,Country_Belgium,13.4086,5.4772,5.4772
+27,Country_United Kingdom,-3.0627,-1.3366,1.3366
+28,Country_Germany,6.7201,5.4772,5.4772
+28,Country_United Kingdom,-3.0627,-1.3366,1.3366
+29,Country_Spain,12.191,5.4772,5.4772
+29,Country_United Kingdom,-3.0627,-1.3366,1.3366
+30,Country_France,6.991,5.4772,5.4772
+30,Country_United Kingdom,-3.0627,-1.3366,1.3366

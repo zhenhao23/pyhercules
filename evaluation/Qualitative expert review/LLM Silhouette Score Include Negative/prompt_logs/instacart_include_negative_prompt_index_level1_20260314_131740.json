@@ -1,0 +1,37 @@
+[
+  {
+    "level": 1,
+    "cluster_id": 0,
+    "prompt_file": "C:\\Users\\weezh\\OneDrive\\Desktop\\pyhercules\\evaluation\\LLM Silhouette Score Include Negative\\prompt_logs\\instacart_include_negative_prompt_level1_cluster0_20260314_131740.txt"
+  },
+  {
+    "level": 1,
+    "cluster_id": 1,
+    "prompt_file": "C:\\Users\\weezh\\OneDrive\\Desktop\\pyhercules\\evaluation\\LLM Silhouette Score Include Negative\\prompt_logs\\instacart_include_negative_prompt_level1_cluster1_20260314_131740.txt"
+  },
+  {
+    "level": 1,
+    "cluster_id": 2,
+    "prompt_file": "C:\\Users\\weezh\\OneDrive\\Desktop\\pyhercules\\evaluation\\LLM Silhouette Score Include Negative\\prompt_logs\\instacart_include_negative_prompt_level1_cluster2_20260314_131740.txt"
+  },
+  {
+    "level": 1,
+    "cluster_id": 3,
+    "prompt_file": "C:\\Users\\weezh\\OneDrive\\Desktop\\pyhercules\\evaluation\\LLM Silhouette Score Include Negative\\prompt_logs\\instacart_include_negative_prompt_level1_cluster3_20260314_131740.txt"
+  },
+  {
+    "level": 1,
+    "cluster_id": 4,
+    "prompt_file": "C:\\Users\\weezh\\OneDrive\\Desktop\\pyhercules\\evaluation\\LLM Silhouette Score Include Negative\\prompt_logs\\instacart_include_negative_prompt_level1_cluster4_20260314_131740.txt"
+  },
+  {
+    "level": 1,
+    "cluster_id": 5,
+    "prompt_file": "C:\\Users\\weezh\\OneDrive\\Desktop\\pyhercules\\evaluation\\LLM Silhouette Score Include Negative\\prompt_logs\\instacart_include_negative_prompt_level1_cluster5_20260314_131740.txt"
+  },
+  {
+    "level": 1,
+    "cluster_id": 6,
+    "prompt_file": "C:\\Users\\weezh\\OneDrive\\Desktop\\pyhercules\\evaluation\\LLM Silhouette Score Include Negative\\prompt_logs\\instacart_include_negative_prompt_level1_cluster6_20260314_131740.txt"
+  }
+]

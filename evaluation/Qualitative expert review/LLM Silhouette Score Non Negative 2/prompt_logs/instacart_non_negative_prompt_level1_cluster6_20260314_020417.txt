@@ -1,0 +1,37 @@
+Generate a concise 'title' (max 5-7 words) and 'description' (3-4 sentences) for the Cluster below (Level 1).
+
+Industry Context: You are analyzing customer purchase behavior in the online grocery delivery market.
+Business Goal: Identify distinct customer segments to power hyper-personalized recommendations and targeted email campaigns.
+
+RESPONSE FORMAT: Respond ONLY with a single, valid JSON object.
+- Top-level key MUST be the string representation of the 'Cluster ID' provided (e.g., "6").
+- Value MUST be a JSON object containing non-empty "title" and "description" string keys.
+
+EXAMPLE:
+{
+  "6": { "title": "Example Title", "description": "Example description." }
+}
+
+IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fences (```json ... ```) or any text outside the JSON structure.
+
+--- Cluster Information ---
+
+--- Cluster ID: 6 (L1, 15518 base items) ---
+
+Most Defining Features (Top Non-Negative Deviations from Global Mean):
+- dept_pct_alcohol: (Cluster: 0.06 vs Global: 0.01) | Deviation: 583.64%
+- dept_pct_beverages: (Cluster: 0.34 vs Global: 0.10) | Deviation: 247.41%
+- dept_pct_snacks: (Cluster: 0.24 vs Global: 0.09) | Deviation: 168.62%
+- dept_pct_bulk: (Cluster: 0.00 vs Global: 0.00) | Deviation: 106.64%
+- reorder_rate: (Cluster: 0.50 vs Global: 0.43) | Deviation: 15.75%
+- preferred_day_of_week: (Cluster: 2.37 vs Global: 2.08) | Deviation: 14.13%
+- avg_days_between_orders: (Cluster: 16.03 vs Global: 15.21) | Deviation: 5.36%
+- dept_pct_household: (Cluster: 0.03 vs Global: 0.03) | Deviation: 4.11%
+- dept_pct_breakfast: (Cluster: 0.02 vs Global: 0.02) | Deviation: 2.04%
+- dept_pct_other: (Cluster: 0.00 vs Global: 0.00) | Deviation: 0.48%
+
+--- End Cluster ID: 6 ---
+
+--- End Clusters Information ---
+
+Generate the JSON output for the Cluster ID: 6
