@@ -3501,27 +3501,73 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
             "silhouette_score_on_prev_level": None,
             "davies_bouldin_score_on_prev_level": None,
             "calinski_harabasz_score_on_prev_level": None,
+            "mdl_cost_on_prev_level": None,
 
             "num_l0_items_in_traditional_internal_eval": 0,
             "silhouette_score_on_l0": None,
             "davies_bouldin_score_on_l0": None,
             "calinski_harabasz_score_on_l0": None,
+            "mdl_cost_on_l0": None,
 
             "llm_internal_metrics_calculated": calculate_llm_internal_metrics,
             "num_l_minus_1_items_in_llm_internal_eval": 0,
             "llm_silhouette_on_prev_level": None,
             "llm_davies_bouldin_on_prev_level": None,
             "llm_calinski_harabasz_on_prev_level": None,
+            "llm_mdl_cost_on_prev_level": None,
 
             "num_l0_items_in_llm_internal_eval": 0,
             "llm_silhouette_on_l0": None,
             "llm_davies_bouldin_on_l0": None,
             "llm_calinski_harabasz_on_l0": None,
+            "llm_mdl_cost_on_l0": None,
 
             "business_goal_provided": bool(business_goal),
             "topic_alignment_score": None,
             "num_clusters_in_topic_alignment": 0,
         }
+
+        def _compute_mdl_cost_for_vectors(X: np.ndarray, labels: np.ndarray) -> float:
+            """Compute MDL-style cost for an embedding matrix and cluster labels."""
+            if X is None or labels is None:
+                raise ValueError("X and labels are required for MDL cost calculation.")
+            if X.ndim != 2:
+                raise ValueError(f"Expected 2D X, got shape {X.shape}.")
+            if len(X) != len(labels):
+                raise ValueError(f"X rows ({len(X)}) and labels ({len(labels)}) must match.")
+            if len(X) == 0:
+                raise ValueError("Cannot compute MDL cost on empty data.")
+
+            unique_labels = np.unique(labels)
+            k = len(unique_labels)
+            if k == 0:
+                return float('inf')
+
+            n, d = X.shape
+            X_flat = X.flatten()
+            unique_vals = np.unique(X_flat)
+            if len(unique_vals) > 1:
+                floatprecision = np.mean(np.diff(np.sort(unique_vals)))
+                if not np.isfinite(floatprecision) or floatprecision <= 0:
+                    floatprecision = 1e-10
+            else:
+                floatprecision = 1e-10
+
+            floatcost = (np.max(X) - np.min(X)) / floatprecision
+            modelcost = k * d * floatcost
+            idxcost = n * np.log(k) if k > 1 else 0.0
+
+            squared_distances = 0.0
+            for label in unique_labels:
+                cluster_points = X[labels == label]
+                if len(cluster_points) == 0:
+                    continue
+                centroid = np.mean(cluster_points, axis=0)
+                squared_distances += float(np.sum((cluster_points - centroid) ** 2))
+
+            residualcost = (n * d * np.log(2 * np.pi) + squared_distances) / 2.0
+            return float(modelcost + idxcost + residualcost)
+
         self._log(f"Starting evaluation for level {level}...", level=1)
         if calculate_llm_internal_metrics:
             self._log(f"  LLM-based internal metrics: Will be calculated.", level=2)
@@ -3705,6 +3751,9 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                         if num_clusters_trad_internal_prev >= 2 and X_trad_internal_eval_prev.shape[0] >= min_samples_ch:
                             try: results["calinski_harabasz_score_on_prev_level"] = calinski_harabasz_score(X_trad_internal_eval_prev, labels_trad_internal_eval_prev)
                             except Exception as e: results["calinski_harabasz_score_on_prev_level_error"] = str(e)
+
+                        try: results["mdl_cost_on_prev_level"] = _compute_mdl_cost_for_vectors(X_trad_internal_eval_prev, labels_trad_internal_eval_prev)
+                        except Exception as e: results["mdl_cost_on_prev_level_error"] = str(e)
         
         if calculate_llm_internal_metrics:
             self._log(f"\n  Calculating LLM-Based Internal Metrics based on L{level-1} description_embeddings...", level=2)
@@ -3747,6 +3796,9 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                         if num_clusters_llm_internal_prev >= 2 and X_llm_internal_eval_prev.shape[0] >= min_samples_ch :
                             try: results["llm_calinski_harabasz_on_prev_level"] = calinski_harabasz_score(X_llm_internal_eval_prev, labels_llm_internal_eval_prev)
                             except Exception as e: results["llm_calinski_harabasz_on_prev_level_error"] = str(e)
+
+                        try: results["llm_mdl_cost_on_prev_level"] = _compute_mdl_cost_for_vectors(X_llm_internal_eval_prev, labels_llm_internal_eval_prev)
+                        except Exception as e: results["llm_mdl_cost_on_prev_level_error"] = str(e)
         else: 
             self._log(f"\n  Skipping calculation of LLM-Based L{level-1} internal metrics.", level=2)
 
@@ -3806,6 +3858,9 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                      try: results["calinski_harabasz_score_on_l0"] = calinski_harabasz_score(X_trad_l0_eval, labels_for_trad_l0_eval)
                      except Exception as e: results["calinski_harabasz_score_on_l0_error"] = str(e)
 
+                 try: results["mdl_cost_on_l0"] = _compute_mdl_cost_for_vectors(X_trad_l0_eval, labels_for_trad_l0_eval)
+                 except Exception as e: results["mdl_cost_on_l0_error"] = str(e)
+
         if calculate_llm_internal_metrics:
             self._log(f"\n  Calculating LLM-Based Internal Metrics based on L0 description_embeddings...", level=2)
             l0_llm_desc_embeddings_for_eval = []
@@ -3854,6 +3909,9 @@ IMPORTANT: Ensure the entire output is valid JSON. Do NOT include markdown fence
                      if num_clusters_llm_l0 >= 2 and X_llm_l0_desc_emb_eval.shape[0] >= min_samples_ch :
                          try: results["llm_calinski_harabasz_on_l0"] = calinski_harabasz_score(X_llm_l0_desc_emb_eval, labels_for_llm_l0_eval)
                          except Exception as e: results["llm_calinski_harabasz_on_l0_error"] = str(e)
+
+                     try: results["llm_mdl_cost_on_l0"] = _compute_mdl_cost_for_vectors(X_llm_l0_desc_emb_eval, labels_for_llm_l0_eval)
+                     except Exception as e: results["llm_mdl_cost_on_l0_error"] = str(e)
         else:
             self._log(f"\n  Skipping calculation of LLM-Based L0 internal metrics.", level=2)
 

@@ -630,7 +630,24 @@ def create_summary_content(cluster_id, cluster_map, config_data, state_data, eva
                              metric_items.append(html.P(f"Note: {results['supervised_metrics_error']}", className="text-warning small mt-1 mb-0"))
                          if "gt_warnings" in results:
                              metric_items.append(html.P(f"GT Note: {results['gt_warnings']}", className="text-warning small mt-1 mb-0"))
-                    for metric in ['silhouette_score_on_prev_level', 'davies_bouldin_score_on_prev_level', 'calinski_harabasz_score_on_prev_level', 'silhouette_score_on_l0', 'davies_bouldin_score_on_l0', 'calinski_harabasz_score_on_l0']:
+                    for metric in [
+                        'silhouette_score_on_prev_level',
+                        'davies_bouldin_score_on_prev_level',
+                        'calinski_harabasz_score_on_prev_level',
+                        'mdl_cost_on_prev_level',
+                        'silhouette_score_on_l0',
+                        'davies_bouldin_score_on_l0',
+                        'calinski_harabasz_score_on_l0',
+                        'mdl_cost_on_l0',
+                        'llm_silhouette_on_prev_level',
+                        'llm_davies_bouldin_on_prev_level',
+                        'llm_calinski_harabasz_on_prev_level',
+                        'llm_mdl_cost_on_prev_level',
+                        'llm_silhouette_on_l0',
+                        'llm_davies_bouldin_on_l0',
+                        'llm_calinski_harabasz_on_l0',
+                        'llm_mdl_cost_on_l0'
+                    ]:
                         add_metric_row(metric.replace('_', ' ').title()+":", results.get(metric))
                     if "unsupervised_metrics_error" in results:
                         metric_items.append(html.P(f"Note: {results['unsupervised_metrics_error']}", className="text-warning small mt-1 mb-0"))
